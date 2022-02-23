@@ -1,0 +1,16 @@
+#input_login {
+    max-width:260px;
+}
+
+#input_password {
+    max-width:260px;
+}
+
+#button_sign_in {
+    max-width:80px;
+}
+
+#button_register {
+    max-width:180px;
+    min-width:100px;
+}

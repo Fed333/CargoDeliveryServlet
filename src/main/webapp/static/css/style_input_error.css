@@ -1,0 +1,17 @@
+.validation-container {
+
+}
+
+.validation-container[data-error] .form-control{
+    border-color: #c92432;
+    color: #c92432;
+    background: #fffafa;
+}
+
+.validation-container[data-error]::after {
+    content: attr(data-error);
+    font-size: 0.85em;
+    color: #c92432;
+    display: block;
+    margin: 10px 0;
+}
