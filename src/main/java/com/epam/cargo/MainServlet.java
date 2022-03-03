@@ -1,7 +1,7 @@
 package com.epam.cargo;
 
 
-import com.epam.cargo.commanda.Commands;
+import com.epam.cargo.command.Commands;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
