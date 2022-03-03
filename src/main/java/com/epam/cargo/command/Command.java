@@ -1,4 +1,4 @@
-package com.epam.cargo.commanda;
+package com.epam.cargo.command;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
