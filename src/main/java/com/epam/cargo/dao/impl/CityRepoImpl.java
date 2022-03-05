@@ -3,6 +3,8 @@ package com.epam.cargo.dao.impl;
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.entity.City;
+import com.epam.cargo.infrastructure.annotation.Inject;
+import com.epam.cargo.infrastructure.annotation.Singleton;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 import static com.epam.cargo.dao.impl.CityRepoImpl.CityColumns.*;
 
+@Singleton(type = Singleton.Type.LAZY)
 public class CityRepoImpl implements CityRepo {
 
     private static final String SELECT_BY_ID = "SELECT * FROM cities WHERE id = ?";
@@ -21,11 +24,11 @@ public class CityRepoImpl implements CityRepo {
     private static final String UPDATE_BY_ID = "UPDATE cities SET name = ?, zipcode = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM cities WHERE id = ?";
 
-
+    @Inject
     private ConnectionPool pool;
 
-    public CityRepoImpl() {
-    }
+    @SuppressWarnings("unused")
+    public CityRepoImpl() {}
 
     public CityRepoImpl(ConnectionPool pool) {
         this.pool = pool;
@@ -34,23 +37,6 @@ public class CityRepoImpl implements CityRepo {
     @Override
     public Optional<City> findById(Long id) {
         return findBy(SELECT_BY_ID, ps -> ps.setLong(1, id));
-//        Connection connection = null;
-//        try {
-//            connection = pool.getConnection();
-//            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
-//            statement.setLong(1, id);
-//            return getCity(statement);
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        finally{
-//            if (!Objects.isNull(connection)){
-//                pool.releaseConnection(connection);
-//            }
-//        }
-//
-//        return Optional.empty();
     }
 
     @Override

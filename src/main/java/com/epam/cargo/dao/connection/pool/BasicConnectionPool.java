@@ -1,39 +1,50 @@
 package com.epam.cargo.dao.connection.pool;
 
+import com.epam.cargo.infrastructure.annotation.PropertyValue;
+import com.epam.cargo.infrastructure.annotation.Singleton;
+
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton(type = Singleton.Type.LAZY)
 public class BasicConnectionPool
         implements ConnectionPool {
 
-    private static final int MAX_TIMEOUT = 10000;
-    private final String url;
-    private final String user;
-    private final String password;
-    private final List<Connection> connectionPool;
-    private final List<Connection> usedConnections = new ArrayList<>();
+    @PropertyValue(property = "url")
+    private String url;
+
+    @PropertyValue(property = "username")
+    private String user;
+
+    @PropertyValue(property = "password")
+    private String password;
+
+    private List<Connection> connectionPool = new ArrayList<>(INITIAL_POOL_SIZE);;
+    private List<Connection> usedConnections = new ArrayList<>();
+
     private static final int INITIAL_POOL_SIZE = 10;
     private static final int MAX_POOL_SIZE = 30;
 
-    private BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool) {
+    private static final int MAX_TIMEOUT = 10000;
+
+    @SuppressWarnings("unused")
+    public BasicConnectionPool() {}
+
+    public BasicConnectionPool(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
-        this.connectionPool = connectionPool;
     }
 
-    public static BasicConnectionPool create(
-            String url, String user,
-            String password) throws SQLException {
-
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
+    @PostConstruct
+    public void init() throws SQLException {
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-            pool.add(createConnection(url, user, password));
+            connectionPool.add(createConnection(url, user, password));
         }
-        return new BasicConnectionPool(url, user, password, pool);
     }
 
     @Override
@@ -42,8 +53,7 @@ public class BasicConnectionPool
             if (usedConnections.size() < MAX_POOL_SIZE) {
                 connectionPool.add(createConnection(url, user, password));
             } else {
-                throw new RuntimeException(
-                        "Maximum pool size reached, no available connections!");
+                throw new RuntimeException("Maximum pool size reached, no available connections!");
             }
         }
 
@@ -67,6 +77,11 @@ public class BasicConnectionPool
     private static Connection createConnection(
             String url, String user, String password)
             throws SQLException {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return DriverManager.getConnection(url, user, password);
     }
 
