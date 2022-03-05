@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface PropertyValue {
     String property() default "";
-    String filePath() default "src/main/resources/applications.properties";
+    String filePath() default "application.properties";
 }
