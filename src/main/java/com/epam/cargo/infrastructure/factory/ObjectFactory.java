@@ -1,6 +1,6 @@
 package com.epam.cargo.infrastructure.factory;
 
-import com.epam.cargo.infrastructure.ApplicationContext;
+import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.configurator.ObjectConfigurator;
 
 import java.lang.reflect.InvocationTargetException;
