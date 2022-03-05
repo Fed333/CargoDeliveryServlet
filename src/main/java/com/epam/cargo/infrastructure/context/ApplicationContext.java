@@ -1,4 +1,4 @@
-package com.epam.cargo.infrastructure;
+package com.epam.cargo.infrastructure.context;
 
 import com.epam.cargo.infrastructure.annotation.Singleton;
 import com.epam.cargo.infrastructure.config.Config;

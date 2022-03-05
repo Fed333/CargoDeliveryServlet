@@ -1,6 +1,6 @@
 package com.epam.cargo.infrastructure.configurator;
 
-import com.epam.cargo.infrastructure.ApplicationContext;
+import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.annotation.Inject;
 
 import java.lang.reflect.Field;
