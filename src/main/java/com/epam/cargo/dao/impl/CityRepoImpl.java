@@ -21,7 +21,11 @@ public class CityRepoImpl implements CityRepo {
     private static final String UPDATE_BY_ID = "UPDATE cities SET name = ?, zipcode = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM cities WHERE id = ?";
 
-    private final ConnectionPool pool;
+
+    private ConnectionPool pool;
+
+    public CityRepoImpl() {
+    }
 
     public CityRepoImpl(ConnectionPool pool) {
         this.pool = pool;

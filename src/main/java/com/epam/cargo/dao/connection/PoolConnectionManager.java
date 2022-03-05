@@ -20,17 +20,11 @@ public class PoolConnectionManager {
     public ConnectionPool getConnectionPool(){
         ConnectionPool connectionPool = null;
 
-        try{
-            connectionPool = BasicConnectionPool.create(
-                    property.getProperty("url"),
-                    property.getProperty("username"),
-                    property.getProperty("password")
-            );
-        }
-        catch (SQLException e){
-            System.err.println("Failed connectionPool");
-            e.printStackTrace();
-        }
+        connectionPool = new BasicConnectionPool(
+                property.getProperty("url"),
+                property.getProperty("username"),
+                property.getProperty("password")
+        );
         return connectionPool;
     }
 }
