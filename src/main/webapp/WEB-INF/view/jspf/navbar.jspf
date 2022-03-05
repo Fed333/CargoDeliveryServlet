@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-green-ireland">
     <div class="container-fluid">
 
-        <a class="navbar-brand" href="/">Cargo Delivery</a>
+        <a class="navbar-brand" href="/CargoDeliveryServlet/">Cargo Delivery</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -41,7 +41,7 @@
                     </li>
                 </ul>
             </div>
-            <a class="btn btn-light me-2" href="login">Sign In</a>
+            <a class="btn btn-light me-2" href="/CargoDeliveryServlet/login">Sign In</a>
         </div>
     </div>
 </nav>
