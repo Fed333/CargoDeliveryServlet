@@ -1,9 +1,10 @@
 package com.epam.cargo;
 
 
-import com.epam.cargo.command.Dispatcher;
+import com.epam.cargo.command.CommandDispatcher;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.Application;
+import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -31,12 +32,15 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ApplicationContext context = (ApplicationContext) getServletContext().getAttribute(APPLICATION_CONTEXT_ATTRIBUTE);
         String requestURI = req.getRequestURI();
-        context.getObject(Dispatcher.class).getCommand(requestURI).execute(req, resp);
+        context.getObject(CommandDispatcher.class).getCommand(requestURI, HttpMethod.GET).execute(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        ApplicationContext context = (ApplicationContext) getServletContext().getAttribute(APPLICATION_CONTEXT_ATTRIBUTE);
+        String requestURI = req.getRequestURI();
+        context.getObject(CommandDispatcher.class).getCommand(requestURI, HttpMethod.POST).execute(req, resp);
+
     }
 
 }
