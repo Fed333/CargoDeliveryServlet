@@ -1,4 +1,4 @@
-package com.epam.cargo.dao.impl;
+package com.epam.cargo.dao.repo.impl;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
 import com.epam.cargo.dao.repo.CityRepo;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.epam.cargo.dao.impl.CityRepoImpl.CityColumns.*;
+import static com.epam.cargo.dao.repo.impl.CityRepoImpl.CityColumns.*;
 
 @Singleton(type = Singleton.Type.LAZY)
 public class CityRepoImpl implements CityRepo {
