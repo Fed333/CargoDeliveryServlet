@@ -3,6 +3,14 @@ package com.epam.cargo.infrastructure.web;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Based on HashMap implementation of Model interface.
+ * @since 06.03.2022
+ * @see Model
+ * @see HashMap
+ * @author Roman Kovalchuk
+ * */
+@SuppressWarnings("unused")
 public class WebModel implements Model {
 
     private final Map<String, Object> map = new HashMap<>();

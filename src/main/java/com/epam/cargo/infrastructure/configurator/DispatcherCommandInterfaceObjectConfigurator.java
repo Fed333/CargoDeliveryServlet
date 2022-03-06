@@ -21,6 +21,17 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+/**
+ *  Configurator of request mapping within the infrastructure.
+ *  Maintain http methods dispatching, using Command pattern.<br>
+ *  This class fetches commands from annotated controllers methods and Command interface implementation to the DispatcherCommand.
+ * @since 06.03.2022
+ * @see Controller
+ * @see RequestMapping
+ * @see CommandMapping
+ * @author Roman Kovalchuk
+ * */
+@SuppressWarnings({"unused", "deprecation"})
 public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfigurator {
 
     @Override
@@ -51,7 +62,6 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
                     RequestMapping annotation = method.getAnnotation(RequestMapping.class);
                     String mapping = annotation.prefix() + annotation.url();
                     Command command = createCommand(controller, method, context);
-//                    commands.put(new SimpleImmutableEntry<>(mapping, annotation.method()), new AtomicReference<>(command));
                     assignCommand(commands, new SimpleImmutableEntry<>(mapping, annotation.method()), new AtomicReference<>(command));
                 }
             }
@@ -119,9 +129,8 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
     private void fetchCommandsFromCommandMappingAnnotation(ApplicationContext context, Map<SimpleImmutableEntry<String, HttpMethod>, AtomicReference<Command>> commands) {
         for (Class<? extends Command> commandClass : context.getConfig().getScanner().getSubTypesOf(Command.class)) {
             CommandMapping commandMapping = commandClass.getAnnotation(CommandMapping.class);
-//            commands.put(new SimpleImmutableEntry<>(commandMapping.mapping(), commandMapping.method()), new AtomicReference<>(context.getObject(commandClass)));
             assignCommand(commands, new SimpleImmutableEntry<>(commandMapping.mapping(), commandMapping.method()), new AtomicReference<>(context.getObject(commandClass)));
-        };
+        }
     }
 
     private void assignCommand(Map<SimpleImmutableEntry<String, HttpMethod>, AtomicReference<Command>> commands, SimpleImmutableEntry<String, HttpMethod> mapping, AtomicReference<Command> command){

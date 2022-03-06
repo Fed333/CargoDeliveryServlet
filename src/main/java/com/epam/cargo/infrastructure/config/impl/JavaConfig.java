@@ -6,11 +6,20 @@ import org.reflections.Reflections;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Config implementation based on Java language configuration.
+ * @since 05.06.2022
+ * @see Config
+ * @author Roman Kovalchuk
+ * */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JavaConfig implements Config {
 
     private final Reflections scanner;
 
+    /**
+     * Map of interface to implementation relations.
+     * */
     private final Map<Class, Class> ifc2ImplClass;
 
     public JavaConfig(String packageToScan, Map<Class, Class> ifc2ImplClass) {

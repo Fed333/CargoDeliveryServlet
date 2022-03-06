@@ -2,6 +2,19 @@ package com.epam.cargo.infrastructure.web;
 
 import java.util.Map;
 
+import com.epam.cargo.infrastructure.annotation.Controller;
+import com.epam.cargo.infrastructure.dispatcher.Command;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * Part of web transporting data layer between servlet's Command and Controller classes. <br/>
+ * Contains data to transfer from Controller into HttpServletRequest.
+ * @since 06.03.2022
+ * @see Controller
+ * @see Command
+ * @see HttpServletRequest
+ * @author Roman Kovalchuk
+ * */
 public interface Model {
 
     void addAttribute(String attribute, Object value);

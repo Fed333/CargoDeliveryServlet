@@ -7,8 +7,15 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Properties;
 
+/**
+ * Configurator of setting property value to the field annotated with @PropertyValue annotation.
+ * Gets property value from pointed in annotation property file.
+ * @since 05.03.2022
+ * @see PropertyValue
+ * @author Roman Kovalchuk
+ * */
+@SuppressWarnings("unused")
 public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigurator{
-
 
     @Override
     public void configure(Object o, ApplicationContext context) {
