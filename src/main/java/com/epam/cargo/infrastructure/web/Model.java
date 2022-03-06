@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Part of web transporting data layer between servlet's Command and Controller classes. <br/>
  * Contains data to transfer from Controller into HttpServletRequest.
- * @since 06.03.2022
  * @see Controller
  * @see Command
  * @see HttpServletRequest
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 public interface Model {
 

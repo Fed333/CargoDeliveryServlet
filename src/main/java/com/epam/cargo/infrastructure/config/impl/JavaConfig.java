@@ -8,9 +8,9 @@ import java.util.Set;
 
 /**
  * Config implementation based on Java language configuration.
- * @since 05.06.2022
  * @see Config
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JavaConfig implements Config {
@@ -19,6 +19,7 @@ public class JavaConfig implements Config {
 
     /**
      * Map of interface to implementation relations.
+     * @since 1.0
      * */
     private final Map<Class, Class> ifc2ImplClass;
 

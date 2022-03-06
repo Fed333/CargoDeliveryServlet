@@ -10,13 +10,18 @@ import java.util.Properties;
 /**
  * Configurator of setting property value to the field annotated with @PropertyValue annotation.
  * Gets property value from pointed in annotation property file.
- * @since 05.03.2022
  * @see PropertyValue
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @SuppressWarnings("unused")
 public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigurator{
 
+    /**
+     * Configure plain JavaBean objects annotated with @PropertyValue annotation.
+     * @since 1.0
+     * @see PropertyValue
+     * */
     @Override
     public void configure(Object o, ApplicationContext context) {
         for (Field field : o.getClass().getDeclaredFields()) {

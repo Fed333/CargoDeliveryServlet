@@ -16,10 +16,10 @@ import com.epam.cargo.infrastructure.dispatcher.*;
  * Dispatching part of DispatcherCommand.
  *
  * @deprecated
- * @since 05.03.2022
  * @see Command
  * @see DispatcherCommand
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 
 @Deprecated
@@ -29,11 +29,13 @@ public @interface CommandMapping {
 
     /**
      * URL mapping path.
+     * @since 1.0
      * */
     String mapping();
 
     /**
      * Http method type.
+     * @since 1.0
      * */
     HttpMethod method();
 }

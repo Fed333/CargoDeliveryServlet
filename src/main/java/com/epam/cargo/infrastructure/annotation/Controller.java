@@ -15,12 +15,12 @@ import com.epam.cargo.infrastructure.configurator.DispatcherCommandInterfaceObje
  * Request handling methods provide simple infrastructure injections web parameters mechanism.
  * The method annotated with @RequestMapping is wrapped with Command method execute, and determine the view template by returned result.<br/>
  * Controllers are configured with DispatcherCommandInterfaceObjectConfigurator.
- * @since 06.03.2022
  * @see RequestMapping
  * @see DispatcherCommandInterfaceObjectConfigurator
  * @see Command
  * @see DispatcherCommand
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

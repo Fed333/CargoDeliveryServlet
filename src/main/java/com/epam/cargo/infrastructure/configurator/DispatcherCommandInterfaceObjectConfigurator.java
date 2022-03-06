@@ -25,15 +25,19 @@ import java.util.stream.Collectors;
  *  Configurator of request mapping within the infrastructure.
  *  Maintain http methods dispatching, using Command pattern.<br>
  *  This class fetches commands from annotated controllers methods and Command interface implementation to the DispatcherCommand.
- * @since 06.03.2022
  * @see Controller
  * @see RequestMapping
  * @see CommandMapping
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @SuppressWarnings({"unused", "deprecation"})
 public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfigurator {
 
+    /**
+     * Configures DispatcherCommand implementation object to maintain http request dispatching.
+     * @since 1.0
+     * */
     @Override
     public void configure(Object o, ApplicationContext context) {
         if (DispatcherCommand.class.isAssignableFrom(o.getClass())){

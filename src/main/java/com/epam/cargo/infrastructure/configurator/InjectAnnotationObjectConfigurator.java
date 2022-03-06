@@ -8,16 +8,18 @@ import java.lang.reflect.Field;
 /**
  * Configurator of injecting plain JavaBean to the field annotated with @Inject annotation.
  * Gets plain JavaBean from the ApplicationContext and sets it to the field.
- * @since 05.03.2022
  * @see Inject
  * @see ApplicationContext
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @SuppressWarnings("unused")
 public class InjectAnnotationObjectConfigurator implements ObjectConfigurator{
 
     /**
-     * Injects plain JavaBean object by type of annotated field from ApplicationContext.
+     * Injects plain JavaBean object by type of annotated field with @Inject annotation from ApplicationContext.
+     * @since 1.0
+     * @see Inject
      * @see ApplicationContext
      * */
     @Override

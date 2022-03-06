@@ -16,10 +16,10 @@ import com.epam.cargo.infrastructure.configurator.PropertyValueAnnotationObjectC
  * if filePath wasn't pointed, takes default application.properties file name.<br/>
  * Applied only for String fields of objects which are part of ApplicationContext.<br/>
  * The annotation is configured with PropertyValueAnnotationObjectConfigurator.
- * @since 05.03.2022
  * @see ApplicationContext
  * @see PropertyValueAnnotationObjectConfigurator
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -27,11 +27,13 @@ public @interface PropertyValue {
 
     /**
      * Name of property in the properties file.
+     * @since 1.0
      * */
     String property() default "";
 
     /**
      * Path to the properties file.
+     * @since 1.0
      * */
     String filePath() default "application.properties";
 }

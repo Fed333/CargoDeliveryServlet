@@ -4,8 +4,8 @@ import org.reflections.Reflections;
 
 /**
  * Interface of Configuration for establishing implementation classes for interfaces.
- * @since 05.03.2022
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 public interface Config {
 
@@ -13,6 +13,7 @@ public interface Config {
      * Gives type which implements according interface
      * @param ifc interface to find its implementation
      * @return type which implement ifc interface
+     * @since 1.0
      * */
     <T> Class<? extends T> getImplClass(Class<T> ifc);
 
@@ -25,6 +26,7 @@ public interface Config {
      *       <artifactId>reflections</artifactId>
      *       <version>0.9.12</version>
      *     </dependency>
+     * @since 1.0
      * @see Reflections
      * */
     Reflections getScanner();

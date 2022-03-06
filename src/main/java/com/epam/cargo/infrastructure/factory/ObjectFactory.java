@@ -13,20 +13,22 @@ import javax.annotation.PostConstruct;
 /**
  * ObjectFactory class, for creating plain JavaBeans objects within ApplicationContext
  *
- * @since  05.03.2022
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 
 public class ObjectFactory {
 
     /**
      * Context within the infrastructure works.
+     * @since 1.0
      * @see ApplicationContext
      * */
     private final ApplicationContext context;
 
     /**
      * List with ObjectConfigurators to configure plain JavaBean objects, after its creation
+     * @since 1.0
      * @see ObjectConfigurator
      * */
     private final List<ObjectConfigurator> configurators = new CopyOnWriteArrayList<>();
@@ -49,6 +51,7 @@ public class ObjectFactory {
      * @param clazz Type of object being created
      * @throws RuntimeException when object creating was failed
      * @return Created and configured plain JavaBean object within ApplicationContext
+     * @since 1.0
      * */
     public <T> T createObject(Class<T> clazz){
 

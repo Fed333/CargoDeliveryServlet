@@ -17,11 +17,11 @@ import com.epam.cargo.infrastructure.configurator.DispatcherCommandInterfaceObje
  * Brings information about mapping url and http method type to the annotated class.
  * Dispatching part of DispatcherCommand.<br/>
  * The annotation is managed with DispatcherCommandInterfaceObjectConfigurator.
- * @since 06.03.2022
  * @see Controller
  * @see DispatcherCommand
  * @see DispatcherCommandInterfaceObjectConfigurator
  * @author Roman Kovalchuk
+ * @version 1.1
  * */
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -30,16 +30,19 @@ public @interface RequestMapping {
 
     /**
      * Prefix of http request mapping. Repeatable part of every http url.
+     * @since 1.1
      * */
     String prefix() default "/CargoDeliveryServlet";
 
     /**
      * URL after prefix part.
+     * @since 1.0
      * */
     String url();
 
     /**
      * Http method type.
+     * @since 1.0
      * */
     HttpMethod method();
 }
