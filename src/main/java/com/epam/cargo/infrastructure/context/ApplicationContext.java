@@ -9,19 +9,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Context within the infrastructure works.
- * @since 05.03.2022
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 public class ApplicationContext {
 
     /**
      * Factory for creation and configuring plain JavaBeans objects within the infrastructure.
+     * @since 1.0
      * @see ObjectFactory
      * */
     private ObjectFactory factory;
 
     /**
      * Config for establishing implementation classes for interfaces.
+     * @since 1.0
      * @see Config
      * */
     private final Config config;
@@ -29,6 +31,7 @@ public class ApplicationContext {
     /**
      * Cache of all plain JavaBeans singletons.<br>
      * Contains only objects annotated with @Singleton annotation
+     * @since 1.0
      * @see Singleton
      * */
     private final Map<Class<?>, Object> cache = new ConcurrentHashMap<>();
@@ -43,6 +46,7 @@ public class ApplicationContext {
      * Caches singletons objects.
      * @param clazz Type of object being created
      * @return Created and configured plain JavaBean object within ApplicationContext
+     * @since 1.0
      * @see ObjectFactory
      * */
     public <T> T getObject(Class<T> clazz){
@@ -73,6 +77,7 @@ public class ApplicationContext {
 
     /**
      * Gives Config with encapsulated logic of establishing implementation classes for interfaces.
+     * @since 1.0
      * @see Config
      * */
     public Config getConfig() {

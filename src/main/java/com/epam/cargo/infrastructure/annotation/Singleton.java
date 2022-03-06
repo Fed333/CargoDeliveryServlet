@@ -9,12 +9,12 @@ import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.Application;
 
 /**
- * Marks plain JavaBean classes as a part of ApplicationContext.<br/>
+ * Marks plain JavaBean classes as a part of ApplicationContext.<br>
  * Annotated classes are managed like singletons,
- * has only one instance which is stored in special context cache.<br/>
- * Applied only for Java classes with no args constructor or default one. <br/>
+ * has only one instance which is stored in special context cache.<br>
+ * Applied only for Java classes with no args constructor or default one. <br>
  * The annotation is managed with ApplicationContext.
- * @since 05.03.2022
+ * @version 1.0
  * @see ApplicationContext
  * @author Roman Kovalchuk
  * */
@@ -23,16 +23,18 @@ import com.epam.cargo.infrastructure.Application;
 public @interface Singleton {
 
     /**
-     * Gives fetch type of singleton.<br/>
+     * Gives fetch type of singleton.<br>
+     * @since 1.0
      * */
     Type type() default Type.EAGER;
 
     /**
-     * Fetch type of singleton. <br/>
+     * Fetch type of singleton. <br>
      * EAGER Singletons get into ApplicationContext immediately after its creation.
-     * EAGER fetching is managed with Application runner class<br/>
+     * EAGER fetching is managed with Application runner class<br>
      * LAZY Singletons get into ApplicationContext only if they are needed (injection or getting the object).
      * @see Application
+     * @since 1.0
      * */
     enum Type {
         LAZY, EAGER

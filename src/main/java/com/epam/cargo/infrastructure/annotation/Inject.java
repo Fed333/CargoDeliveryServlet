@@ -10,13 +10,13 @@ import com.epam.cargo.infrastructure.configurator.InjectAnnotationObjectConfigur
 
 /**
  * Marks field of plain JavaBean class within ApplicationContext
- * to assign object of corresponding type for annotated field. <br/>
- * This annotation can be applied only on objects which are managed with ApplicationContext.<br/>
+ * to assign object of corresponding type for annotated field. <br>
+ * This annotation can be applied only on objects which are managed with ApplicationContext.<br>
  * The injections are configured with InjectAnnotationObjectConfigurator
- * @since 05.03.2022
  * @see ApplicationContext
  * @see InjectAnnotationObjectConfigurator
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})

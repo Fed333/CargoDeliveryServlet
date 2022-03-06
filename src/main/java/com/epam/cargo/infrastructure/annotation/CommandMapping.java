@@ -10,16 +10,16 @@ import java.lang.annotation.Target;
 import com.epam.cargo.infrastructure.dispatcher.*;
 
 /**
- * Annotation to mark dispatch mapping of single Command implementation's classes.<br/>
- * Uses on implemented Command interface classes.<br/>
+ * Annotation to mark dispatch mapping of single Command implementation's classes.<br>
+ * Uses on implemented Command interface classes.<br>
  * Brings information about mapping url and http method type to the annotated class.
  * Dispatching part of DispatcherCommand.
  *
  * @deprecated
- * @since 05.03.2022
  * @see Command
  * @see DispatcherCommand
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 
 @Deprecated
@@ -29,11 +29,13 @@ public @interface CommandMapping {
 
     /**
      * URL mapping path.
+     * @since 1.0
      * */
     String mapping();
 
     /**
      * Http method type.
+     * @since 1.0
      * */
     HttpMethod method();
 }

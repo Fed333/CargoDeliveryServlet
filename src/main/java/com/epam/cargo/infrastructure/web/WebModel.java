@@ -5,10 +5,10 @@ import java.util.Map;
 
 /**
  * Based on HashMap implementation of Model interface.
- * @since 06.03.2022
  * @see Model
  * @see HashMap
  * @author Roman Kovalchuk
+ * @version 1.0
  * */
 @SuppressWarnings("unused")
 public class WebModel implements Model {

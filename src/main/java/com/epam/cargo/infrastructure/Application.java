@@ -10,22 +10,23 @@ import com.epam.cargo.infrastructure.factory.ObjectFactory;
 import java.util.Map;
 
 /**
- * Runner class of the infrastructure. <br/>
+ * Runner class of the infrastructure. <br>
  * Sets Config implementation, creates ObjectFactory, raises ApplicationContext.
- * @since 06.03.2022
  * @see Config
  * @see ObjectFactory
  * @see ApplicationContext
  * @author Roman Kovalchuk
+ * @version 1.1
  * */
 @SuppressWarnings("rawtypes")
 public class Application {
     /**
-     * Initialize the infrastructure according initial param settings.<br/>
+     * Initialize the infrastructure according initial param settings.<br>
      * Raise ApplicationContext.
      * @param packageToScan work package
      * @param ifc2ImplClass configure map with interface to implementation class relation
      * @return raised ApplicationContext object
+     * @since 1.1
      * @see ApplicationContext
      * */
     public static ApplicationContext run(String packageToScan, Map<Class, Class> ifc2ImplClass){
