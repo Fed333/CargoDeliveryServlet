@@ -6,6 +6,13 @@ import com.epam.cargo.entity.DirectionDelivery;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * DAO Repository for DirectionDelivery POJO.
+ * @see Dao
+ * @see DirectionDelivery
+ * @author Roman Kovalchuk
+ * @version 1.0
+ * */
 public interface DirectionDeliveryRepo extends Dao<DirectionDelivery, Long> {
     @Override
     Optional<DirectionDelivery> findById(Long id);
