@@ -12,7 +12,7 @@ import java.util.Properties;
  * Gets property value from pointed in annotation property file.
  * @see PropertyValue
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @SuppressWarnings("unused")
 public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigurator{
@@ -29,11 +29,10 @@ public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigur
                 PropertyValue annotation = field.getAnnotation(PropertyValue.class);
                 Properties properties = new Properties();
                 try {
-                    getClass().getClassLoader().getResourceAsStream(annotation.filePath());
-                    properties.load(getClass().getClassLoader().getResourceAsStream(annotation.filePath()));
+                    properties.load(getClass().getClassLoader().getResourceAsStream(buildPathToPropertiesFile(annotation)));
                 } catch (IOException e){
                     e.printStackTrace();
-                    throw new RuntimeException("Cannot set property for field " + field + ". File " + annotation.filePath() + " wasn't found or opened.");
+                    throw new RuntimeException("Cannot set property for field " + field + ". File " + buildPathToPropertiesFile(annotation) + " wasn't found or opened.");
                 }
                 String value = properties.getProperty(!annotation.property().isBlank() ? annotation.property() : field.getName());
                 field.setAccessible(true);
@@ -45,5 +44,14 @@ public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigur
                 }
             }
         }
+    }
+
+    /**
+     * Builds path to properties file, according to the data in @PropertyValue annotation
+     * @param annotation source of file path data
+     * @since 1.1
+     * */
+    private String buildPathToPropertiesFile(PropertyValue annotation) {
+        return annotation.prefixPath() + annotation.filePath();
     }
 }

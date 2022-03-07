@@ -13,13 +13,14 @@ import com.epam.cargo.infrastructure.configurator.PropertyValueAnnotationObjectC
  * Fetch property from pointed properties file with further assignment.
  * Search value by pointed annotation property attribute, if it isn't specified uses field name instead.
  * Searching runs in properties file with specified filePath annotation attribute,
- * if filePath wasn't pointed, takes default application.properties file name.<br>
+ * if filePath wasn't pointed, takes default "application.properties" file name.
+ * The path to file is built from prefixPath + filePath. If prefixPath isn't specified, takes default "resources/"<br>
  * Applied only for String fields of objects which are part of ApplicationContext.<br>
  * The annotation is configured with PropertyValueAnnotationObjectConfigurator.
  * @see ApplicationContext
  * @see PropertyValueAnnotationObjectConfigurator
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -36,4 +37,10 @@ public @interface PropertyValue {
      * @since 1.0
      * */
     String filePath() default "application.properties";
+
+    /**
+     * Prefix path, repeatable part of file path to properties files.
+     * @since 1.1
+     * */
+    String prefixPath() default "resources/";
 }
