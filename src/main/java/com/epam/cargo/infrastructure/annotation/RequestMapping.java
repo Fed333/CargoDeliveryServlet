@@ -14,7 +14,7 @@ import com.epam.cargo.infrastructure.configurator.DispatcherCommandInterfaceObje
 /**
  * Annotation to dispatch http mapping in controller's methods<br>
  * Uses on methods of classes annotated with @Controller annotation.<br>
- * Brings information about mapping url and http method type to the annotated class.
+ * Brings information about mapping url and http method type to the annotated method.
  * Dispatching part of DispatcherCommand.<br>
  * The annotation is managed with DispatcherCommandInterfaceObjectConfigurator.
  * @see Controller
