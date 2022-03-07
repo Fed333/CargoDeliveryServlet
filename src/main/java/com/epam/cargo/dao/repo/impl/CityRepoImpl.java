@@ -6,14 +6,23 @@ import com.epam.cargo.entity.City;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.Singleton;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.epam.cargo.dao.repo.impl.CityRepoImpl.CityColumns.*;
 
+/**
+ * Implementation of CityRepo interface. <br>
+ * Part of infrastructure's ApplicationContext. Singleton plain JavaBean. <br>
+ * Based on PostgreSQL database.
+ * @author Roman Kovalchuk
+ * @version 1.1
+ * */
 @Singleton(type = Singleton.Type.LAZY)
 public class CityRepoImpl implements CityRepo {
 
@@ -27,40 +36,34 @@ public class CityRepoImpl implements CityRepo {
     @Inject
     private ConnectionPool pool;
 
+    private CityDaoPersist cityDaoPersist;
+
     @SuppressWarnings("unused")
     public CityRepoImpl() {}
 
     public CityRepoImpl(ConnectionPool pool) {
         this.pool = pool;
+        init();
+    }
+
+    @PostConstruct
+    private void init(){
+        cityDaoPersist = new CityDaoPersist(pool);
     }
 
     @Override
     public Optional<City> findById(Long id) {
-        return findBy(SELECT_BY_ID, ps -> ps.setLong(1, id));
+        return cityDaoPersist.findBy(SELECT_BY_ID, ps -> ps.setLong(1, id));
     }
 
     @Override
     public Optional<City> findByZipcode(String zipcode) {
-        return findBy(SELECT_BY_ZIPCODE, ps -> ps.setString(1, zipcode));
+        return cityDaoPersist.findBy(SELECT_BY_ZIPCODE, ps -> ps.setString(1, zipcode));
     }
 
     @Override
     public List<City> findAll() {
-        Connection connection = null;
-        try {
-            connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
-            return fetchAll(statement);
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-        finally {
-            if (!Objects.isNull(connection)){
-                pool.releaseConnection(connection);
-            }
-        }
-        return null;
+        return cityDaoPersist.findAll(SELECT_ALL);
     }
 
     @Override
@@ -75,45 +78,14 @@ public class CityRepoImpl implements CityRepo {
         }
     }
 
-    private City update(City o) {
-        Connection connection = null;
-        try {
-            connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(UPDATE_BY_ID);
-            statement.setString(1, o.getName());
-            statement.setString(2, o.getZipcode());
-            statement.setLong(3, o.getId());
-            statement.execute();
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            if (!Objects.isNull(connection)){
-                pool.releaseConnection(connection);
-            }
-        }
-        return o;
+    @Override
+    public City update(City o) {
+        return cityDaoPersist.update(UPDATE_BY_ID, o);
     }
 
-    private City insert(City o) {
-        Connection connection = null;
-        try {
-            connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(INSERT_INTO, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, o.getName());
-            statement.setString(2, o.getZipcode());
-            statement.execute();
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()){
-                o.setId(generatedKeys.getLong(1));
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            if (!Objects.isNull(connection)){
-                pool.releaseConnection(connection);
-            }
-        }
-        return o;
+    @Override
+    public City insert(City o) {
+        return cityDaoPersist.create(INSERT_INTO, o);
     }
 
     private void requireValidCity(City o) {
@@ -130,82 +102,9 @@ public class CityRepoImpl implements CityRepo {
 
     @Override
     public void delete(City o) {
-        if (Objects.isNull(o)){
-            return;
-        }
-
-        if (Objects.isNull(o.getId())){
-            throw new IllegalArgumentException("Cannot delete city with id null!");
-        }
-
-        Connection connection = null;
-        try {
-            connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID);
-            statement.setLong(1, o.getId());
-            statement.execute();
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            if (!Objects.isNull(connection)){
-                pool.releaseConnection(connection);
-            }
-        }
+        cityDaoPersist.delete(DELETE_BY_ID, o);
     }
 
-    /**
-     * Finds one object according to the sql query and given arguments for statement
-     * @param selectQuery a sql query
-     * @param prepared prepared params to set preparedStatement
-     * @return Optional with City object
-     * @throws IllegalStateException when more than 1 element was found
-     * */
-    public Optional<City> findBy(String selectQuery, PreparedStatementConsumer prepared) {
-        Connection connection = null;
-        try {
-            connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(selectQuery);
-            prepared.prepare(statement);
-            return getCity(statement);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (!Objects.isNull(connection)) {
-                pool.releaseConnection(connection);
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    private Optional<City> getCity(PreparedStatement statement) throws SQLException {
-        List<City> list = fetchAll(statement);
-        if (list.isEmpty()){
-            return Optional.empty();
-        }
-        if (list.size() > 1){
-            throw new IllegalStateException("More than 1 element was found!");
-        }
-        return Optional.ofNullable(list.get(0));
-    }
-
-    private List<City> fetchAll(PreparedStatement statement) throws SQLException {
-        ResultSet result = statement.executeQuery();
-        List<City> cities = new ArrayList<>();
-        while (result.next()){
-            cities.add(parseCity(result));
-        }
-        return cities;
-    }
-
-    private City parseCity(ResultSet result) throws SQLException {
-        Long id = result.getLong(ID.column());
-        String name = result.getString(NAME.column());
-        String zipcode = result.getString(ZIPCODE.column());
-        return new City(id, name, zipcode);
-    }
 
     enum CityColumns {
         ID("id"), NAME("name"), ZIPCODE("zipcode");
@@ -225,8 +124,43 @@ public class CityRepoImpl implements CityRepo {
 
         void prepare(PreparedStatement preparedStatement) throws SQLException;
 
+        @SuppressWarnings("unused")
         default PreparedStatementConsumer prepareNext(PreparedStatementConsumer after) {
             return o -> {prepare(o); after.prepare(o);};
+        }
+    }
+
+    /**
+     * Implementation of DaoPersist for CityRepoImpl class.<br>
+     * Implements all abstract methods of DaoPersist interface.
+     * @author Roman Kovalchuk
+     * @version 1.0
+     * */
+    private static class CityDaoPersist extends DaoPersist<City, Long>{
+
+        public CityDaoPersist(ConnectionPool pool) {
+            super(pool);
+        }
+
+        @Override
+        public City parseObjectFrom(ResultSet result) throws SQLException {
+            Long id = result.getLong(ID.column());
+            String name = result.getString(NAME.column());
+            String zipcode = result.getString(ZIPCODE.column());
+            return new City(id, name, zipcode);
+        }
+
+        @Override
+        public void transferObjectToInsert(City o, PreparedStatement statement) throws SQLException {
+            statement.setString(1, o.getName());
+            statement.setString(2, o.getZipcode());
+        }
+
+        @Override
+        public void transferObjectToUpdate(City o, PreparedStatement statement) throws SQLException {
+            statement.setString(1, o.getName());
+            statement.setString(2, o.getZipcode());
+            statement.setLong(3, o.getId());
         }
     }
 }
