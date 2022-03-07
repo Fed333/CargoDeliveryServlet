@@ -8,7 +8,7 @@ import java.util.Objects;
  * Represents directions of delivery
  * Used in finding delivery route
  * */
-public class DirectionDelivery implements Cloneable{
+public class DirectionDelivery implements Entity<Long>, Cloneable{
 
     private Long id;
 

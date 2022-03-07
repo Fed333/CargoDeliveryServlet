@@ -8,9 +8,9 @@ import java.util.Objects;
 /**
  * Represents city
  * Used in addresses and delivery distances
- * Implements Cloneable
+ * Implements Entity, Cloneable interfaces
  * */
-public class City implements Cloneable{
+public class City implements Entity<Long>, Cloneable{
 
     private Long id;
 
@@ -74,10 +74,12 @@ public class City implements Cloneable{
         return super.clone();
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

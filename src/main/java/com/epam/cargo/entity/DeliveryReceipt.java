@@ -3,10 +3,13 @@ package com.epam.cargo.entity;
 import java.time.LocalDate;
 
 /**
- * Represents receipt of delivery
- * Used in approving delivery applications with further paying for service
+ * POJO class which represents receipt of delivery.
+ * Used in approving delivery applications with further paying for service.
+ * Implements Entity, Receipt interfaces.
+ * @author Roman Kovalchuk
+ * @version 1.1
  * */
-public class DeliveryReceipt implements Receipt {
+public class DeliveryReceipt implements Entity<Long>, Receipt {
 
     private Long id;
 

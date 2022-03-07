@@ -3,10 +3,13 @@ package com.epam.cargo.entity;
 import java.time.LocalDate;
 
 /**
- * Represents delivery application
- * Used for providing user form of making delivery requests
+ * POJO class which represents delivery application.
+ * Used for providing user form of making delivery requests.
+ * Implements Entity interface.
+ * @author Roman Kovalchuk
+ * @version 1.1
  * */
-public class DeliveryApplication {
+public class DeliveryApplication implements Entity<Long> {
 
     private Long id;
 

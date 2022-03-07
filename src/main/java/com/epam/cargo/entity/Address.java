@@ -3,12 +3,20 @@ package com.epam.cargo.entity;
 import java.util.Objects;
 
 /**
- * Class for representing address
- * Used as directly user's address or address of delivering
+ * POJO class for representing address.
+ * Used as directly user's address or address of delivering.
+ * @author Roman Kovalchuk
+ * @version 1.1
  * */
-public class Address {
+public class Address implements Entity<Long>{
 
     private Long id;
+
+    private City city;
+
+    private String street;
+
+    private String houseNumber;
 
     public Address() {
     }
@@ -24,12 +32,6 @@ public class Address {
         this.houseNumber = houseNumber;
     }
 
-    private City city;
-
-    private String street;
-
-    private String houseNumber;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,5 +46,39 @@ public class Address {
     @Override
     public int hashCode() {
         return Objects.hash(id, city, street, houseNumber);
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 }

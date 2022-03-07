@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Represents an end user
+ * Represents an end user.
+ * Implements Entity interface.
+ * @author Roman Kovalchuk
+ * @version 1.1
  * */
-public class User {
+public class User implements Entity<Long> {
 
     private Long id;
 
