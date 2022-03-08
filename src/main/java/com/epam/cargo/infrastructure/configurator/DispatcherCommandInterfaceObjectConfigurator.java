@@ -103,11 +103,11 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
 
     private Object fetchArgumentByParameter(Parameter parameter, HttpServletRequest req, HttpServletResponse res, ApplicationContext context) {
 
-        if (parameter.isAnnotationPresent(RequestAttribute.class)){
-            RequestAttribute attributeAnnotation = parameter.getAnnotation(RequestAttribute.class);
-            Object attributeValue = req.getAttribute(attributeAnnotation.name());
+        if (parameter.isAnnotationPresent(RequestParam.class)){
+            RequestParam paramAnnotation = parameter.getAnnotation(RequestParam.class);
+            Object attributeValue = req.getParameter(paramAnnotation.name());
             if (Objects.isNull(attributeValue)){
-                return attributeAnnotation.defaultValue();
+                return paramAnnotation.defaultValue();
             }
             return attributeValue;
         }

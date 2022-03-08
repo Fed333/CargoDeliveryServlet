@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER})
-public @interface RequestAttribute {
+public @interface RequestParam {
 
     /**
      * Name of attribute in HttpServletRequest.
