@@ -5,6 +5,8 @@ import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.dispatcher.Command;
 import com.epam.cargo.infrastructure.dispatcher.DispatcherCommand;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
+import com.epam.cargo.infrastructure.format.formatter.Formatter;
+import com.epam.cargo.infrastructure.format.manager.FormatterManager;
 import com.epam.cargo.infrastructure.web.Model;
 
 import javax.servlet.ServletRequest;
@@ -12,10 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -80,12 +79,12 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
 
             for (int i = 0; i < parameters.length; i++) {
                 Parameter parameter = parameters[i];
-                Object argument = fetchArgumentByParameter(parameter, req, res, context);
+                Object argument = bindParameter(parameter, req, res, context);
                 arguments[i] = argument;
             }
             method.setAccessible(true);
 
-            String methodResponse = null;
+            String methodResponse;
             try {
                 methodResponse = (String) method.invoke(controller, arguments);
 
@@ -101,15 +100,74 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
         };
     }
 
-    private Object fetchArgumentByParameter(Parameter parameter, HttpServletRequest req, HttpServletResponse res, ApplicationContext context) {
+    private String buildParamName(String parent, Field field){
+        String prefix = Objects.nonNull(parent) && !parent.isBlank() ? parent + "." : "";
+        return prefix + field.getName();
+    }
+
+    private Object assembleDataTransfer(Class<?> transferClass, HttpServletRequest req, String parent, ApplicationContext context){
+        try {
+            Object transfer = transferClass.getDeclaredConstructor().newInstance();
+            for (Field field : transfer.getClass().getDeclaredFields()) {
+                Class<?> fieldClass = field.getType();
+
+                Object fieldObject;
+                if (fieldClass.isAnnotationPresent(DTO.class)){
+                    fieldObject = assembleDataTransfer(fieldClass, req, field.getName(), context);
+                } else {
+                    fieldObject = bindType(fieldClass, req, buildParamName(parent, field), context);
+                }
+
+                field.setAccessible(true);
+                field.set(transfer, fieldObject);
+
+            }
+            return transfer;
+
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create data transfer object of class " + transferClass);
+        }
+    }
+
+    private <T> T convertTypeFromString(String value, Class<T> fieldClass, FormatterManager manager) {
+        Formatter<String, T> formatter = manager.getFormatter(String.class, fieldClass).orElseThrow(()->new RuntimeException(String.format("No formatter from %s to %s was found! Please specify one with %s ", String.class, fieldClass, FormatterManager.class)));
+        return formatter.format(value);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T bindType(Class<T> bindClass, HttpServletRequest req, String parameterName, ApplicationContext context) {
+        Object bindValue = req.getParameter(parameterName);
+        if (Objects.nonNull(bindValue) && !bindClass.isAssignableFrom(bindValue.getClass())){
+            if (!((String)bindValue).isBlank()) {
+                bindValue = convertTypeFromString((String) bindValue, bindClass, context.getObject(FormatterManager.class));
+            } else {
+                bindValue = null;
+            }
+        }
+        return (T) bindValue;
+    }
+
+    private Object bindParameter(Parameter parameter, HttpServletRequest req, HttpServletResponse res, ApplicationContext context) {
+
+        if (parameter.getType().isAnnotationPresent(DTO.class) || parameter.isAnnotationPresent(DataTransfer.class)){
+            Class<?> parameterClass = parameter.getType();
+            return assembleDataTransfer(parameterClass, req, "", context);
+        }
 
         if (parameter.isAnnotationPresent(RequestParam.class)){
             RequestParam paramAnnotation = parameter.getAnnotation(RequestParam.class);
-            Object attributeValue = req.getParameter(paramAnnotation.name());
-            if (Objects.isNull(attributeValue)){
-                return paramAnnotation.defaultValue();
+            Class<?> parameterClass = parameter.getType();
+            Object bind = bindType(parameterClass, req, paramAnnotation.name(), context);
+            if (Objects.isNull(bind)){
+                if (parameterClass.isAssignableFrom(paramAnnotation.defaultValue().getClass())){
+                    return paramAnnotation.defaultValue();
+                } else {
+                    Formatter<String, ?> formatter = context.getObject(FormatterManager.class).getFormatter(String.class, parameterClass).orElseThrow();
+                    return formatter.format(paramAnnotation.defaultValue());
+                }
             }
-            return attributeValue;
+            return bind;
         }
 
         if (ServletRequest.class.isAssignableFrom(parameter.getType())){
