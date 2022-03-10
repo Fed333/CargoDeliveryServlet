@@ -7,6 +7,9 @@ import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.factory.ObjectFactory;
 import com.epam.cargo.infrastructure.format.formatter.Formatter;
 import com.epam.cargo.infrastructure.format.manager.FormatterManager;
+import com.epam.cargo.infrastructure.web.binding.binder.ParameterBinder;
+import com.epam.cargo.infrastructure.web.binding.manager.ParameterBinderManager;
+import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +23,7 @@ import java.util.Set;
  * @see ObjectFactory
  * @see ApplicationContext
  * @author Roman Kovalchuk
- * @version 1.2
+ * @version 1.3
  * */
 @SuppressWarnings("rawtypes")
 public class Application {
@@ -40,7 +43,9 @@ public class Application {
         context.setFactory(factory);
 
         initNoLazySingletons(config, context);
+
         setSupportedFormatters(config, context);
+        setSupportedBinders(config, context);
 
         return context;
     }
@@ -77,6 +82,28 @@ public class Application {
         formatters.forEach(formatterClass ->{
             try {
                 manager.assignFormatter(formatterClass.getDeclaredConstructor().newInstance());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Sets all supported ParameterBinder objects inside ParameterBinderManager singleton.<br>
+     * Settings based on scanning a web.binding.binder.impl package
+     * @param config Config with interface to implementation classes
+     * @param context ApplicationContext
+     * @author Roman Kovalchuk
+     * @since 1.3
+     * */
+    private static void setSupportedBinders(Config config, ApplicationContext context){
+        String packageToScan = Application.class.getPackageName() + ".web.binding.binder.impl";
+        Reflections scanner = new Reflections(packageToScan);
+        ParameterBinderManager manager = context.getObject(ParameterBinderManager.class);
+        Set<Class<? extends ParameterBinder>> binders = scanner.getSubTypesOf(ParameterBinder.class);
+        binders.forEach(pb->{
+            try {
+                manager.addParameterBinder(pb.getDeclaredConstructor().newInstance());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
             }

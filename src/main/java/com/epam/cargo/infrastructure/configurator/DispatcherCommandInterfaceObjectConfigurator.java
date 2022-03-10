@@ -1,20 +1,23 @@
 package com.epam.cargo.infrastructure.configurator;
 
-import com.epam.cargo.infrastructure.annotation.*;
+import com.epam.cargo.infrastructure.annotation.CommandMapping;
+import com.epam.cargo.infrastructure.annotation.Controller;
+import com.epam.cargo.infrastructure.annotation.FetchCommands;
+import com.epam.cargo.infrastructure.annotation.RequestMapping;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.dispatcher.Command;
 import com.epam.cargo.infrastructure.dispatcher.DispatcherCommand;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.format.formatter.Formatter;
-import com.epam.cargo.infrastructure.format.manager.FormatterManager;
 import com.epam.cargo.infrastructure.web.Model;
+import com.epam.cargo.infrastructure.web.binding.binder.ParameterBinder;
+import com.epam.cargo.infrastructure.web.binding.manager.ParameterBinderManager;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,7 +31,7 @@ import java.util.stream.Collectors;
  * @see RequestMapping
  * @see CommandMapping
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @SuppressWarnings({"unused", "deprecation"})
 public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfigurator {
@@ -71,6 +74,21 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
         }
     }
 
+    /**
+     * Creates command to put in DispatcherCommand.<br>
+     * Wraps method of controller to maintain web binding
+     * and analyse the method's response with name of view template.<br>
+     * @param controller object of controller class
+     * @param method dispatching method by requested mapping
+     * @param context infrastructure's ApplicationContext
+     * @return Command lambda expression which represents Command interface implementation
+     * to be added to DispatcherCommand
+     * @since 1.0
+     * @see Controller
+     * @see ApplicationContext
+     * @see Command
+     * @author Roman Kovalchuk
+     * */
     private Command createCommand(Object controller, Method method, ApplicationContext context) {
         return (req, res) -> {
             req.setAttribute(Model.class.getName(), context.getObject(Model.class));
@@ -100,92 +118,15 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
         };
     }
 
-    private String buildParamName(String parent, Field field){
-        String prefix = Objects.nonNull(parent) && !parent.isBlank() ? parent + "." : "";
-        return prefix + field.getName();
-    }
-
-    private Object assembleDataTransfer(Class<?> transferClass, HttpServletRequest req, String parent, ApplicationContext context){
-        try {
-            Object transfer = transferClass.getDeclaredConstructor().newInstance();
-            for (Field field : transfer.getClass().getDeclaredFields()) {
-                Class<?> fieldClass = field.getType();
-
-                Object fieldObject;
-                if (fieldClass.isAnnotationPresent(DTO.class)){
-                    fieldObject = assembleDataTransfer(fieldClass, req, field.getName(), context);
-                } else {
-                    fieldObject = bindType(fieldClass, req, buildParamName(parent, field), context);
-                }
-
-                field.setAccessible(true);
-                field.set(transfer, fieldObject);
-
-            }
-            return transfer;
-
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to create data transfer object of class " + transferClass);
-        }
-    }
-
-    private <T> T convertTypeFromString(String value, Class<T> fieldClass, FormatterManager manager) {
-        Formatter<String, T> formatter = manager.getFormatter(String.class, fieldClass).orElseThrow(()->new RuntimeException(String.format("No formatter from %s to %s was found! Please specify one with %s ", String.class, fieldClass, FormatterManager.class)));
-        return formatter.format(value);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T bindType(Class<T> bindClass, HttpServletRequest req, String parameterName, ApplicationContext context) {
-        Object bindValue = req.getParameter(parameterName);
-        if (Objects.nonNull(bindValue) && !bindClass.isAssignableFrom(bindValue.getClass())){
-            if (!((String)bindValue).isBlank()) {
-                bindValue = convertTypeFromString((String) bindValue, bindClass, context.getObject(FormatterManager.class));
-            } else {
-                bindValue = null;
-            }
-        }
-        return (T) bindValue;
-    }
-
+    /**
+     * Binds web parameter with ParameterBinderManager.<br>
+     * @return value of bind parameter
+     * @since 1.1
+     * @author Roman Kovalchuk
+     * */
     private Object bindParameter(Parameter parameter, HttpServletRequest req, HttpServletResponse res, ApplicationContext context) {
-
-        if (parameter.getType().isAnnotationPresent(DTO.class) || parameter.isAnnotationPresent(DataTransfer.class)){
-            Class<?> parameterClass = parameter.getType();
-            return assembleDataTransfer(parameterClass, req, "", context);
-        }
-
-        if (parameter.isAnnotationPresent(RequestParam.class)){
-            RequestParam paramAnnotation = parameter.getAnnotation(RequestParam.class);
-            Class<?> parameterClass = parameter.getType();
-            Object bind = bindType(parameterClass, req, paramAnnotation.name(), context);
-            if (Objects.isNull(bind)){
-                if (parameterClass.isAssignableFrom(paramAnnotation.defaultValue().getClass())){
-                    return paramAnnotation.defaultValue();
-                } else {
-                    Formatter<String, ?> formatter = context.getObject(FormatterManager.class).getFormatter(String.class, parameterClass).orElseThrow();
-                    return formatter.format(paramAnnotation.defaultValue());
-                }
-            }
-            return bind;
-        }
-
-        if (ServletRequest.class.isAssignableFrom(parameter.getType())){
-            return req;
-        }
-        if (ServletResponse.class.isAssignableFrom(parameter.getType())){
-            return res;
-        }
-        if (HttpSession.class.isAssignableFrom(parameter.getType())){
-            return req.getSession();
-        }
-        if (Model.class.isAssignableFrom(parameter.getType())){
-            if (Objects.isNull(req.getAttribute(Model.class.getName()))){
-                req.setAttribute(Model.class.getName(), context.getObject(Model.class));
-            }
-            return req.getAttribute(Model.class.getName());
-        }
-        return null;
+        Optional<ParameterBinder> parameterBinder = context.getObject(ParameterBinderManager.class).getParameterBinder(parameter);
+        return parameterBinder.map(binder -> binder.bindParameter(parameter, req, res, context)).orElse(null);
     }
 
     private void fetchCommandsFromCommandMappingAnnotation(ApplicationContext context, Map<SimpleImmutableEntry<String, HttpMethod>, AtomicReference<Command>> commands) {
