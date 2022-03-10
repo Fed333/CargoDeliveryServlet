@@ -1,7 +1,7 @@
 package com.epam.cargo;
 
 
-import com.epam.cargo.command.CommandDispatcher;
+import com.epam.cargo.infrastructure.dispatcher.impl.CommandDispatcher;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.Application;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
