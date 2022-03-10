@@ -1,7 +1,8 @@
 package com.epam.cargo.infrastructure.configurator;
 
-import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.annotation.PropertyValue;
+import com.epam.cargo.infrastructure.context.ApplicationContext;
+import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -12,7 +13,7 @@ import java.util.Properties;
  * Gets property value from pointed in annotation property file.
  * @see PropertyValue
  * @author Roman Kovalchuk
- * @version 1.1
+ * @version 1.2
  * */
 @SuppressWarnings("unused")
 public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigurator{
@@ -27,9 +28,9 @@ public class PropertyValueAnnotationObjectConfigurator implements ObjectConfigur
         for (Field field : o.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(PropertyValue.class)){
                 PropertyValue annotation = field.getAnnotation(PropertyValue.class);
-                Properties properties = new Properties();
+                Properties properties;
                 try {
-                    properties.load(getClass().getClassLoader().getResourceAsStream(buildPathToPropertiesFile(annotation)));
+                    properties = context.getObject(PropertiesSource.class).getProperties(buildPathToPropertiesFile(annotation));
                 } catch (IOException e){
                     e.printStackTrace();
                     throw new RuntimeException("Cannot set property for field " + field + ". File " + buildPathToPropertiesFile(annotation) + " wasn't found or opened.");
