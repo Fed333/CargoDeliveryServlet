@@ -1,4 +1,4 @@
-package com.epam.cargo.command;
+package com.epam.cargo.infrastructure.dispatcher.impl;
 
 import com.epam.cargo.infrastructure.annotation.FetchCommands;
 import com.epam.cargo.infrastructure.annotation.Singleton;
@@ -10,6 +10,11 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Base implementation of DispatcherCommand interface.<br>
+ * @author Roman Kovalchuk
+ * @version 1.0
+ * */
 @Singleton
 public final class CommandDispatcher implements DispatcherCommand {
 
