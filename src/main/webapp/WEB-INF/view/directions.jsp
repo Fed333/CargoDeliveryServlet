@@ -38,11 +38,11 @@
                     </div>
 
                     <div class="col-4">
-                        <input type="text" class="form-control" name="senderCityName" id="senderCityNameId" value="${requestScope.senderCity != null ? requestScope.senderCity : ""}" placeholder="Sender city"/>
+                        <input type="text" class="form-control" name="senderCityName" id="senderCityNameId" value="${sessionScope.senderCity != null ? sessionScope.senderCity : ""}" placeholder="Sender city"/>
                     </div>
 
                     <div class="col-4">
-                        <input type="text" class="form-control" name="receiverCityName" id="receiverCityNameId" value="${requestScope.receiverCity != null ? requestScope.receiverCity : ""}" placeholder="Receiver city"/>
+                        <input type="text" class="form-control" name="receiverCityName" id="receiverCityNameId" value="${sessionScope.receiverCity != null ? sessionScope.receiverCity : ""}" placeholder="Receiver city"/>
                     </div>
 
                     <div class="col-2">
