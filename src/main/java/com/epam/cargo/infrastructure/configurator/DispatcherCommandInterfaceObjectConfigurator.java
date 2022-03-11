@@ -105,10 +105,9 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
             String methodResponse;
             try {
                 methodResponse = (String) method.invoke(controller, arguments);
-
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Failed to invoke controller's method " + method, e);
+                throw new RuntimeException("Controller's method invocation failed " + method, e.getCause());
             }
 
             Model model = (Model)req.getAttribute(Model.class.getName());
