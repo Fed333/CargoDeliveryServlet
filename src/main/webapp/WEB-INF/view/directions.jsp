@@ -19,15 +19,25 @@
                     </div>
                     <div class="col-5">
                         <select class="form-select" name="sort" id="sortCriterionSelect">
-                            <option value="senderCity.name" id="senderCityOption">Sender City</option>
-                            <option value="receiverCity.name" id="receiverCityOption">Receiver City</option>
-                            <option value="distance" id="distanceOption">Distance</option>
+                            <option value="senderCity.name" id="senderCityOption" <c:if test="${sessionScope.sort == \"senderCity.name\"}">selected</c:if>>
+                                Sender City
+                            </option>
+                            <option value="receiverCity.name" id="receiverCityOption" <c:if test="${sessionScope.sort == \"receiverCity.name\"}">selected</c:if>>
+                                Receiver City
+                            </option>
+                            <option value="distance" id="distanceOption" <c:if test="${sessionScope.sort == \"distance\"}">selected</c:if>>
+                                Distance
+                            </option>
                         </select>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" id="sortOrderSelect">
-                            <option value="asc" id="ascOption">ASC</option>
-                            <option value="desc" id="descOption">DESC</option>
+                        <select class="form-select" id="sortOrderSelect" name="order">
+                            <option value="ASC" id="ascOption" <c:if test="${sessionScope.sortOrder == \"ASC\"}">selected</c:if>>
+                                ASC
+                            </option>
+                            <option value="DESC" id="descOption" <c:if test="${sessionScope.sortOrder == \"DESC\"}">selected</c:if>>
+                                DESC
+                            </option>
                         </select>
                     </div>
                 </div>
