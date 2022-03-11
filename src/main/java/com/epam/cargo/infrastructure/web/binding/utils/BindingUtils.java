@@ -6,9 +6,28 @@ import com.epam.cargo.infrastructure.format.manager.FormatterManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
+import java.util.Optional;
 
+/**
+ * Utils class for managing with common web binding operations.<br>
+ * @author Roman Kovalchuk
+ * @version 1.0
+ * */
 public class BindingUtils {
 
+    /**
+     * Binds value of given type from HttpServletRequest.<br>
+     * @param <T> generic type of bind object
+     * @param bindClass class of object to bind
+     * @param req http web request where we bind from
+     * @param parameterName name of source value to bind
+     * @param context ApplicationContext for getting necessities infrastructure's objects
+     * @return bind from req object of generic T class
+     * @author Roman Kovalchuk
+     * @see HttpServletRequest
+     * @see ApplicationContext
+     * @since 1.0
+     * */
     @SuppressWarnings("unchecked")
     public static <T> T bindType(Class<T> bindClass, HttpServletRequest req, String parameterName, ApplicationContext context) {
         Object bindValue = req.getParameter(parameterName);
@@ -22,9 +41,51 @@ public class BindingUtils {
         return (T) bindValue;
     }
 
-    private static <T> T convertTypeFromString(String value, Class<T> fieldClass, FormatterManager manager) {
-        Formatter<String, T> formatter = manager.getFormatter(String.class, fieldClass).orElseThrow(()->new RuntimeException(String.format("No formatter from %s to %s was found! Please specify one with %s ", String.class, fieldClass, FormatterManager.class)));
-        return formatter.format(value);
+    /**
+     * Converts bind type from a plain String.<br>
+     * @param <T> generic type of bind object
+     * @param value String to convert into bind T class
+     * @param bindClass type where we bind String to
+     * @param manager mean of converting String to bind T class
+     * @return bind from String object of generic T class
+     * @author Roman Kovalchuk
+     * @see FormatterManager
+     * @see Formatter
+     * @since 1.0
+     * */
+    @SuppressWarnings("unchecked")
+    public static <T> T convertTypeFromString(String value, Class<T> bindClass, FormatterManager manager) {
+        Optional<Formatter<String, T>> formatterOptional = manager.getFormatter(String.class, bindClass);
+        if (formatterOptional.isPresent()){
+            return formatterOptional.get().format(value);
+        } else {
+            if (bindClass.isEnum()){
+                return (T) bindEnumType(bindClass, value);
+            }
+            throw new RuntimeException(String.format("No formatter from %s to %s was found! Please specify one with %s ", String.class, bindClass, FormatterManager.class));
+        }
+    }
+
+    /**
+     * Binds enum classes from String value.<br>
+     * Uses standard {@link Enum#valueOf(Class, String)} method.
+     * @param bindClass class which must be enum
+     * @param constantName name of enum constant
+     * @return according to the constantName enum constant, if constantName is null or blank returns null
+     * @author Roman Kovalchuk
+     * @see Enum
+     * @since 1.0
+     * */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static Enum<?> bindEnumType(Class<?> bindClass, String constantName){
+        if (!bindClass.isEnum()){
+            throw new RuntimeException("Misuse of bindEnumType method. No enum class was passed as argument.");
+        }
+
+        if (Objects.nonNull(constantName) && !constantName.isBlank()) {
+            return Enum.valueOf((Class)bindClass, constantName);
+        }
+        return null;
     }
 
 }

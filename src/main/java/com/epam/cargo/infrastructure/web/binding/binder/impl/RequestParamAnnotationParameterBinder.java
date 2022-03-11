@@ -2,7 +2,6 @@ package com.epam.cargo.infrastructure.web.binding.binder.impl;
 
 import com.epam.cargo.infrastructure.annotation.RequestParam;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
-import com.epam.cargo.infrastructure.format.formatter.Formatter;
 import com.epam.cargo.infrastructure.format.manager.FormatterManager;
 import com.epam.cargo.infrastructure.web.binding.binder.ParameterBinder;
 
@@ -12,6 +11,7 @@ import java.lang.reflect.Parameter;
 import java.util.Objects;
 
 import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.bindType;
+import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.convertTypeFromString;
 
 /**
  * Binds web parameters annotated with @RequestParam annotation.
@@ -31,12 +31,10 @@ public class RequestParamAnnotationParameterBinder implements ParameterBinder {
             if (parameterClass.isAssignableFrom(paramAnnotation.defaultValue().getClass())){
                 return paramAnnotation.defaultValue();
             } else {
-                Formatter<String, ?> formatter = context.getObject(FormatterManager.class).getFormatter(String.class, parameterClass).orElseThrow();
-                return formatter.format(paramAnnotation.defaultValue());
+                return convertTypeFromString(paramAnnotation.defaultValue(), parameterClass, context.getObject(FormatterManager.class));
             }
         }
         return bind;
-
     }
 
     @Override
