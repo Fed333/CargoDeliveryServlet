@@ -1,6 +1,7 @@
 package com.epam.cargo.controller;
 
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
+import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.DirectionDelivery;
 import com.epam.cargo.infrastructure.annotation.Controller;
 import com.epam.cargo.infrastructure.annotation.Inject;
@@ -27,14 +28,18 @@ public class DirectionsController {
             HttpSession session,
             @RequestParam(name = "senderCityName", defaultValue = "") String senderCity,
             @RequestParam(name = "receiverCityName", defaultValue = "") String receiverCity,
-            DirectionDeliveryFilterRequest filter
+            DirectionDeliveryFilterRequest filter,
+            SortRequest sort
+
     ){
-        List<DirectionDelivery> directions = directionsService.findAll(filter);
+        List<DirectionDelivery> directions = directionsService.findAll(filter, sort);
+
         model.addAttribute("directions", directions);
         model.addAttribute("url", "/CargoDeliveryServlet/directions");
 
         Optional.ofNullable(filter.getSenderCityName()).ifPresent(v->session.setAttribute("senderCity", v));
         Optional.ofNullable(filter.getReceiverCityName()).ifPresent(v->session.setAttribute("receiverCity", v));
+        Optional.ofNullable(sort).ifPresent(v->session.setAttribute("sort", v));
 
         return "directions.jsp";
     }

@@ -2,20 +2,25 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
+import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.Singleton;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Optional;
+import java.text.Collator;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static com.epam.cargo.service.ServiceUtils.*;
+
+import static com.epam.cargo.dto.SortRequest.Order;
 
 @Singleton(type = Singleton.Type.LAZY)
 public class DirectionDeliveryService {
@@ -34,12 +39,25 @@ public class DirectionDeliveryService {
         return directions;
     }
 
+    public List<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, SortRequest sort){
+        List<DirectionDelivery> directions = findAll(filter);
+        if (Objects.nonNull(sort) && Objects.nonNull(sort.getSort())) {
+            ServiceUtils.sortList(directions, sort, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
+        }
+        return directions;
+    }
+
+    public void deleteDirection(DirectionDelivery direction) {
+        directionDeliveryRepo.delete(direction);
+    }
+
+
     @NotNull
     private List<DirectionDelivery> filterDirections(DirectionDeliveryFilterRequest filter, List<DirectionDelivery> directions) {
         return directions.stream()
                 .filter(
                         getDirectionDeliveryPredicate(filter::getSenderCityName, DirectionDelivery::getSenderCity)
-                                .and(getDirectionDeliveryPredicate(filter::getReceiverCityName, DirectionDelivery::getReceiverCity))
+                        .and(getDirectionDeliveryPredicate(filter::getReceiverCityName, DirectionDelivery::getReceiverCity))
                 ).collect(Collectors.toList());
     }
 
@@ -53,4 +71,35 @@ public class DirectionDeliveryService {
             return matcher.find();
         };
     }
+
+    private static class DirectionDeliveryComparatorRecognizer implements ComparatorRecognizer<DirectionDelivery> {
+
+        private final Map<String, Comparator<DirectionDelivery>> comparators;
+
+        DirectionDeliveryComparatorRecognizer(Collator collator){
+            comparators = new HashMap<>();
+            comparators.put("senderCity.name", new DirectionDelivery.SenderCityNameComparator(collator));
+            comparators.put("receiverCity.name", new DirectionDelivery.ReceiverCityNameComparator(collator));
+            comparators.put("distance", new DirectionDelivery.DistanceComparator());
+        }
+
+        @Override
+        public Comparator<DirectionDelivery> getComparator(String property, Order order){
+            Comparator<DirectionDelivery> cmp = comparators.get(property);
+            if (order.equals(Order.DESC)){
+                cmp = cmp.reversed();
+            }
+            return cmp;
+        }
+    }
+
+    private void requireNonNullAndSimilarCities(DirectionDelivery direction){
+        City city1 = Optional.ofNullable(direction.getSenderCity()).orElseThrow();
+        City city2 = Optional.ofNullable(direction.getReceiverCity()).orElseThrow();
+        if (city1.equals(city2)){
+            throw new IllegalArgumentException();
+        }
+    }
+
+
 }
