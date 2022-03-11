@@ -13,6 +13,7 @@ import com.epam.cargo.service.DirectionDeliveryService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
@@ -39,8 +40,10 @@ public class DirectionsController {
 
         Optional.ofNullable(filter.getSenderCityName()).ifPresent(v->session.setAttribute("senderCity", v));
         Optional.ofNullable(filter.getReceiverCityName()).ifPresent(v->session.setAttribute("receiverCity", v));
-        Optional.ofNullable(sort).ifPresent(v->session.setAttribute("sort", v));
-
+        if (Objects.nonNull(sort)){
+            Optional.ofNullable(sort.getSort()).ifPresent(v->session.setAttribute("sort", v));
+            Optional.ofNullable(sort.getOrder()).ifPresent(v->session.setAttribute("sortOrder", v));
+        }
         return "directions.jsp";
     }
 }
