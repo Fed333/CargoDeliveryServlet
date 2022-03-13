@@ -5,20 +5,27 @@ import com.epam.cargo.infrastructure.annotation.DTO;
 /**
  * Data Transfer Object for assembling filter for DirectionDelivery objects on directions page.<br>
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @DTO
 public class SortRequest {
 
-    private String sort;
+    /**
+     * Property by we sort.
+     * */
+    private String property;
+
+    /**
+     * Direction order of sorting.
+     * */
     private Order order;
 
-    public String getSort() {
-        return sort;
+    public String getProperty() {
+        return property;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setProperty(String property) {
+        this.property = property;
     }
 
     public Order getOrder() {
