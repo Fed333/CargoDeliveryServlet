@@ -50,9 +50,10 @@ public class DataTransferObjectParameterBinder implements ParameterBinder {
 
                 }
 
-                field.setAccessible(true);
-                field.set(transfer, fieldObject);
-
+                if (Objects.nonNull(fieldObject)) {
+                    field.setAccessible(true);
+                    field.set(transfer, fieldObject);
+                }
             }
             return transfer;
 
