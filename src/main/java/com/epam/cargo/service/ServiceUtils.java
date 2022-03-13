@@ -57,14 +57,13 @@ public class ServiceUtils {
      * @author Roman Kovalhchuk
      * */
     static <T> void sortList(List<T> list, SortRequest sort, ComparatorRecognizer<T> recognizer) {
-        Objects.requireNonNull(sort.getSort(), "Sort criterion cannot be null");
-        Comparator<T> comparator = recognizer.getComparator(sort.getSort(), Optional.ofNullable(sort.getOrder()).orElse(Order.ASC));
+        Objects.requireNonNull(sort.getProperty(), "Sort property cannot be null");
+        Comparator<T> comparator = recognizer.getComparator(sort.getProperty(), Optional.ofNullable(sort.getOrder()).orElse(Order.ASC));
 
         if (!Objects.isNull(comparator)) {
             list.sort(comparator);
         }
     }
-
 
     /**
      * Checks authorized rights for personal actions.
