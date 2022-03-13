@@ -2,6 +2,7 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
+import com.epam.cargo.dto.PageRequest;
 import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
@@ -41,16 +42,39 @@ public class DirectionDeliveryService {
 
     public List<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, SortRequest sort){
         List<DirectionDelivery> directions = findAll(filter);
-        if (Objects.nonNull(sort) && Objects.nonNull(sort.getSort())) {
+        if (Objects.nonNull(sort) && Objects.nonNull(sort.getProperty())) {
             ServiceUtils.sortList(directions, sort, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
         }
         return directions;
     }
 
+    public List<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, PageRequest pageRequest){
+        List<DirectionDelivery> directions = findAll(filter);
+        List<DirectionDelivery> page;
+        page = getPage(directions, pageRequest);
+        return page;
+    }
+
+    private List<DirectionDelivery> getPage(List<DirectionDelivery> directions, PageRequest pageRequest) {
+
+        if(pageRequest.getPage() * pageRequest.getSize() > directions.size()){
+            pageRequest.setPage(0);
+        }
+        SortRequest sort = pageRequest.getSort();
+        if (Objects.nonNull(sort) && Objects.nonNull(sort.getProperty())) {
+            sortList(directions, sort, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
+        }
+        int start = pageRequest.getPage() * pageRequest.getSize();
+        int end = Math.min(start + pageRequest.getSize(), directions.size());
+        if (start > end){
+            return Collections.emptyList();
+        }
+        return directions.subList(start, end);
+    }
+
     public void deleteDirection(DirectionDelivery direction) {
         directionDeliveryRepo.delete(direction);
     }
-
 
     @NotNull
     private List<DirectionDelivery> filterDirections(DirectionDeliveryFilterRequest filter, List<DirectionDelivery> directions) {
@@ -100,6 +124,5 @@ public class DirectionDeliveryService {
             throw new IllegalArgumentException();
         }
     }
-
 
 }

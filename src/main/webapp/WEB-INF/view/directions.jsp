@@ -1,4 +1,5 @@
 <%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
+<%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE>
 <html>
@@ -13,12 +14,12 @@
         <h2 class="d-flex justify-content-center">Directions</h2>
         <div class="d-flex justify-content-center">
             <form class="col-6" action="${requestScope.url}" method="get">
-                <div class="form-group row mt-2">
+                 <div class="form-group row mt-2">
                     <div class="col-2">
                         <label class="col-form-label">Sorting</label>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" name="sort" id="sortCriterionSelect">
+                        <select class="form-select" name="sort.property" id="sortCriterionSelect">
                             <option value="senderCity.name" id="senderCityOption" <c:if test="${sessionScope.sort == \"senderCity.name\"}">selected</c:if>>
                                 Sender City
                             </option>
@@ -31,7 +32,7 @@
                         </select>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" id="sortOrderSelect" name="order">
+                        <select class="form-select" id="sortOrderSelect" name="sort.order">
                             <option value="ASC" id="ascOption" <c:if test="${sessionScope.sortOrder == \"ASC\"}">selected</c:if>>
                                 ASC
                             </option>
@@ -56,7 +57,7 @@
                     </div>
 
                     <div class="col-2">
-                        <button class="btn btn-primary" type="submit">Filter</button>
+                        <button class="btn btn-primary" type="submit" id="submitButton">Filter</button>
                     </div>
 
                 </div>
@@ -76,9 +77,12 @@
                             </tr>
                         </c:forEach>
                         </tbody>
+
                     </table>
                 </div>
-
+                <div class="row">
+                    <tag:pager url="${requestScope.url}" submitButtonId="submitButton"/>
+                </div>
             </form>
         </div>
     </div>

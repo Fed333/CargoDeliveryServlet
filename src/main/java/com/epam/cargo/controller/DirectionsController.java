@@ -1,6 +1,7 @@
 package com.epam.cargo.controller;
 
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
+import com.epam.cargo.dto.PageRequest;
 import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.DirectionDelivery;
 import com.epam.cargo.infrastructure.annotation.Controller;
@@ -27,23 +28,23 @@ public class DirectionsController {
     public String directions(
             Model model,
             HttpSession session,
-            @RequestParam(name = "senderCityName", defaultValue = "") String senderCity,
-            @RequestParam(name = "receiverCityName", defaultValue = "") String receiverCity,
             DirectionDeliveryFilterRequest filter,
-            SortRequest sort
-
+            //TODO infrastructure's support of Pageable
+            PageRequest pageRequest
     ){
-        List<DirectionDelivery> directions = directionsService.findAll(filter, sort);
+        List<DirectionDelivery> directions = directionsService.findAll(filter, pageRequest);
 
         model.addAttribute("directions", directions);
         model.addAttribute("url", "/CargoDeliveryServlet/directions");
 
         Optional.ofNullable(filter.getSenderCityName()).ifPresent(v->session.setAttribute("senderCity", v));
         Optional.ofNullable(filter.getReceiverCityName()).ifPresent(v->session.setAttribute("receiverCity", v));
+        SortRequest sort = Optional.ofNullable(pageRequest).map(PageRequest::getSort).orElse(null);
         if (Objects.nonNull(sort)){
-            Optional.ofNullable(sort.getSort()).ifPresent(v->session.setAttribute("sort", v));
+            Optional.ofNullable(sort.getProperty()).ifPresent(v->session.setAttribute("sort", v));
             Optional.ofNullable(sort.getOrder()).ifPresent(v->session.setAttribute("sortOrder", v));
         }
+        Optional.ofNullable(pageRequest).ifPresent(v->model.addAttribute("pageRequest", pageRequest));
         return "directions.jsp";
     }
 }
