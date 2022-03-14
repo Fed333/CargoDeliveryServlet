@@ -1,9 +1,12 @@
+<%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="resources/messages"/>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-green-ireland">
     <div class="container-fluid">
 
-        <a class="navbar-brand" href="/CargoDeliveryServlet/">Cargo Delivery</a>
+        <a class="navbar-brand" href="/CargoDeliveryServlet/"><fmt:message key="menu.cargo-delivery"/></a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -12,36 +15,36 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/CargoDeliveryServlet/directions">Directions</a>
+                    <a class="nav-link" href="/CargoDeliveryServlet/directions"><fmt:message key="menu.directions"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/make_app">Create Application</a>
+                    <a class="nav-link" href="/make_app"><fmt:message key="menu.create-application"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
+                    <a class="nav-link" href="/profile"><fmt:message key="menu.profile"/></a>
                 </li>
             </ul>
             <div class="dropdown navbar-nav me-2" id="switchLanguageDropdown">
                 <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="selectLanguageDropdown">
                     <img src="static/images/i18n/language_icon.png" width="24" height="24" class="d-inline-block align-text-top">
-                    Language
+                    <fmt:message key="menu.language"/>
                 </a>
                 <ul class="dropdown-menu me-auto" aria-labelledby="selectLanguageDropdown">
                     <li>
                         <a class="dropdown-item" href="#" role="button" id="langEnglish">
                             <img src="static/images/i18n/flags/english_flag.png" width="48" height="24" class="d-inline-block me-4">
-                            English
+                            <fmt:message key="menu.language_en"/>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#" role="button" id="langUkrainian">
                             <img src="static/images/i18n/flags/ukraine_flag.png" width="48" height="24" class="d-inline-block me-4">
-                            Ukrainian
+                            <fmt:message key="menu.language_uk"/>
                         </a>
                     </li>
                 </ul>
             </div>
-            <a class="btn btn-light me-2" href="/CargoDeliveryServlet/login">Sign In</a>
+            <a class="btn btn-light me-2" href="/CargoDeliveryServlet/login"><fmt:message key="auth.login"/></a>
         </div>
     </div>
 </nav>

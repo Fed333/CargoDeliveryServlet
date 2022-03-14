@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE>
 <html lang="ru">
 <head>
@@ -11,32 +12,29 @@
     <%@include file="jspf/navbar.jspf"%>
 
     <div class="container mt-4">
-        <script src="../../static/js/formSubmit.js"></script>
-        <script src="../../static/js/localization.js"></script>
         <div class="row d-flex justify-content-center mt-4">
-            <form action="/login" method="post" style="max-width: 480px;">
-                <input type="hidden" name="_csrf" value="9bdeb140-e24e-418e-8ed6-d3a9d03365dd">
+            <form action="/CargoDeliveryServlet/login" method="post" style="max-width: 480px;">
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col d-flex justify-content-center mb-2">
-                                <h2>Please Sign In</h2>
+                                <h2><fmt:message key="auth.login.head"/></h2>
                             </div>
                         </div>
                         <div class="form-group row justify-content-center mb-2">
-                            <input class="form-control" type="text" name="username" placeholder="Login" id="input_login">
+                            <input class="form-control" type="text" name="username" placeholder="<fmt:message key="auth.credentials-login"/>" id="input_login">
                         </div>
                         <div class="form-group row justify-content-center mb-2">
-                            <input class="form-control" type="password" name="password" placeholder="Password" id="input_password">
+                            <input class="form-control" type="password" name="password" placeholder="<fmt:message key="auth.credentials-password"/>" id="input_password">
                         </div>
                         <div class="form-group row mx-5">
-                            <label class="col-form label"><a href="/reset_password">Forgot password</a></label>
+                            <label class="col-form label"><a href="/reset_password"><fmt:message key="auth.login.forgot-password"/></a></label>
                         </div>
                         <div class="form-group row mx-5">
-                            <label class="col-form label">Haven't registered yet? <a href="/registration">Register now!</a></label>
+                            <label class="col-form label"><fmt:message key="auth.login.have-not-registered"/> <a href="/registration"><fmt:message key="auth.login.register-now"/></a></label>
                         </div>
                         <div class="form-group row justify-content-center">
-                            <button class="btn btn-primary mt-4" type="submit" id="button_sign_in">Sign In</button>
+                            <button class="btn btn-primary mt-4" type="submit" id="button_sign_in"><fmt:message key="auth.login"/></button>
                         </div>
                     </div>
                 </div>
@@ -44,16 +42,17 @@
         </div>
 
 
-        <form action="/login" method="get">
+        <form action="/CargoDeliveryServlet/login" method="get">
             <input name="lang" value="en" id="langInput" hidden="">
             <button type="submit" id="submitButton" hidden=""></button>
         </form>
-
+        <script src="static/js/formSubmit.js"></script>
+        <script src="static/js/localization.js"></script>
         <script>
             function clickSubmitButtonHandler(){
                 clickSubmitButton('submitButton')
             }
-            addEventListeners(clickSubmitButtonHandler)
+            addSwitchLanguageWithFormListeners(clickSubmitButtonHandler)
         </script>
 
     </div>

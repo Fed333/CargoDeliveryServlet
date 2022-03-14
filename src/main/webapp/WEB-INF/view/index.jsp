@@ -16,10 +16,19 @@
     <%@include file="jspf/navbar.jspf"%>
     <div class="container mt-4">
         <h2><fmt:message key="lang.greeting"/></h2>
-        <div class="row">
-            <h3>Your response: ${greetings}</h3>
-        </div>
     </div>
+    <form action="/CargoDeliveryServlet/" method="get">
+        <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
+        <button type="submit" id="submitButton" hidden></button>
+    </form>
 </div>
+<script src="static/js/formSubmit.js"></script>
+<script src="static/js/localization.js"></script>
+<script>
+    function clickSubmitButtonHandler(){
+        clickSubmitButton('submitButton')
+    }
+    addSwitchLanguageWithFormListeners(clickSubmitButtonHandler)
+</script>
 </body>
 </html>
