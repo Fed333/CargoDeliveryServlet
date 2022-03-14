@@ -1,14 +1,13 @@
 package com.epam.cargo;
 
 
-import com.epam.cargo.infrastructure.dispatcher.impl.CommandDispatcher;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.Application;
+import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
+import com.epam.cargo.infrastructure.dispatcher.impl.CommandDispatcher;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet("/")
 public class MainServlet extends HttpServlet {
 
     private static final String APPLICATION_CONTEXT_ATTRIBUTE = "applicationContext";;
