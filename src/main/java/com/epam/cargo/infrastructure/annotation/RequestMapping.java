@@ -21,7 +21,7 @@ import com.epam.cargo.infrastructure.configurator.DispatcherCommandInterfaceObje
  * @see DispatcherCommand
  * @see DispatcherCommandInterfaceObjectConfigurator
  * @author Roman Kovalchuk
- * @version 1.1
+ * @version 1.2
  * */
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -29,13 +29,7 @@ import com.epam.cargo.infrastructure.configurator.DispatcherCommandInterfaceObje
 public @interface RequestMapping {
 
     /**
-     * Prefix of http request mapping. Repeatable part of every http url.
-     * @since 1.1
-     * */
-    String prefix() default "/CargoDeliveryServlet";
-
-    /**
-     * URL after prefix part.
+     * Requested URL mapping.
      * @since 1.0
      * */
     String url();

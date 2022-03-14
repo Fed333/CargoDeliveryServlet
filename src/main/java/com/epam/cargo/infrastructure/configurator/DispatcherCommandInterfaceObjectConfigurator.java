@@ -8,12 +8,14 @@ import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.dispatcher.Command;
 import com.epam.cargo.infrastructure.dispatcher.DispatcherCommand;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
+import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
 import com.epam.cargo.infrastructure.web.Model;
 import com.epam.cargo.infrastructure.web.binding.binder.ParameterBinder;
 import com.epam.cargo.infrastructure.web.binding.manager.ParameterBinderManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,10 +33,12 @@ import java.util.stream.Collectors;
  * @see RequestMapping
  * @see CommandMapping
  * @author Roman Kovalchuk
- * @version 1.1
+ * @version 1.3
  * */
 @SuppressWarnings({"unused", "deprecation"})
 public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfigurator {
+
+    private static final String APPLICATION_PROPERTIES_PATH = "resources/application.properties";
 
     /**
      * Configures DispatcherCommand implementation object to maintain http request dispatching.
@@ -66,7 +70,17 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
             for (final Method method : controllerClass.getDeclaredMethods()) {
                 if (method.isAnnotationPresent(RequestMapping.class)){
                     RequestMapping annotation = method.getAnnotation(RequestMapping.class);
-                    String mapping = annotation.prefix() + annotation.url();
+
+                    String prefix = "";
+                    try {
+                        Properties properties = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH);
+                        prefix = properties.getProperty("httpPrefix");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        //TODO log WARNING message
+                    }
+
+                    String mapping = prefix + annotation.url();
                     Command command = createCommand(controller, method, context);
                     assignCommand(commands, new SimpleImmutableEntry<>(mapping, annotation.method()), new AtomicReference<>(command));
                 }
@@ -113,7 +127,8 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
             Model model = (Model)req.getAttribute(Model.class.getName());
             req.removeAttribute(Model.class.getName());
             model.asMap().forEach(req::setAttribute);
-            req.getRequestDispatcher("WEB-INF/view/" + methodResponse).forward(req, res);
+            String viewPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("viewPrefix", "");
+            req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
         };
     }
 
