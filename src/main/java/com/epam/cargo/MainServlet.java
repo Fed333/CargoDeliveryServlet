@@ -15,6 +15,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Entry launch point of the servlet application.<br>
+ * The main application's servlet. Is configured via web.xml<br>
+ * Sets the ApplicationContext, raises the infrastructure, assigns get,post methods handlers.<br>
+ * @author Roman Kovalchuk
+ * @see HttpServlet
+ * @see ApplicationContext
+ * @see Application
+ * @version 1.2
+ * */
 public class MainServlet extends HttpServlet {
 
     private static final String APPLICATION_CONTEXT_ATTRIBUTE = "applicationContext";;
