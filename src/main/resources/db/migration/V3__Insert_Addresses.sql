@@ -1,0 +1,111 @@
+--
+-- Data for Name: addresses; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.addresses VALUES (2, '98', 1, 'Kelezka');
+INSERT INTO public.addresses VALUES (4, '68', 1, 'Soborna');
+INSERT INTO public.addresses VALUES (10, '100', 1, 'Pyrogova');
+INSERT INTO public.addresses VALUES (14, '98', 1, 'Келецька');
+INSERT INTO public.addresses VALUES (20, '23', 13, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (21, '', 2, '');
+INSERT INTO public.addresses VALUES (22, '', 1, 'Келецька');
+INSERT INTO public.addresses VALUES (23, '82', 5, 'Шевченка');
+INSERT INTO public.addresses VALUES (24, '14', 1, 'Молодіжна');
+INSERT INTO public.addresses VALUES (25, '13', 6, 'Липки');
+INSERT INTO public.addresses VALUES (26, '81', 1, 'Соборна');
+INSERT INTO public.addresses VALUES (27, '91', 1, 'Соборна');
+INSERT INTO public.addresses VALUES (28, '', 20, '');
+INSERT INTO public.addresses VALUES (29, '', 6, '');
+INSERT INTO public.addresses VALUES (30, '', 1, '');
+INSERT INTO public.addresses VALUES (31, '22', 20, 'Олекси Довбуша');
+INSERT INTO public.addresses VALUES (32, '123', 20, 'Олекси  Довбуша');
+INSERT INTO public.addresses VALUES (33, '', 23, '');
+INSERT INTO public.addresses VALUES (34, '26', 1, 'Академіка Янгеля');
+INSERT INTO public.addresses VALUES (35, '32', 20, 'Олекса Довбуша');
+INSERT INTO public.addresses VALUES (36, '12', 20, 'Олекси Довбуша');
+INSERT INTO public.addresses VALUES (37, '44', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (38, '65', 1, 'Соборна');
+INSERT INTO public.addresses VALUES (39, '82', 2, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (40, '32', 2, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (41, '53', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (42, '22', 17, 'Симона Петлюри');
+INSERT INTO public.addresses VALUES (43, '73', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (44, '87', 21, 'Каразіна');
+INSERT INTO public.addresses VALUES (45, '73', 13, 'Тараса Шевченка');
+INSERT INTO public.addresses VALUES (46, '74', 5, 'Василя Сосюри');
+INSERT INTO public.addresses VALUES (47, '93', 23, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (48, '83', 15, 'Богдана Хмельницького');
+INSERT INTO public.addresses VALUES (49, '76', 21, 'Незалежності');
+INSERT INTO public.addresses VALUES (50, '93', 22, 'Івана Франка');
+INSERT INTO public.addresses VALUES (51, '93', 3, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (52, '37', 13, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (53, '93', 20, 'Каразіна');
+INSERT INTO public.addresses VALUES (54, '65', 21, 'Олекса Довбуша');
+INSERT INTO public.addresses VALUES (55, '93', 20, 'Олекси Довбуша');
+INSERT INTO public.addresses VALUES (56, '83', 21, 'Василя Каразіна');
+INSERT INTO public.addresses VALUES (57, '72', 21, 'Василя Каразіна');
+INSERT INTO public.addresses VALUES (58, '83', 23, 'Незалежності');
+INSERT INTO public.addresses VALUES (59, '83', 20, 'Олекса Довбуша');
+INSERT INTO public.addresses VALUES (60, '37', 1, 'Проспект Юності');
+INSERT INTO public.addresses VALUES (61, '73', 2, 'Незалежності');
+INSERT INTO public.addresses VALUES (62, '47', 18, 'Незалежності');
+INSERT INTO public.addresses VALUES (63, '93', 22, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (64, '28', 1, 'Воїнів інтернаціоналістів');
+INSERT INTO public.addresses VALUES (65, '83', 1, 'В''ячеслава Чорновола');
+INSERT INTO public.addresses VALUES (66, '73', 1, 'Соборна');
+INSERT INTO public.addresses VALUES (67, '87', 1, 'Пирогова');
+INSERT INTO public.addresses VALUES (68, '83', 10, 'Олекси Довбуша');
+INSERT INTO public.addresses VALUES (69, '83', 9, 'Івана Франка');
+INSERT INTO public.addresses VALUES (70, '63', 20, 'Олекси Довбуша');
+INSERT INTO public.addresses VALUES (71, '63', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (72, '43', 9, 'Івана Франка');
+INSERT INTO public.addresses VALUES (73, '37', 11, 'Незалежності');
+INSERT INTO public.addresses VALUES (74, '83', 17, 'Степана Бандери');
+INSERT INTO public.addresses VALUES (75, '83', 7, 'Богдана Хмельницького');
+INSERT INTO public.addresses VALUES (76, '73', 19, 'Івана Франка');
+INSERT INTO public.addresses VALUES (77, '93', 6, 'Хрещатик');
+INSERT INTO public.addresses VALUES (78, '83', 4, 'Незалежності');
+INSERT INTO public.addresses VALUES (79, '72', 1, 'Воїнів інтернаціоналістів');
+INSERT INTO public.addresses VALUES (80, '25', 3, 'Новощіпний Ряд');
+INSERT INTO public.addresses VALUES (81, '9', 1, 'Сергія Зулінського');
+INSERT INTO public.addresses VALUES (82, '29', 17, 'В''ячеслава Чорновола');
+INSERT INTO public.addresses VALUES (83, '64', 12, 'Тараса Шевченка');
+INSERT INTO public.addresses VALUES (84, '65', 7, 'Кобзаря');
+INSERT INTO public.addresses VALUES (85, '43', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (86, '62', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (87, '53', 4, 'Подільська');
+INSERT INTO public.addresses VALUES (88, '73', 6, 'Хрещатик');
+INSERT INTO public.addresses VALUES (89, '52', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (90, '83', 13, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (91, '73', 19, 'Незалежності');
+INSERT INTO public.addresses VALUES (92, '163', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (93, '37', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (94, '121', 16, 'Котляревського');
+INSERT INTO public.addresses VALUES (95, '42', 1, 'Поділля');
+INSERT INTO public.addresses VALUES (96, '141', 9, 'Івана-Франка');
+INSERT INTO public.addresses VALUES (97, '141', 20, 'Івана-Франка');
+INSERT INTO public.addresses VALUES (98, '42', 21, 'Поділля');
+INSERT INTO public.addresses VALUES (99, '63', 18, 'Незалежності');
+INSERT INTO public.addresses VALUES (100, '62', 18, 'Незалежності');
+INSERT INTO public.addresses VALUES (105, '33', 1, 'Кармелюка');
+INSERT INTO public.addresses VALUES (112, '12', 23, 'Тараса Шевченка');
+INSERT INTO public.addresses VALUES (113, '13', 23, 'Тараса Шевченка');
+INSERT INTO public.addresses VALUES (114, '73', 1, 'Оводова');
+INSERT INTO public.addresses VALUES (115, '83', 6, 'Хрещатик');
+INSERT INTO public.addresses VALUES (116, '83', 1, 'Оводова');
+INSERT INTO public.addresses VALUES (117, '83', 21, 'Незалежності');
+INSERT INTO public.addresses VALUES (118, '83', 7, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (119, '83', 19, 'Івана Франка');
+INSERT INTO public.addresses VALUES (127, '83', 15, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (128, '16', 1, 'Ющенка');
+INSERT INTO public.addresses VALUES (129, '8', 15, 'Незалежності');
+INSERT INTO public.addresses VALUES (130, '8', 18, 'Незалежності');
+INSERT INTO public.addresses VALUES (131, '72', 13, 'Лесі Українки');
+INSERT INTO public.addresses VALUES (132, '78', 19, 'Лесі Українки');
+
+
+--
+-- Name: addresses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.addresses_id_seq', 132, true);

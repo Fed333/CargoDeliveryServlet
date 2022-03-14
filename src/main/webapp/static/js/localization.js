@@ -21,7 +21,7 @@ function addSwitchLanguageListeners(){
     langUkrainian.addEventListener('click', switchLanguageToUkrainianLocale)
 }
 
-function addEventListeners(submitHandler){
+function addSwitchLanguageWithFormListeners(submitHandler){
     langEnglish.addEventListener('click', switchLanguageToEnglishLocale)
     langUkrainian.addEventListener('click', switchLanguageToUkrainianLocale)
 
