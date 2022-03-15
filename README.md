@@ -25,5 +25,6 @@
 * PostgreSQL
 * Apache Tomcat
 * JSP/JSTL
+* Bootstrap 5
 * JUnit 5
 * Mockito
