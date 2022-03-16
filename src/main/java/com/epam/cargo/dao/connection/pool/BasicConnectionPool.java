@@ -2,6 +2,7 @@ package com.epam.cargo.dao.connection.pool;
 
 import com.epam.cargo.infrastructure.annotation.PropertyValue;
 import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
@@ -9,7 +10,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Base implementation of ConnectionPool interface.<br>
+ * @author Roman Kovalchuk
+ * @version 1.0
+ * */
 @Singleton(type = Singleton.Type.LAZY)
 public class BasicConnectionPool
         implements ConnectionPool {
@@ -56,10 +63,13 @@ public class BasicConnectionPool
                 throw new RuntimeException("Maximum pool size reached, no available connections!");
             }
         }
+        Connection connection = connectionPool.remove(connectionPool.size() - 1);
 
-        Connection connection = connectionPool
-                .remove(connectionPool.size() - 1);
-
+        if (Objects.isNull(connection)){
+            Logger logger = Logger.getLogger(BasicConnectionPool.class);
+            logger.error("Null Connection received!");
+        }
+        Objects.requireNonNull(connection, "The obtained connection mustn't be null!");
         if(!connection.isValid(MAX_TIMEOUT)){
             connection = createConnection(url, user, password);
         }
