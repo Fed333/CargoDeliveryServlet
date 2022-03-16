@@ -6,3 +6,4 @@ files
 *.iml
 .vscode
 javadoc
+log
