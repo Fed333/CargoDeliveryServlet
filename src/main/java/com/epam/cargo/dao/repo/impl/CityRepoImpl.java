@@ -120,16 +120,6 @@ public class CityRepoImpl implements CityRepo {
         }
     }
 
-    interface PreparedStatementConsumer {
-
-        void prepare(PreparedStatement preparedStatement) throws SQLException;
-
-        @SuppressWarnings("unused")
-        default PreparedStatementConsumer prepareNext(PreparedStatementConsumer after) {
-            return o -> {prepare(o); after.prepare(o);};
-        }
-    }
-
     /**
      * Implementation of DaoPersist for CityRepoImpl class.<br>
      * Implements all abstract methods of DaoPersist interface.

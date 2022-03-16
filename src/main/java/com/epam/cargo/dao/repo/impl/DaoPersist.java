@@ -56,7 +56,7 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
      * @throws IllegalStateException when more than 1 element was found
      * @since 1.0
      * */
-    public Optional<T> findBy(String selectQuery, CityRepoImpl.PreparedStatementConsumer prepared) {
+    public Optional<T> findBy(String selectQuery, PreparedStatementConsumer prepared) {
         Connection connection = null;
         try {
             connection = pool.getConnection();
@@ -204,4 +204,20 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
         }
         return objects;
     }
+
+    /**
+     * Interface for special preparing action under PreparedStatement.
+     * @author Roman Kovalchuk
+     * @version 1.0
+     * */
+    interface PreparedStatementConsumer {
+
+        void prepare(PreparedStatement preparedStatement) throws SQLException;
+
+        @SuppressWarnings("unused")
+        default PreparedStatementConsumer prepareNext(PreparedStatementConsumer after) {
+            return o -> {prepare(o); after.prepare(o);};
+        }
+    }
+
 }
