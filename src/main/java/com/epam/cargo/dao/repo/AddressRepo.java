@@ -6,6 +6,11 @@ import com.epam.cargo.entity.City;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository of fetching Addresses objects from database.
+ * @author Roman Kovalchuk
+ * @version 1.0
+ * */
 public interface AddressRepo extends Dao<Address, Long> {
 
     @Override
