@@ -1,5 +1,6 @@
 package com.epam.cargo.dto;
 
+import com.epam.cargo.entity.Order;
 import com.epam.cargo.infrastructure.annotation.DTO;
 
 /**
@@ -36,12 +37,4 @@ public class SortRequest {
         this.order = order;
     }
 
-    /**
-     * Ordering direction of sorting.<br>
-     * @author Roman Kovalchuk
-     * @since 1.0
-     * */
-    public enum Order{
-        ASC, DESC
-    }
 }

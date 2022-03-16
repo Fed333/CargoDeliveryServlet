@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import static com.epam.cargo.service.ServiceUtils.*;
 
-import static com.epam.cargo.dto.SortRequest.Order;
+import com.epam.cargo.entity.Order;
 
 @Singleton(type = Singleton.Type.LAZY)
 public class DirectionDeliveryService {

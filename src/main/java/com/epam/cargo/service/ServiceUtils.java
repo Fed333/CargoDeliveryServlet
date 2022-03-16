@@ -8,7 +8,7 @@ import com.epam.cargo.exception.ModelErrorAttribute;
 import com.epam.cargo.exception.WrongDataAttributeException;
 import com.epam.cargo.exception.WrongInput;
 
-import com.epam.cargo.dto.SortRequest.Order;
+import com.epam.cargo.entity.Order;
 
 import java.util.*;
 
