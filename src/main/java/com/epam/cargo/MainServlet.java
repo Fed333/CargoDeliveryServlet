@@ -27,7 +27,7 @@ import java.util.Map;
  * */
 public class MainServlet extends HttpServlet {
 
-    private static final String APPLICATION_CONTEXT_ATTRIBUTE = "applicationContext";;
+    private static final String APPLICATION_CONTEXT_ATTRIBUTE = "applicationContext";
 
     @Override
     public void init() {
