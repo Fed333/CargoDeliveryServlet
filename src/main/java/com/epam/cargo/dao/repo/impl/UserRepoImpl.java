@@ -25,12 +25,13 @@ import static com.epam.cargo.dao.repo.impl.UserRepoImpl.UserColumns.*;
  * Part of infrastructure's ApplicationContext. Singleton plain JavaBean. <br>
  * Based on PostgreSQL database.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public class UserRepoImpl implements UserRepo {
 
     private static final String SELECT_BY_ID = "SELECT * FROM users WHERE id = ?";
     private static final String SELECT_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
+    private static final String SELECT_BY_LOGIN_AND_PASSWORD = "SELECT * FROM users WHERE login = ? AND password = ?";
     private static final String SELECT_ALL = "SELECT * FROM users";
     private static final String INSERT_INTO = "INSERT INTO users (name, surname, login, password, phone, email, cash, address_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_BY_ID = "UPDATE users SET name = ?, surname = ?, login = ?, password = ?, phone = ?, email = ?, cash = ?, address_id = ? WHERE id = ?";
@@ -99,6 +100,16 @@ public class UserRepoImpl implements UserRepo {
         User user = userDaoPersist.findBy(SELECT_BY_LOGIN, ps -> ps.setString(1, login)).orElse(null);
         fetchRoles(user);
         return user;
+    }
+
+    @Override
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        User user = userDaoPersist.findBy(SELECT_BY_LOGIN_AND_PASSWORD, ps -> {
+            ps.setString(1, login);
+            ps.setString(2, password);
+        }).orElse(null);
+        fetchRoles(user);
+        return Optional.ofNullable(user);
     }
 
     private void assignRoles(User user) {
