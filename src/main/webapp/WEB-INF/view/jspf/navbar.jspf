@@ -1,8 +1,10 @@
 <%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="resources/messages"/>
 
+<c:set scope="session" var="user" value="${sessionScope.authorizedUser}"/>
 <nav class="navbar navbar-expand-lg navbar-dark bg-green-ireland">
     <div class="container-fluid">
 
@@ -44,7 +46,16 @@
                     </li>
                 </ul>
             </div>
-            <a class="btn btn-light me-2" href="/CargoDeliveryServlet/login"><fmt:message key="auth.login"/></a>
+            <c:choose>
+                <c:when test="${user == null}">
+                    <a class="btn btn-light me-2" href="/CargoDeliveryServlet/login"><fmt:message key="auth.login"/></a>
+                </c:when>
+                <c:when test="${user != null}">
+                    <form class="d-flex mb-0" action="/CargoDeliveryServlet/logout" method="post">
+                        <button type="submit" class="btn btn-light"><fmt:message key="auth.logout"/></button>
+                    </form>
+                </c:when>
+            </c:choose>
         </div>
     </div>
 </nav>
