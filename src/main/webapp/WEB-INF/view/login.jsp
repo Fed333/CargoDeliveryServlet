@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="form-group row justify-content-center mb-2">
-                            <input class="form-control" type="text" name="username" placeholder="<fmt:message key="auth.credentials-login"/>" id="input_login">
+                            <input class="form-control" type="text" name="login" placeholder="<fmt:message key="auth.credentials-login"/>" id="input_login">
                         </div>
                         <div class="form-group row justify-content-center mb-2">
                             <input class="form-control" type="password" name="password" placeholder="<fmt:message key="auth.credentials-password"/>" id="input_password">
