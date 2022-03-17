@@ -39,4 +39,22 @@ public class CityService {
         return true;
     }
 
+    /**
+     * find city in database according to the given id
+     * @param id city identifier in database
+     * @return found City object or null if absent
+     * */
+    public City findCityById(Long id){
+        return cityRepo.findById(id).orElse(null);
+    }
+
+    /**
+     * find city in database according given zipcode
+     * @param zipcode post code of City object
+     * @return found City object or null if city with given zipcode is absent
+     * */
+    public City findCityByZipCode(String zipcode) {
+        return cityRepo.findByZipcode(zipcode).orElse(null);
+    }
+
 }
