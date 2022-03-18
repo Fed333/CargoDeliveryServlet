@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * @see RequestMapping
  * @see CommandMapping
  * @author Roman Kovalchuk
- * @version 1.3
+ * @version 1.4
  * */
 @SuppressWarnings({"unused", "deprecation"})
 public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfigurator {
@@ -127,8 +127,15 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
             Model model = (Model)req.getAttribute(Model.class.getName());
             req.removeAttribute(Model.class.getName());
             model.asMap().forEach(req::setAttribute);
-            String viewPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("viewPrefix", "");
-            req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
+
+            if (isRedirect(methodResponse)){
+                String httpPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("httpPrefix", "");
+                res.sendRedirect(httpPrefix + eraseRedirect(methodResponse));
+            } else{
+                String viewPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("viewPrefix", "");
+                req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
+            }
+
         };
     }
 
@@ -167,5 +174,26 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
             throw new RuntimeException("Type of field " + field + " isn't a map.");
         }
         return field;
+    }
+
+    /**
+     * Checks whether given url is a redirect: url.
+     * @since 1.4
+     * */
+    private boolean isRedirect(String url){
+        return url.matches("^redirect:/.*");
+    }
+
+    /**
+     * Erases redirect: part from redirectUrl.<br>
+     * @param redirectUrl url with redirect: at beginning
+     * @return url without redirect: part
+     * @since 1.4
+     * */
+    private String eraseRedirect(String redirectUrl){
+        if (!isRedirect(redirectUrl)){
+            throw new IllegalArgumentException("Not redirect url!");
+        }
+        return redirectUrl.replaceAll("^redirect:", "");
     }
 }
