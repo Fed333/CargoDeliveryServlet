@@ -46,8 +46,8 @@
             <input name="lang" value="en" id="langInput" hidden="">
             <button type="submit" id="submitButton" hidden=""></button>
         </form>
-        <script src="static/js/formSubmit.js"></script>
-        <script src="static/js/localization.js"></script>
+        <script src="${pageContext.request.contextPath}/static/js/formSubmit.js"></script>
+        <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>
         <script>
             function clickSubmitButtonHandler(){
                 clickSubmitButton('submitButton')

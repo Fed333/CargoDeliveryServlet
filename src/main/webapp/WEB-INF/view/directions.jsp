@@ -89,8 +89,8 @@
                 </div>
                 <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
             </form>
-            <script src="static/js/formSubmit.js"></script>
-            <script src="static/js/localization.js"></script>
+            <script src="${pageContext.request.contextPath}/static/js/formSubmit.js"></script>
+            <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>
             <script>
                 function clickSubmitButtonHandler(){
                     clickSubmitButton('submitButton')

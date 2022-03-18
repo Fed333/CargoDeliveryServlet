@@ -22,25 +22,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/make_app"><fmt:message key="menu.create-application"/></a>
                 </li>
+                <c:if test="${user != null && user.isManager()}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/CargoDeliveryServlet/applications/review"><fmt:message key="menu.delivery-applications-review"/></a>
+                    </li>
+                </c:if>
                 <li class="nav-item">
                     <a class="nav-link" href="/profile"><fmt:message key="menu.profile"/></a>
                 </li>
             </ul>
             <div class="dropdown navbar-nav me-2" id="switchLanguageDropdown">
                 <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="selectLanguageDropdown">
-                    <img src="static/images/i18n/language_icon.png" width="24" height="24" class="d-inline-block align-text-top">
+                    <img src="${pageContext.request.contextPath}/static/images/i18n/language_icon.png" width="24" height="24" class="d-inline-block align-text-top">
                     <fmt:message key="menu.language"/>
                 </a>
                 <ul class="dropdown-menu me-auto" aria-labelledby="selectLanguageDropdown">
                     <li>
                         <a class="dropdown-item" href="#" role="button" id="langEnglish">
-                            <img src="static/images/i18n/flags/english_flag.png" width="48" height="24" class="d-inline-block me-4">
+                            <img src="${pageContext.request.contextPath}/static/images/i18n/flags/english_flag.png" width="48" height="24" class="d-inline-block me-4">
                             <fmt:message key="menu.language_en"/>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#" role="button" id="langUkrainian">
-                            <img src="static/images/i18n/flags/ukraine_flag.png" width="48" height="24" class="d-inline-block me-4">
+                            <img src="${pageContext.request.contextPath}/static/images/i18n/flags/ukraine_flag.png" width="48" height="24" class="d-inline-block me-4">
                             <fmt:message key="menu.language_uk"/>
                         </a>
                     </li>
