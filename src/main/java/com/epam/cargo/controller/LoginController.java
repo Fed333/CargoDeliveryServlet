@@ -20,18 +20,16 @@ public class LoginController {
     public String loginPage(
             Model model
     ){
-
         return "login.jsp";
     }
 
     @RequestMapping(url = "/login", method = HttpMethod.POST)
     public String signIn(
-            Model model,
             HttpSession session,
             AuthorizedDataRequest authorizedRequest
     ){
         if (authorizationService.login(authorizedRequest, session)){
-            return "index.jsp";
+            return "redirect:/directions";
         }
         return "login.jsp";
     }
