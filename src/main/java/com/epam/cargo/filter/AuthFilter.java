@@ -3,7 +3,6 @@ package com.epam.cargo.filter;
 import com.epam.cargo.entity.User;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.util.Set;
 
 import static com.epam.cargo.service.AuthorizationService.AUTHORIZED_USER;
 
-@WebFilter("/*")
 public class AuthFilter implements Filter {
 
     private String contextPath = "/CargoDeliveryServlet";
