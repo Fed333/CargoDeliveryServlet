@@ -1,14 +1,13 @@
 package com.epam.cargo.service;
 
-import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.exception.ModelErrorAttribute;
 import com.epam.cargo.exception.WrongDataAttributeException;
 import com.epam.cargo.exception.WrongInput;
-
-import com.epam.cargo.entity.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
 
 import java.util.*;
 
@@ -16,7 +15,7 @@ import java.util.*;
  * Utils service class.<br>
  * Has common useful for services static methods.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public class ServiceUtils {
 
@@ -49,16 +48,27 @@ public class ServiceUtils {
     /**
      * Common list sorting with SortRequest and ComparatorRecognizer.<br>
      * @param list List to sort
-     * @param sort request of sorting by
+     * @param sort data of sorting by
      * @param recognizer mean of recognizing according to the SortRequest comparators
-     * @since 1.0
-     * @see SortRequest
+     * @since 1.1
+     * @see Sort
      * @see ComparatorRecognizer
      * @author Roman Kovalhchuk
      * */
-    static <T> void sortList(List<T> list, SortRequest sort, ComparatorRecognizer<T> recognizer) {
-        Objects.requireNonNull(sort.getProperty(), "Sort property cannot be null");
-        Comparator<T> comparator = recognizer.getComparator(sort.getProperty(), Optional.ofNullable(sort.getOrder()).orElse(Order.ASC));
+    static <T> void sortList(List<T> list, Sort sort, ComparatorRecognizer<T> recognizer) {
+
+        var orders = sort.getOrders();
+
+        Comparator<T> comparator = null;
+
+        for (var order:orders) {
+            if (Objects.isNull(comparator)){
+                comparator = recognizer.getComparator(order);
+            }
+            else{
+                comparator = comparator.thenComparing(recognizer.getComparator(order));
+            }
+        }
 
         if (!Objects.isNull(comparator)) {
             list.sort(comparator);
@@ -77,8 +87,13 @@ public class ServiceUtils {
         return Objects.equals(user.getLogin(), initiator.getLogin()) && Objects.equals(user.getPassword(), initiator.getPassword());
     }
 
+    /**
+     * Interface of further generic implementation for each entity class to be sorted.
+     * @author Roman Kovalchuk
+     * @version 1.1
+     * */
     public interface ComparatorRecognizer<T> {
-        Comparator<T> getComparator(String property, Order order);
+        Comparator<T> getComparator(Order order);
     }
 
 }

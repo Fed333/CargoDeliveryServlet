@@ -24,7 +24,7 @@
                         <label class="col-form-label"><fmt:message key="lang.sorting"/></label>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" name="sort.property" id="sortCriterionSelect">
+                        <select class="form-select" name="sort" id="sortCriterionSelect">
                             <option value="senderCity.name" id="senderCityOption" <c:if test="${sessionScope.sort == \"senderCity.name\"}">selected</c:if>>
                                 <fmt:message key="info.sort-direction-sender-city"/>
                             </option>
@@ -37,7 +37,7 @@
                         </select>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" id="sortOrderSelect" name="sort.order">
+                        <select class="form-select" id="sortOrderSelect" name="order">
                             <option value="ASC" id="ascOption" <c:if test="${sessionScope.sortOrder == \"ASC\"}">selected</c:if>>
                                 <fmt:message key="sort.order-asc"/>
                             </option>
@@ -75,7 +75,7 @@
                         </tr>
                         </thead>
                         <tbody class="table-light">
-                        <c:forEach items="${requestScope.directions}" var="direction">
+                        <c:forEach items="${requestScope.directions.content}" var="direction">
                             <tr>
                                 <td>${direction.senderCity.name} - ${direction.receiverCity.name}</td>
                                 <td>${direction.distance}</td>
@@ -87,7 +87,6 @@
                 <div class="row">
                     <tag:pager url="${requestScope.url}" submitButtonId="submitButton"/>
                 </div>
-                <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
             </form>
             <script src="${pageContext.request.contextPath}/static/js/formSubmit.js"></script>
             <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>

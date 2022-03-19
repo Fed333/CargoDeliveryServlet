@@ -1,20 +1,20 @@
 package com.epam.cargo.controller;
 
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
-import com.epam.cargo.dto.PageRequest;
-import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.DirectionDelivery;
 import com.epam.cargo.infrastructure.annotation.Controller;
 import com.epam.cargo.infrastructure.annotation.Inject;
+import com.epam.cargo.infrastructure.annotation.PageableDefault;
 import com.epam.cargo.infrastructure.annotation.RequestMapping;
-import com.epam.cargo.infrastructure.annotation.RequestParam;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
 import com.epam.cargo.infrastructure.web.Model;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
 import com.epam.cargo.service.DirectionDeliveryService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
@@ -27,24 +27,24 @@ public class DirectionsController {
     @RequestMapping(url = "/directions", method = HttpMethod.GET)
     public String directions(
             Model model,
+            HttpServletRequest req,
             HttpSession session,
             DirectionDeliveryFilterRequest filter,
-            //TODO infrastructure's support of Pageable
-            PageRequest pageRequest
+            @PageableDefault(size = 9, sort = {"distance"}, directions = {Order.Direction.DESC}) Pageable pageable
     ){
-        List<DirectionDelivery> directions = directionsService.findAll(filter, pageRequest);
+        Page<DirectionDelivery> directions = directionsService.findAll(filter, pageable);
 
         model.addAttribute("directions", directions);
         model.addAttribute("url", "/CargoDeliveryServlet/directions");
 
         Optional.ofNullable(filter.getSenderCityName()).ifPresent(v->session.setAttribute("senderCity", v));
         Optional.ofNullable(filter.getReceiverCityName()).ifPresent(v->session.setAttribute("receiverCity", v));
-        SortRequest sort = Optional.ofNullable(pageRequest).map(PageRequest::getSort).orElse(null);
-        if (Objects.nonNull(sort)){
-            Optional.ofNullable(sort.getProperty()).ifPresent(v->session.setAttribute("sort", v));
-            Optional.ofNullable(sort.getOrder()).ifPresent(v->session.setAttribute("sortOrder", v));
-        }
-        Optional.ofNullable(pageRequest).ifPresent(v->model.addAttribute("pageRequest", pageRequest));
+        Order order = pageable.getSort().getOrders().get(0);
+        model.addAttribute("order", order);
+        session.setAttribute("sort", order.getProperty());
+        session.setAttribute("sortOrder", order.getDirection().toString());
+        model.addAttribute("pageable", pageable);
+
         return "directions.jsp";
     }
 }

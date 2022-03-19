@@ -13,7 +13,7 @@
         <li class="page-item disabled">
             <a class="page-link" href="#"><fmt:message key="pagination.pages"/></a>
         </li>
-        <c:set scope="application" var="activePage" value="${requestScope.pageRequest.page}"/>
+        <c:set scope="application" var="activePage" value="${requestScope.pageable.pageNumber}"/>
         <c:set scope="application" var="pages" value="${[1,2,3,4,5]}"/>
         <c:forEach items="${pages}" var="page">
             <li class="page-item <c:if test="${activePage == page-1}">active</c:if>">

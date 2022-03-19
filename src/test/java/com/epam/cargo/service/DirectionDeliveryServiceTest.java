@@ -3,11 +3,11 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.dao.repo.impl.DirectionDeliveryRepoImpl;
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
-import com.epam.cargo.dto.SortRequest;
-import com.epam.cargo.entity.Order;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
-import com.epam.cargo.entity.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import com.epam.cargo.utils.TestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +21,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.epam.cargo.dao.utils.RepoTestsUtils.createDirectionDeliveryFilterRequest;
-import static com.epam.cargo.dao.utils.RepoTestsUtils.createSortRequest;
-import static org.mockito.Mockito.when;
+import static com.epam.cargo.infrastructure.web.data.sort.Order.Direction.ASC;
+import static com.epam.cargo.infrastructure.web.data.sort.Order.Direction.DESC;
 
 public class DirectionDeliveryServiceTest {
 
@@ -39,12 +39,12 @@ public class DirectionDeliveryServiceTest {
     @NotNull
     public static Stream<Arguments> testSortedCase() {
         return Stream.of(
-            Arguments.of(getEmptyFilter(), getSortBySenderCityName(Order.DESC), directionSenderCityNameDescComparator()),
-            Arguments.of(getEmptyFilter(), getSortByReceiverCityName(Order.DESC), directionReceiverCityNameDescComparator()),
-            Arguments.of(getEmptyFilter(), getSortBySenderCityName(Order.ASC), directionSenderCityNameAscComparator()),
-            Arguments.of(getEmptyFilter(), getSortByReceiverCityName(Order.ASC), directionReceiverCityNameAscComparator()),
-            Arguments.of(getEmptyFilter(), getSortByDistance(Order.DESC), directionDistanceDescComparator()),
-            Arguments.of(getEmptyFilter(), getSortByDistance(Order.ASC), directionDistanceAscComparator())
+            Arguments.of(getEmptyFilter(), getSortBySenderCityName(DESC), directionSenderCityNameDescComparator()),
+            Arguments.of(getEmptyFilter(), getSortByReceiverCityName(DESC), directionReceiverCityNameDescComparator()),
+            Arguments.of(getEmptyFilter(), getSortBySenderCityName(ASC), directionSenderCityNameAscComparator()),
+            Arguments.of(getEmptyFilter(), getSortByReceiverCityName(ASC), directionReceiverCityNameAscComparator()),
+            Arguments.of(getEmptyFilter(), getSortByDistance(DESC), directionDistanceDescComparator()),
+            Arguments.of(getEmptyFilter(), getSortByDistance(ASC), directionDistanceAscComparator())
         );
     }
 
@@ -57,8 +57,8 @@ public class DirectionDeliveryServiceTest {
     }
 
     @NotNull
-    private static SortRequest getEmptySort() {
-        return new SortRequest();
+    private static Sort getEmptySort() {
+        return Sort.by();
     }
 
     @NotNull
@@ -96,18 +96,18 @@ public class DirectionDeliveryServiceTest {
     }
 
     @NotNull
-    private static SortRequest getSortBySenderCityName(Order order) {
-        return createSortRequest("senderCity.name", order);
+    private static Sort getSortBySenderCityName(Order.Direction direction) {
+        return Sort.by(new Order("senderCity.name", direction));
     }
 
     @NotNull
-    private static Object getSortByReceiverCityName(Order order) {
-        return createSortRequest("receiverCity.name", order);
+    private static Object getSortByReceiverCityName(Order.Direction direction) {
+        return Sort.by(new Order("receiverCity.name", direction));
     }
 
     @NotNull
-    private static Object getSortByDistance(Order order) {
-        return createSortRequest("distance", order);
+    private static Object getSortByDistance(Order.Direction direction) {
+        return Sort.by(new Order("distance", direction));
     }
 
     @BeforeEach
@@ -115,7 +115,7 @@ public class DirectionDeliveryServiceTest {
         DirectionDeliveryRepo mockRepo = Mockito.mock(DirectionDeliveryRepoImpl.class);
         List<DirectionDelivery> unorderedDirections = getTestDirections();
         Collections.shuffle(unorderedDirections);
-        when(mockRepo.findAll()).thenReturn(unorderedDirections);
+        Mockito.when(mockRepo.findAll()).thenReturn(unorderedDirections);
         directionDeliveryService = new DirectionDeliveryService();
         Field field = directionDeliveryService.getClass().getDeclaredField("directionDeliveryRepo");
         field.setAccessible(true);
@@ -134,33 +134,16 @@ public class DirectionDeliveryServiceTest {
 
     @ParameterizedTest
     @MethodSource("testSortedCase")
-    void findAllWithSorting(DirectionDeliveryFilterRequest filter, SortRequest sort, Comparator<DirectionDelivery> comparator) {
+    void findAllWithSorting(DirectionDeliveryFilterRequest filter, Sort sort, Comparator<DirectionDelivery> comparator) {
         List<DirectionDelivery> actual = directionDeliveryService.findAll(filter, sort);
-        Assertions.assertTrue(isSorted(actual, comparator));
+        Assertions.assertTrue(TestUtils.isSorted(actual, comparator));
     }
 
     @ParameterizedTest
     @MethodSource("testUnsortedCase")
-    void findAllWithoutSorting(DirectionDeliveryFilterRequest filter, SortRequest sort) {
+    void findAllWithoutSorting(DirectionDeliveryFilterRequest filter, Sort sort) {
         List<DirectionDelivery> expected = directionDeliveryService.findAll(filter);
         List<DirectionDelivery> actual = directionDeliveryService.findAll(filter, sort);
         Assertions.assertEquals(expected, actual);
     }
-
-    private boolean isSorted(List<DirectionDelivery> list, Comparator<DirectionDelivery> comparator){
-        Iterator<DirectionDelivery> it = list.iterator();
-        if (it.hasNext()) {
-            DirectionDelivery o1 = it.next();
-            DirectionDelivery o2;
-            while(it.hasNext()){
-                o2 = it.next();
-                if (comparator.compare(o1, o2) > 0){
-                    return false;
-                }
-                o1 = o2;
-            }
-        }
-        return true;
-    }
-
 }
