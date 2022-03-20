@@ -46,10 +46,10 @@ public class ServiceUtils {
     }
 
     /**
-     * Common list sorting with SortRequest and ComparatorRecognizer.<br>
+     * Common list sorting with {@link Sort} and ComparatorRecognizer.<br>
      * @param list List to sort
      * @param sort data of sorting by
-     * @param recognizer mean of recognizing according to the SortRequest comparators
+     * @param recognizer mean of recognizing comparators according to the {@link Sort}
      * @since 1.1
      * @see Sort
      * @see ComparatorRecognizer
