@@ -5,14 +5,15 @@
 
 <%@ attribute name="url" type="java.lang.String" required="true" %>
 <%@ attribute name="page" type="com.epam.cargo.infrastructure.web.data.page.Page" required="true"%>
-<%@ attribute name="prefix" type="java.lang.String" required="false"%>
+<%@ attribute name="prefix" type="java.lang.String" required="true"%>
 <%@ attribute name="submitButtonId" type="java.lang.String" required="true"%>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="resources/messages"/>
 
+
 <div class="mt-2">
-    <ul class="pagination" id="${prefix != null ? prefix : ''}Paginator">
+    <ul class="pagination" id="${prefix}Paginator">
         <li class="page-item disabled">
             <a class="page-link" href="#"><fmt:message key="pagination.pages"/></a>
         </li>
@@ -66,10 +67,10 @@
 
         </c:forEach>
     </ul>
-    <input type="text" name="${prefix != null ? prefix + "_page" : "page"}" id="pageNumber" value="${activePage != null ? activePage : 0}" hidden>
+    <input type="text" name="${prefix}page" id="pageNumber" value="${activePage != null ? activePage : 0}" hidden>
     <input type="text" name="size" id="pageSize" value="" hidden>
     <script src="static/js/pagination.js"></script>
     <script>
-        paginate('${prefix != null ? prefix : ''}Paginator', ()=>{document.getElementById('${submitButtonId}').click()})
+        paginate('${prefix}Paginator', ()=>{document.getElementById('${submitButtonId}').click()})
     </script>
 </div>

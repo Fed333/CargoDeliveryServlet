@@ -24,7 +24,7 @@
                         <label class="col-form-label"><fmt:message key="lang.sorting"/></label>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" name="sort" id="sortCriterionSelect">
+                        <select class="form-select" name="directions_sort" id="sortCriterionSelect">
                             <option value="senderCity.name" id="senderCityOption" <c:if test="${sessionScope.sort == \"senderCity.name\"}">selected</c:if>>
                                 <fmt:message key="info.sort-direction-sender-city"/>
                             </option>
@@ -37,7 +37,7 @@
                         </select>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" id="sortOrderSelect" name="order">
+                        <select class="form-select" id="sortOrderSelect" name="directions_order">
                             <option value="ASC" id="ascOption" <c:if test="${sessionScope.sortOrder == \"ASC\"}">selected</c:if>>
                                 <fmt:message key="sort.order-asc"/>
                             </option>
@@ -85,7 +85,7 @@
                     </table>
                 </div>
                 <div class="row">
-                    <tag:pager url="${requestScope.url}" page="${requestScope.directions}" submitButtonId="submitButton"/>
+                    <tag:pager url="${requestScope.url}" prefix="directions_" page="${requestScope.directions}" submitButtonId="submitButton"/>
                 </div>
                 <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
             </form>
