@@ -1,12 +1,15 @@
 package com.epam.cargo.infrastructure.web.binding.utils;
 
+import com.epam.cargo.infrastructure.annotation.Qualifier;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.format.formatter.Formatter;
 import com.epam.cargo.infrastructure.format.manager.FormatterManager;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
 import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Utils class for managing with common web binding operations.<br>
  * @author Roman Kovalchuk
- * @version 1.1
+ * @version 1.2
  * */
 public class BindingUtils {
 
@@ -128,6 +131,34 @@ public class BindingUtils {
             orders[i] = new Order(property, direction);
         }
         return orders;
+    }
+
+    /**
+     * Qualifies web parameter if it's annotated with @Qualifier annotation.<br>
+     * @param parameter web parameter to qualify
+     * @return prefix from qualifier value if present in format "value_", otherwise returns ""
+     * @since 1.2
+     * */
+    @NotNull
+    public static String qualify(Parameter parameter){
+        if (parameter.isAnnotationPresent(Qualifier.class)){
+            Qualifier qualifier = parameter.getAnnotation(Qualifier.class);
+            return qualifier.value() + "_";
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Qualifies parameterName if web parameter is annotated with {@link Qualifier} annotation.<br>
+     * @param parameter web parameter which might be qualified
+     * @param parameterName parameter name to qualify
+     * @return result of concatenation a {@link #qualify(Parameter)} method and parameterName
+     * @since 1.2
+     * */
+    @NotNull
+    public static String qualify(Parameter parameter, String parameterName){
+        return qualify(parameter) + parameterName;
     }
 
 }

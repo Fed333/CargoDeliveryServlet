@@ -16,12 +16,13 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.epam.cargo.infrastructure.web.binding.constants.ConstantParameters.*;
+import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.qualify;
 
 /**
  * Designed for binding Pageable object to controllers methods.
  * @author Roman Kovalchuk
  * @see Pageable
- * @version 1.0
+ * @version 1.1
  * */
 @SuppressWarnings("unused")
 public class PageableParameterBinder implements ParameterBinder {
@@ -39,7 +40,7 @@ public class PageableParameterBinder implements ParameterBinder {
 
     @NotNull
     private Sort bindSort(Parameter parameter, String propertyParameter, String directionParameter, HttpServletRequest req) {
-        Sort sort = BindingUtils.bindSort(req, propertyParameter, directionParameter);
+        Sort sort = BindingUtils.bindSort(req, qualify(parameter, propertyParameter), qualify(parameter, directionParameter));
         if (sort.getOrders().isEmpty()){
             if (parameter.isAnnotationPresent(PageableDefault.class)) {
                 PageableDefault pageableDefault = parameter.getAnnotation(PageableDefault.class);
@@ -59,12 +60,12 @@ public class PageableParameterBinder implements ParameterBinder {
 
     @NotNull
     private Integer bindPage(Parameter parameter, String parameterName, HttpServletRequest req) {
-        return bindInt(parameterName, req, () -> defaultPage(parameter));
+        return bindInt(qualify(parameter, parameterName), req, () -> defaultPage(parameter));
     }
 
     @NotNull
     private Integer bindSize(Parameter parameter, String parameterName, HttpServletRequest req) {
-        return bindInt(parameterName, req, () -> defaultSize(parameter));
+        return bindInt(qualify(parameter, parameterName), req, () -> defaultSize(parameter));
     }
 
     private int defaultSize(Parameter parameter) {
