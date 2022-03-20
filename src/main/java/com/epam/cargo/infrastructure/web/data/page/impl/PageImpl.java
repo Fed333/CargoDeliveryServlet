@@ -19,10 +19,10 @@ public class PageImpl<T> implements Page<T> {
 
     private final int totalPages;
 
-    public PageImpl(List<T> content, Pageable pageable, int totalPages) {
+    public PageImpl(List<T> content, Pageable pageable, int total) {
         this.content = content;
         this.pageable = pageable;
-        this.totalPages = totalPages;
+        this.totalPages = (int) Math.ceil( (double) total / Math.max(pageable.getPageSize(), 1));
     }
 
     @Override
