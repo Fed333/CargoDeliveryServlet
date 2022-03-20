@@ -13,6 +13,7 @@ import java.lang.reflect.Parameter;
 import java.util.Objects;
 
 import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.bindType;
+import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.qualify;
 
 /**
  * Binds web parameters of dto classes.
@@ -21,14 +22,14 @@ import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.bindT
  * @see ParameterBinder
  * @see DTO
  * @see DataTransfer
- * @version 1.0
+ * @version 1.1
  * */
 public class DataTransferObjectParameterBinder implements ParameterBinder {
 
     @Override
     public Object bindParameter(Parameter parameter, HttpServletRequest req, HttpServletResponse res, ApplicationContext context) {
         Class<?> parameterClass = parameter.getType();
-        return assembleDataTransfer(parameterClass, req, "", context);
+        return assembleDataTransfer(parameterClass, req, "", qualify(parameter), context);
     }
 
     @Override
@@ -36,7 +37,7 @@ public class DataTransferObjectParameterBinder implements ParameterBinder {
         return parameter.getType().isAnnotationPresent(DTO.class) || parameter.isAnnotationPresent(DataTransfer.class);
     }
 
-    private Object assembleDataTransfer(Class<?> transferClass, HttpServletRequest req, String parent, ApplicationContext context){
+    private Object assembleDataTransfer(Class<?> transferClass, HttpServletRequest req, String parent, String qualifier, ApplicationContext context){
         try {
             Object transfer = transferClass.getDeclaredConstructor().newInstance();
             for (Field field : transfer.getClass().getDeclaredFields()) {
@@ -44,9 +45,9 @@ public class DataTransferObjectParameterBinder implements ParameterBinder {
 
                 Object fieldObject;
                 if (fieldClass.isAnnotationPresent(DTO.class)){
-                    fieldObject = assembleDataTransfer(fieldClass, req, field.getName(), context);
+                    fieldObject = assembleDataTransfer(fieldClass, req, buildParamName(parent, field), qualifier, context);
                 } else {
-                    fieldObject = bindType(fieldClass, req, buildParamName(parent, field), context);
+                    fieldObject = bindType(fieldClass, req, qualifier + buildParamName(parent, field), context);
 
                 }
 
