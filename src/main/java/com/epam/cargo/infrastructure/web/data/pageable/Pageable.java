@@ -16,6 +16,12 @@ public interface Pageable {
      * */
     int getPageNumber();
 
+    /**
+     * Creates new Pageable based on existing one, but starting with another page number.<br>
+     * @param page number of page to start with
+     * @return new Pageable which starts from new page number
+     * @since 1.0
+     * */
     Pageable withPage(int page);
 
     /**
