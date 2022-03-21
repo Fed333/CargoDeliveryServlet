@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Abstract class with common logic of CRUD Dao methods.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public abstract class DaoPersist<T extends Entity<ID>, ID> {
     
@@ -83,10 +84,21 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
      * @since 1.0
      * */
     public List<T> findAll(String selectAllQuery) {
+        return findAllBy(selectAllQuery, ps -> {});
+    }
+
+    /**
+     * Finds all T objects in selected by given sql query.
+     * @param selectQuery sql query to select all records from database
+     * @return List of all T objects from database
+     * @since 1.1
+     * */
+    public List<T> findAllBy(String selectQuery, PreparedStatementConsumer prepared) {
         Connection connection = null;
         try {
             connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(selectAllQuery);
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            prepared.prepare(statement);
             return fetchAll(statement);
         }
         catch (SQLException e){
