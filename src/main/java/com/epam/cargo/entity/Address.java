@@ -21,6 +21,10 @@ public class Address implements Entity<Long>{
     public Address() {
     }
 
+    public Address(Long id) {
+        this.id = id;
+    }
+
     public Address(City city, String street, String houseNumber) {
         this(null, city, street, houseNumber);
     }

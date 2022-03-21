@@ -1,6 +1,7 @@
 package com.epam.cargo.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * POJO class which represents delivery application.
@@ -15,8 +16,6 @@ public class DeliveryApplication implements Entity<Long> {
 
     private User customer;
 
-    private Long userId;
-    
     private Address senderAddress;
 
     private Address receiverAddress;
@@ -30,6 +29,22 @@ public class DeliveryApplication implements Entity<Long> {
     private State state;
 
     private Double price;
+
+    public DeliveryApplication() {
+    }
+
+    public DeliveryApplication(Long id, User customer, Address senderAddress, Address receiverAddress, DeliveredBaggage deliveredBaggage, LocalDate sendingDate, LocalDate receivingDate, State state, Double price) {
+        this.id = id;
+        this.customer = customer;
+        this.senderAddress = senderAddress;
+        this.receiverAddress = receiverAddress;
+        this.deliveredBaggage = deliveredBaggage;
+        this.sendingDate = sendingDate;
+        this.receivingDate = receivingDate;
+        this.state = state;
+        this.price = price;
+    }
+
 
     public enum State{
         SUBMITTED, CONFIRMED, COMPLETED, CANCELED, REJECTED
@@ -49,14 +64,6 @@ public class DeliveryApplication implements Entity<Long> {
 
     public void setCustomer(User customer) {
         this.customer = customer;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public Address getSenderAddress() {
@@ -113,5 +120,18 @@ public class DeliveryApplication implements Entity<Long> {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryApplication that = (DeliveryApplication) o;
+        return Objects.equals(id, that.id) && Objects.equals(customer, that.customer) && Objects.equals(senderAddress, that.senderAddress) && Objects.equals(receiverAddress, that.receiverAddress) && Objects.equals(deliveredBaggage, that.deliveredBaggage) && Objects.equals(sendingDate, that.sendingDate) && Objects.equals(receivingDate, that.receivingDate) && state == that.state && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, customer, senderAddress, receiverAddress, deliveredBaggage, sendingDate, receivingDate, state, price);
     }
 }

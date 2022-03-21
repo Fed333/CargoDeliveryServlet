@@ -39,6 +39,10 @@ public class User implements Entity<Long> {
 
     public User() { }
 
+    public User(Long id){
+        this.id = id;
+    }
+
     public User(String name, String login, String password) {
         this.name = name;
         this.login = login;
