@@ -30,7 +30,7 @@
         <c:set scope="application" var="bodyBefore" value="${(pageNumber >= 3 && pageNumber <= totalPages) ? [pageNumber - 2, pageNumber - 1] : []}"/>
         <c:set scope="application" var="bodyAfter" value="${(pageNumber < totalPages - 1) ? [pageNumber + 1, pageNumber + 2] : []}"/>
 
-        <c:set scope="application" var="activePage" value="${requestScope.pageable.pageNumber}"/>
+        <c:set scope="application" var="activePage" value="${page.number}"/>
 
         <jsp:useBean id="pagesList" scope="request" class="java.util.ArrayList"/>
 
@@ -42,9 +42,7 @@
             pagesList.addAll((List)application.getAttribute("tail"));
         %>
 
-        <c:set scope="application" var="body" value="${pagesList}"/>
-
-        <c:set scope="application" var="pages" value="${applicationScope.body}"/>
+        <c:set scope="application" var="pages" value="${pagesList}"/>
         <c:forEach items="${applicationScope.pages}" var="page">
             <c:choose>
                 <c:when test="${page == -1}">
@@ -67,7 +65,7 @@
         </c:forEach>
     </ul>
     <input type="text" name="${prefix}page" id="pageNumber" value="${activePage != null ? activePage : 0}" hidden>
-    <input type="text" name="size" id="pageSize" value="" hidden>
+    <input type="text" name="${prefix}size" id="pageSize" value="" hidden>
     <script src="${pageContext.request.contextPath}/static/js/pagination.js"></script>
     <script>
         paginate('${prefix}Paginator', ()=>{document.getElementById('${submitButtonId}').click()})
