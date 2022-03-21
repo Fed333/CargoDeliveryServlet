@@ -1,6 +1,9 @@
 package com.epam.cargo.dao.repo.impl;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
+import com.epam.cargo.dao.persist.DaoPersist;
+import com.epam.cargo.dao.persist.OrderColumnRecognizer;
+import com.epam.cargo.dao.persist.PageableQueryBuilder;
 import com.epam.cargo.dao.repo.AddressRepo;
 import com.epam.cargo.dao.repo.DeliveredBaggageRepo;
 import com.epam.cargo.dao.repo.DeliveryApplicationRepo;
@@ -16,16 +19,14 @@ import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
 import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
 import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static com.epam.cargo.dao.repo.impl.DeliveryApplicationRepoImpl.DeliveryApplicationColumns.*;
 
@@ -61,6 +62,16 @@ public class DeliveryApplicationRepoImpl implements DeliveryApplicationRepo {
     private DeliveredBaggageRepo baggageRepo;
 
     private DeliveryApplicationDaoPersist persist;
+
+    private final PageableQueryBuilder pageableQueryBuilder = new PageableQueryBuilder(
+            OrderColumnRecognizer.of(
+                    "id", ID.getColumn(),
+                    "sendingDate", SENDING_DATE.getColumn(),
+                    "receivingDate", RECEIVING_DATE.getColumn(),
+                    "state", STATE.getColumn(),
+                    "price", PRICE.getColumn()
+            )
+    );
 
     @SuppressWarnings("unused")
     public DeliveryApplicationRepoImpl() {
@@ -106,7 +117,7 @@ public class DeliveryApplicationRepoImpl implements DeliveryApplicationRepo {
      * */
     @Override
     public Page<DeliveryApplication> findAllByUserId(Long userId, Pageable pageable) {
-        List<DeliveryApplication> application = persist.findAllBy(SELECT_ALL_BY_USER_ID + " " + buildPageQuery(pageable), ps -> ps.setLong(1, userId));
+        List<DeliveryApplication> application = persist.findAllBy(pageableQueryBuilder.buildPageQuery(SELECT_ALL_BY_USER_ID, pageable), ps -> ps.setLong(1, userId));
         application.forEach(this::fetchEager);
         int total = persist.countBy(SELECT_COUNT_BY_USER_ID, ps -> ps.setLong(1, userId));
 
@@ -211,79 +222,6 @@ public class DeliveryApplicationRepoImpl implements DeliveryApplicationRepo {
 
         public String getColumn() {
             return column;
-        }
-    }
-
-    /**
-     * Builds part of sql query with order and limit.<br>
-     * @param pageable source of data to obtain page
-     * @return string with sql commands of sorting and limiting
-     * @since 1.1
-     * */
-    private String buildPageQuery(Pageable pageable){
-        return orderQuery(pageable.getSort()) + " " + limitQuery(pageable.getPageSize(), pageable.getOffset());
-    }
-
-    /**
-     * Builds limit query with page limit and offset.<br>
-     * @param limit number of records in select
-     * @param offset skipped number of records
-     * @since 1.1
-     * @return string with limit sql query
-     * */
-    private String limitQuery(int limit, int offset){
-        return String.format("LIMIT %d OFFSET %d", limit, offset);
-    }
-
-    /**
-     * Builds order query from {@link Sort}.<br>
-     * @param sort source of sorting orders
-     * @since 1.1
-     * @return string with order sql query
-     * */
-    private String orderQuery(Sort sort){
-        return "ORDER BY " + new OrderColumnRecognizer().recognizeOrders(sort);
-    }
-
-    /**
-     * Recognizes columns of mapped object with {@link Pageable}.<br>
-     * @author Roman Kovalchuk
-     * @version 1.0
-     * */
-    private static class OrderColumnRecognizer {
-
-        private final Map<String, String> orderedColumns = Map.of(
-                "id", ID.getColumn(),
-                "sendingDate", SENDING_DATE.getColumn(),
-                "receivingDate", RECEIVING_DATE.getColumn(),
-                "state", STATE.getColumn(),
-                "price", PRICE.getColumn()
-        );
-
-        /**
-         * Recognize sort orders from {@link Sort}.<br>
-         * @param sort source of sorting orders
-         * @return String with order columns separated with ','
-         * @since 1.0
-         * */
-        public String recognizeOrders(Sort sort){
-            StringJoiner joiner = new StringJoiner(",");
-
-            for (Order order : sort.getOrders()) {
-                joiner.add(recognizeOrder(order));
-            }
-
-            return joiner.toString();
-        }
-
-        /**
-         * Recognize sort orders from {@link Order}.<br>
-         * @param order source of sorting order
-         * @return String with order
-         * @since 1.0
-         * */
-        public String recognizeOrder(Order order){
-            return orderedColumns.get(order.getProperty()) + " " + (order.isAscending() ? "ASC" : "DESC");
         }
     }
 
