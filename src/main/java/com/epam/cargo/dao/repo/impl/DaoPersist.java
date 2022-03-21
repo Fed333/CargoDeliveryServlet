@@ -113,6 +113,35 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
     }
 
     /**
+     * Gives number of records by countQuery.<br>
+     * @param countQuery query to find count of records
+     * @param prepared actions to prepare PreparedStatement
+     * @return count of records
+     * */
+    public int countBy(String countQuery, PreparedStatementConsumer prepared){
+        Connection connection = null;
+        try {
+            connection = pool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(countQuery);
+            prepared.prepare(ps);
+            ResultSet resultSet = ps.executeQuery();
+            int total = 0;
+            if (resultSet.next()){
+                total = resultSet.getInt(1);
+            }
+            return total;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to get count of records from database.", e);
+        } finally {
+            if (Objects.nonNull(connection)) {
+                pool.releaseConnection(connection);
+            }
+        }
+    }
+
+    /**
      * Inserts object of class T into database. Makes insert according to the given query.<br>
      * @param insertInto sql query to execute inserting
      * @param o object to insert
