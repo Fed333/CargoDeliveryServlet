@@ -8,10 +8,13 @@ import java.util.Objects;
 /**
  * Immutable class. Embedded mean of storing sorting data.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public final class Sort {
 
+    /**
+     * Sorting orders.
+     * */
     private final List<Order> orders;
 
     private Sort(List<Order> orders){
@@ -47,5 +50,14 @@ public final class Sort {
      * */
     public List<Order> getOrders() {
         return Collections.unmodifiableList(orders);
+    }
+
+    /**
+     * Shows whether {@link Sort} object has any sorting orders inside.<br>
+     * @return true if any {@link Order} objects is present, otherwise false
+     * @since 1.1
+     * */
+    public boolean hasOrders(){
+        return !orders.isEmpty();
     }
 }
