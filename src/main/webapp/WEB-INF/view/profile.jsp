@@ -11,8 +11,8 @@
 <c:set scope="application" var="street" value="${requestScope.user.address.street}"/>
 <c:set scope="application" var="houseNumber" value="${requestScope.user.address.houseNumber}"/>
 
-<c:set scope="session" var="activePill" value="${sessionScope.activePill != null ? sessionScope.activePill : requestScope.activePill}"/>
-<c:set scope="application" var="notificatinsPill" value="pills-notifications-tab"/>
+<c:set scope="session" var="activePill" value="${requestScope.activePill != null ? requestScope.activePill : sessionScope.activePill}"/>
+<c:set scope="application" var="notificationsPill" value="pills-notifications-tab"/>
 <c:set scope="application" var="applicationsPill" value="pills-applications-tab"/>
 <c:set scope="application" var="receiptsPill" value="pills-receipts-tab"/>
 
@@ -120,5 +120,12 @@
     }
     addSwitchLanguageWithFormListeners(clickSubmitButtonHandler)
 </script>
+
+<script src="${pageContext.request.contextPath}/static/js/profile.js"></script>
+
+<script>
+    setChangingMenuItemsHandlers('profileMenuItems')
+</script>
+
 </body>
 </html>
