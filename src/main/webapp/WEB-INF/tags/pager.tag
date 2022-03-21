@@ -3,7 +3,6 @@
 <%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%@ attribute name="url" type="java.lang.String" required="true" %>
 <%@ attribute name="page" type="com.epam.cargo.infrastructure.web.data.page.Page" required="true"%>
 <%@ attribute name="prefix" type="java.lang.String" required="true"%>
 <%@ attribute name="submitButtonId" type="java.lang.String" required="true"%>
@@ -69,7 +68,7 @@
     </ul>
     <input type="text" name="${prefix}page" id="pageNumber" value="${activePage != null ? activePage : 0}" hidden>
     <input type="text" name="size" id="pageSize" value="" hidden>
-    <script src="static/js/pagination.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/pagination.js"></script>
     <script>
         paginate('${prefix}Paginator', ()=>{document.getElementById('${submitButtonId}').click()})
     </script>

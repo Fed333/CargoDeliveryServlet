@@ -85,7 +85,7 @@
                     </table>
                 </div>
                 <div class="row">
-                    <tag:pager url="${requestScope.url}" prefix="directions_" page="${requestScope.directions}" submitButtonId="submitButton"/>
+                    <tag:pager prefix="directions_" page="${requestScope.directions}" submitButtonId="submitButton"/>
                 </div>
                 <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
             </form>
