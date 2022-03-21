@@ -4,6 +4,8 @@ import com.epam.cargo.dao.repo.DeliveryApplicationRepo;
 import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.Singleton;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 
 import java.util.List;
 
@@ -30,9 +32,9 @@ public class DeliveryApplicationService {
         return deliveryApplicationRepo.findAllByUserId(id);
     }
 
-//    public Page<DeliveryApplication> findAllByUserId(Long id, Pageable pageable) {
-//        return deliveryApplicationRepo.findAllByUserId(id, pageable);
-//    }
+    public Page<DeliveryApplication> findAllByUserId(Long id, Pageable pageable) {
+        return deliveryApplicationRepo.findAllByUserId(id, pageable);
+    }
 
 
 }
