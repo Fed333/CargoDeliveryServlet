@@ -43,4 +43,13 @@ public class AuthorizationService {
         session.removeAttribute(AUTHORIZED_USER);
     }
 
+    /**
+     * Gives authorized user from session.<br>
+     * @param session current HttpSession
+     * @return authorized User if exists, otherwise null
+     * */
+    public User getAuthorized(HttpSession session){
+        return (User) session.getAttribute(AUTHORIZED_USER);
+    }
+
 }
