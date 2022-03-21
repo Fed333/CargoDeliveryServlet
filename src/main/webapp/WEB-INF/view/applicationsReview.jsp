@@ -17,7 +17,7 @@
 
     <h1>Applications Review</h1>
 
-    <form action="/CargoDeliveryServlet${requestScope.url}" method="get">
+    <form action="${pageContext.request.contextPath}${requestScope.url}" method="get">
         <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
         <button type="submit" id="submitButton" hidden></button>
     </form>

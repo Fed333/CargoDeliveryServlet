@@ -18,7 +18,7 @@
         <c:set scope="session" var="user" value="${sessionScope.authorizedUser}"/>
         <h2><fmt:message key="lang.greeting"/> <c:if test="${user != null}">${sessionScope.user.login}</c:if></h2>
     </div>
-    <form action="/CargoDeliveryServlet/" method="get">
+    <form action="${pageContext.request.contextPath}/" method="get">
         <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
         <button type="submit" id="submitButton" hidden></button>
     </form>

@@ -8,7 +8,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-green-ireland">
     <div class="container-fluid">
 
-        <a class="navbar-brand" href="/CargoDeliveryServlet/"><fmt:message key="menu.cargo-delivery"/></a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/"><fmt:message key="menu.cargo-delivery"/></a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,14 +17,14 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/CargoDeliveryServlet/directions"><fmt:message key="menu.directions"/></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/directions"><fmt:message key="menu.directions"/></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/make_app"><fmt:message key="menu.create-application"/></a>
                 </li>
                 <c:if test="${user != null && user.isManager()}">
                     <li class="nav-item">
-                        <a class="nav-link" href="/CargoDeliveryServlet/applications/review"><fmt:message key="menu.delivery-applications-review"/></a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/applications/review"><fmt:message key="menu.delivery-applications-review"/></a>
                     </li>
                 </c:if>
                 <li class="nav-item">
@@ -53,10 +53,10 @@
             </div>
             <c:choose>
                 <c:when test="${user == null}">
-                    <a class="btn btn-light me-2" href="/CargoDeliveryServlet/login"><fmt:message key="auth.login"/></a>
+                    <a class="btn btn-light me-2" href="${pageContext.request.contextPath}/login"><fmt:message key="auth.login"/></a>
                 </c:when>
                 <c:when test="${user != null}">
-                    <form class="d-flex mb-0" action="/CargoDeliveryServlet/logout" method="post">
+                    <form class="d-flex mb-0" action="${pageContext.request.contextPath}/logout" method="post">
                         <button type="submit" class="btn btn-light"><fmt:message key="auth.logout"/></button>
                     </form>
                 </c:when>

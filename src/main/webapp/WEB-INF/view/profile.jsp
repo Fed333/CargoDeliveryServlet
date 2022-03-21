@@ -50,7 +50,7 @@
         </div>
 
 
-        <form action="/CargoDeliveryServlet/profile" method="get">
+        <form action="${pageContext.request.contextPath}/profile" method="get">
             <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
             <button type="submit" id="submitButton" hidden></button>
         </form>

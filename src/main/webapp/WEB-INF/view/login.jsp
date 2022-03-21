@@ -13,7 +13,7 @@
 
     <div class="container mt-4">
         <div class="row d-flex justify-content-center mt-4">
-            <form action="/CargoDeliveryServlet/login" method="post" style="max-width: 480px;">
+            <form action="${pageContext.request.contextPath}/login" method="post" style="max-width: 480px;">
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row">
