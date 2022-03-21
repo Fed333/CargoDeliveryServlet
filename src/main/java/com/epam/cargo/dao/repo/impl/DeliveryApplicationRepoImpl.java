@@ -11,6 +11,11 @@ import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.Singleton;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
@@ -18,7 +23,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 import static com.epam.cargo.dao.repo.impl.DeliveryApplicationRepoImpl.DeliveryApplicationColumns.*;
 
@@ -28,13 +35,14 @@ import static com.epam.cargo.dao.repo.impl.DeliveryApplicationRepoImpl.DeliveryA
  * Part of infrastructure's ApplicationContext. Singleton plain JavaBean.<br>
  * Based on PostgreSQL database.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @Singleton(type = Singleton.Type.LAZY)
 public class DeliveryApplicationRepoImpl implements DeliveryApplicationRepo {
 
     private static final String SELECT_BY_ID = "SELECT * FROM delivery_applications WHERE id = ?";
     private static final String SELECT_ALL_BY_USER_ID = "SELECT * FROM delivery_applications WHERE user_id = ?";
+    private static final String SELECT_COUNT_BY_USER_ID = "SELECT COUNT(*) FROM delivery_applications WHERE  user_id = ?";
     private static final String SELECT_ALL = "SELECT * FROM delivery_applications";
     private static final String INSERT_INTO = "INSERT INTO delivery_applications (user_id, sender_address_id, receiver_address_id, baggage_id, sending_date, receiving_date, state, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_BY_ID = "UPDATE delivery_applications SET user_id = ?, sender_address_id = ?, receiver_address_id = ?, baggage_id = ?, sending_date = ?, receiving_date = ?, state = ?, price = ? WHERE id = ?";
@@ -87,6 +95,22 @@ public class DeliveryApplicationRepoImpl implements DeliveryApplicationRepo {
         List<DeliveryApplication> applications = persist.findAllBy(SELECT_ALL_BY_USER_ID, ps -> ps.setLong(1, userId));
         applications.forEach(this::fetchEager);
         return applications;
+    }
+
+    /**
+     * Gives page according to the pageable with records found by user id.<br>
+     * Doesn't consider sorting by relation objects.<br>
+     * @param userId id of user which delivery applications we fetch
+     * @param pageable instructions of sorting and pagination
+     * @return {@link Page} with found paginated records inside
+     * */
+    @Override
+    public Page<DeliveryApplication> findAllByUserId(Long userId, Pageable pageable) {
+        List<DeliveryApplication> application = persist.findAllBy(SELECT_ALL_BY_USER_ID + " " + buildPageQuery(pageable), ps -> ps.setLong(1, userId));
+        application.forEach(this::fetchEager);
+        int total = persist.countBy(SELECT_COUNT_BY_USER_ID, ps -> ps.setLong(1, userId));
+
+        return new PageImpl<>(application, pageable, total);
     }
 
     @Override
@@ -187,6 +211,79 @@ public class DeliveryApplicationRepoImpl implements DeliveryApplicationRepo {
 
         public String getColumn() {
             return column;
+        }
+    }
+
+    /**
+     * Builds part of sql query with order and limit.<br>
+     * @param pageable source of data to obtain page
+     * @return string with sql commands of sorting and limiting
+     * @since 1.1
+     * */
+    private String buildPageQuery(Pageable pageable){
+        return orderQuery(pageable.getSort()) + " " + limitQuery(pageable.getPageSize(), pageable.getOffset());
+    }
+
+    /**
+     * Builds limit query with page limit and offset.<br>
+     * @param limit number of records in select
+     * @param offset skipped number of records
+     * @since 1.1
+     * @return string with limit sql query
+     * */
+    private String limitQuery(int limit, int offset){
+        return String.format("LIMIT %d OFFSET %d", limit, offset);
+    }
+
+    /**
+     * Builds order query from {@link Sort}.<br>
+     * @param sort source of sorting orders
+     * @since 1.1
+     * @return string with order sql query
+     * */
+    private String orderQuery(Sort sort){
+        return "ORDER BY " + new OrderColumnRecognizer().recognizeOrders(sort);
+    }
+
+    /**
+     * Recognizes columns of mapped object with {@link Pageable}.<br>
+     * @author Roman Kovalchuk
+     * @version 1.0
+     * */
+    private static class OrderColumnRecognizer {
+
+        private final Map<String, String> orderedColumns = Map.of(
+                "id", ID.getColumn(),
+                "sendingDate", SENDING_DATE.getColumn(),
+                "receivingDate", RECEIVING_DATE.getColumn(),
+                "state", STATE.getColumn(),
+                "price", PRICE.getColumn()
+        );
+
+        /**
+         * Recognize sort orders from {@link Sort}.<br>
+         * @param sort source of sorting orders
+         * @return String with order columns separated with ','
+         * @since 1.0
+         * */
+        public String recognizeOrders(Sort sort){
+            StringJoiner joiner = new StringJoiner(",");
+
+            for (Order order : sort.getOrders()) {
+                joiner.add(recognizeOrder(order));
+            }
+
+            return joiner.toString();
+        }
+
+        /**
+         * Recognize sort orders from {@link Order}.<br>
+         * @param order source of sorting order
+         * @return String with order
+         * @since 1.0
+         * */
+        public String recognizeOrder(Order order){
+            return orderedColumns.get(order.getProperty()) + " " + (order.isAscending() ? "ASC" : "DESC");
         }
     }
 
