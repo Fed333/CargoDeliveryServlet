@@ -32,13 +32,16 @@ public class ProfileController {
             HttpSession session,
             @Qualifier("applications")
             @PageableDefault(size = 7, sort = {"id"}, directions = {Order.Direction.DESC})
-                    Pageable applicationsPageable
-    ){
+                    Pageable applicationsPageable,
+            @RequestParam(name = "activePill", defaultValue = "pills-applications-tab")
+                    String activePill
+
+            ){
         User authorized = authorizationService.getAuthorized(session);
         model.addAttribute("user", authorized);
         Page<DeliveryApplication> applicationsPage = applicationService.findAllByUserId(authorized.getId(), applicationsPageable);
         model.addAttribute("applications", applicationsPage);
-
+        model.addAttribute("activePill", activePill);
         return "profile.jsp";
     }
 }
