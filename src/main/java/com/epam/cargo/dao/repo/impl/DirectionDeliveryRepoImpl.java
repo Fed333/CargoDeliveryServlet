@@ -1,6 +1,7 @@
 package com.epam.cargo.dao.repo.impl;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
+import com.epam.cargo.dao.persist.DaoPersist;
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.entity.City;
@@ -97,7 +98,7 @@ public class DirectionDeliveryRepoImpl implements DirectionDeliveryRepo {
         }
     }
 
-    private class DirectionDeliveryDaoPersist extends DaoPersist<DirectionDelivery, Long>{
+    private class DirectionDeliveryDaoPersist extends DaoPersist<DirectionDelivery, Long> {
 
         public DirectionDeliveryDaoPersist(ConnectionPool pool) {
             super(pool);

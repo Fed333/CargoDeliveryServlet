@@ -1,6 +1,7 @@
 package com.epam.cargo.dao.repo.impl;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
+import com.epam.cargo.dao.persist.DaoPersist;
 import com.epam.cargo.dao.repo.AddressRepo;
 import com.epam.cargo.dao.repo.RoleRepo;
 import com.epam.cargo.dao.repo.UserRepo;

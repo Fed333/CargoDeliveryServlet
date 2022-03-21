@@ -1,6 +1,7 @@
 package com.epam.cargo.dao.repo.impl;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
+import com.epam.cargo.dao.persist.DaoPersist;
 import com.epam.cargo.dao.repo.AddressRepo;
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.entity.Address;
@@ -110,7 +111,7 @@ public class AddressRepoImpl implements AddressRepo {
     }
 
 
-    private class AddressDaoPersist extends DaoPersist<Address, Long>{
+    private class AddressDaoPersist extends DaoPersist<Address, Long> {
 
         public AddressDaoPersist(ConnectionPool pool) {
             super(pool);

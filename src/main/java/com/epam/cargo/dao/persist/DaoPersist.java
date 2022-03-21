@@ -1,4 +1,4 @@
-package com.epam.cargo.dao.repo.impl;
+package com.epam.cargo.dao.persist;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
 import com.epam.cargo.entity.Entity;
@@ -251,7 +251,7 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
      * @author Roman Kovalchuk
      * @version 1.0
      * */
-    interface PreparedStatementConsumer {
+    public interface PreparedStatementConsumer {
 
         void prepare(PreparedStatement preparedStatement) throws SQLException;
 

@@ -1,6 +1,7 @@
 package com.epam.cargo.dao.repo.impl;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
+import com.epam.cargo.dao.persist.DaoPersist;
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.infrastructure.annotation.Inject;
@@ -126,7 +127,7 @@ public class CityRepoImpl implements CityRepo {
      * @author Roman Kovalchuk
      * @version 1.0
      * */
-    private static class CityDaoPersist extends DaoPersist<City, Long>{
+    private static class CityDaoPersist extends DaoPersist<City, Long> {
 
         public CityDaoPersist(ConnectionPool pool) {
             super(pool);
