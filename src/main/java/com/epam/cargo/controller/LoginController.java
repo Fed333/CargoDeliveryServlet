@@ -29,7 +29,7 @@ public class LoginController {
             AuthorizedDataRequest authorizedRequest
     ){
         if (authorizationService.login(authorizedRequest, session)){
-            return "redirect:/directions";
+            return "redirect:/profile";
         }
         return "login.jsp";
     }
