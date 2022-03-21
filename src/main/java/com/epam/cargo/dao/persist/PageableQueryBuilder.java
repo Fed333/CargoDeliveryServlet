@@ -11,6 +11,9 @@ import com.epam.cargo.infrastructure.web.data.sort.Sort;
  * */
 public class PageableQueryBuilder {
 
+    /**
+     * Object for recognizing column names from sort properties.
+     * */
     private final OrderColumnRecognizer orderColumnRecognizer;
 
     public PageableQueryBuilder(OrderColumnRecognizer orderColumnRecognizer) {
@@ -64,8 +67,5 @@ public class PageableQueryBuilder {
         }
         return "";
     }
-
-
-
 
 }
