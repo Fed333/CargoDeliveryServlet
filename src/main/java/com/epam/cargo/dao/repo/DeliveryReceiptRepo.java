@@ -1,6 +1,8 @@
 package com.epam.cargo.dao.repo;
 
 import com.epam.cargo.entity.DeliveryReceipt;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,5 +17,5 @@ public interface DeliveryReceiptRepo extends Dao<DeliveryReceipt, Long> {
 
     List<DeliveryReceipt> findAllByCustomerId(Long id);
 
-//    Page<DeliveryReceipt> findAllByCustomerId(Long id, Pageable pageable);
+    Page<DeliveryReceipt> findAllByCustomerId(Long id, Pageable pageable);
 }
