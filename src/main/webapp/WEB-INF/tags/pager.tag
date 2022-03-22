@@ -63,11 +63,14 @@
             </c:choose>
 
         </c:forEach>
+        <%
+            pagesList.clear();
+        %>
     </ul>
-    <input type="text" name="${prefix}page" id="pageNumber" value="${activePage != null ? activePage : 0}" hidden>
-    <input type="text" name="${prefix}size" id="pageSize" value="" hidden>
+    <input type="text" name="${prefix}page" id="${prefix}pageNumber" value="${activePage != null ? activePage : 0}" hidden>
+    <input type="text" name="${prefix}size" id="${prefix}pageSize" value="" hidden>
     <script src="${pageContext.request.contextPath}/static/js/pagination.js"></script>
     <script>
-        paginate('${prefix}Paginator', ()=>{document.getElementById('${submitButtonId}').click()})
+        paginate('${prefix}Paginator', '${prefix}pageNumber', ()=>{document.getElementById('${submitButtonId}').click()})
     </script>
 </div>
