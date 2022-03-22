@@ -4,6 +4,7 @@ public enum ModelErrorAttribute {
     DUPLICATE_PASSWORD("duplicatePasswordErrorMessage"),
     LOGIN("loginErrorMessage"),
     PASSWORD("passwordErrorMessage"),
+    CREDENTIALS("credentialsErrorMessage"),
     NAME("nameErrorMessage"),
     PHONE("phoneErrorMessage"),
     SURNAME("surnameErrorMessage"),

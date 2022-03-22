@@ -13,6 +13,16 @@
 
     <div class="container mt-4">
         <div class="row d-flex justify-content-center mt-4">
+            <c:if test="${requestScope.credentialsErrorMessage != null}">
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-danger">
+                            <fmt:message key="${requestScope.credentialsErrorMessage}"/>
+                        </div>
+                    </div>
+                </div>
+
+            </c:if>
             <form action="${pageContext.request.contextPath}/login" method="post" style="max-width: 480px;">
                 <div class="card">
                     <div class="card-body">
@@ -22,10 +32,18 @@
                             </div>
                         </div>
                         <div class="form-group row justify-content-center mb-2">
-                            <input class="form-control" type="text" name="login" placeholder="<fmt:message key="auth.credentials-login"/>" id="input_login">
+                            <div class="col d-flex justify-content-center">
+                                <div class="validation-container">
+                                    <input class="form-control" type="text" required pattern="^(?=.*[a-zA-Z-_])(?=\S+$).{1,32}" name="login" placeholder="<fmt:message key="auth.credentials-login"/>" id="input_login">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row justify-content-center mb-2">
-                            <input class="form-control" type="password" name="password" placeholder="<fmt:message key="auth.credentials-password"/>" id="input_password">
+                            <div class="col d-flex justify-content-center">
+                                <div class="validation-container" <c:if test="${requestScope.passwordErrorMessage != null}">data-error="${requestScope.passwordErrorMessage}" </c:if>>
+                                    <input class="form-control" type="password" required pattern="^(?=.*[0-9])(?=.*[a-zA-Z-_])(?=\S+$).{8,64}" name="password" placeholder="<fmt:message key="auth.credentials-password"/>" id="input_password">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row mx-5">
                             <label class="col-form label"><a href="/reset_password"><fmt:message key="auth.login.forgot-password"/></a></label>
@@ -42,7 +60,7 @@
         </div>
 
 
-        <form action="/CargoDeliveryServlet/login" method="get">
+        <form action="${pageContext.request.contextPath}/login" method="get">
             <input name="lang" value="en" id="langInput" hidden="">
             <button type="submit" id="submitButton" hidden=""></button>
         </form>
@@ -54,7 +72,10 @@
             }
             addSwitchLanguageWithFormListeners(clickSubmitButtonHandler)
         </script>
-
+        <script src="${pageContext.request.contextPath}/static/js/validationError.js"></script>
+        <script>
+            addRemoveErrorAttributeListener()
+        </script>
     </div>
 </div>
 
