@@ -9,6 +9,7 @@ import com.epam.cargo.infrastructure.web.Model;
 import com.epam.cargo.service.AuthorizationService;
 
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 @Controller
 public class LoginController {
@@ -18,8 +19,11 @@ public class LoginController {
 
     @RequestMapping(url = "/login", method = HttpMethod.GET)
     public String loginPage(
-            Model model
+            HttpSession session
     ){
+        if (Objects.nonNull(authorizationService.getAuthorized(session))){
+            return "redirect:/forbidden";
+        }
         return "login.jsp";
     }
 
@@ -28,6 +32,9 @@ public class LoginController {
             HttpSession session,
             AuthorizedDataRequest authorizedRequest
     ){
+        if (Objects.nonNull(authorizationService.getAuthorized(session))){
+            return "redirect:/forbidden";
+        }
         if (authorizationService.login(authorizedRequest, session)){
             return "redirect:/profile";
         }
