@@ -77,6 +77,7 @@
                             <div class="tab-pane fade <c:if test="${sessionScope.activePill == applicationScope.notificationsPill}">active show</c:if>" id="pills-notifications" role="tabpanel" aria-labelledby="pills-notifications-tab">
                                 There is no notifications for you yet.
                             </div>
+
                             <div class="tab-pane fade <c:if test="${sessionScope.activePill == applicationScope.applicationsPill}">active show</c:if>" id="pills-applications" role="tabpanel" aria-labelledby="pills-applications-tab">
                                 <c:forEach items="${requestScope.applications.content}" var="application">
                                     <div class="row alert alert-primary mb-2">
@@ -98,6 +99,56 @@
                                     </div>
                                 </c:forEach>
                                 <tag:pager prefix="applications_" page="${requestScope.applications}" submitButtonId="submitButton"/>
+                            </div>
+
+                            <div class="tab-pane fade <c:if test="${sessionScope.activePill == applicationScope.receiptsPill}">active show</c:if>" id="pills-receipts" role="tabpanel" aria-labelledby="pills-receipts-tab">
+                                <div class="row alert alert-dark mb-2">
+                                    <div class="col-1">
+                                        #id
+                                    </div>
+                                    <div class="col-2">
+                                        <fmt:message key="delivery.application"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <fmt:message key="lang.manager"/>
+                                    </div>
+                                    <div class="col-2" style="min-width: 110px;">
+                                        <fmt:message key="delivery.application.receipt.formation-date"/>
+                                    </div>
+                                    <div class="col-2">
+                                        <fmt:message key="lang.price"/>
+                                    </div>
+                                </div>
+                                <c:forEach items="${requestScope.receipts.content}" var="receipt">
+                                    <div class="row alert alert-primary mb-2">
+                                        <div class="col-1 d-flex align-self-center">
+                                            <a class="link disabled" href="#">#${receipt.id}</a>
+                                        </div>
+                                        <div class="col-2 d-flex align-self-center">
+                                            <a class="link disabled" href="#">#${receipt.application.id}</a>
+                                        </div>
+                                        <div class="col-3 d-flex align-self-center">
+                                                ${receipt.manager.name} ${receipt.manager.surname}
+                                        </div>
+                                        <div class="col-2 d-flex align-self-center" style="min-width: 110px;">
+                                                ${receipt.formationDate}
+                                        </div>
+                                        <div class="col-2 d-flex align-self-center">
+                                                ${receipt.totalPrice} <fmt:message key="lang.UAH"/>
+                                        </div>
+                                        <div class="col d-flex justify-content-end me-2 align-self-center">
+                                            <c:choose>
+                                                <c:when test="${receipt.paid == true}">
+                                                    <button class="btn btn-primary disabled"><fmt:message key="lang.paid"/></button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a class="btn btn-success" href="/receipt/${receipt.id}/pay"><fmt:message key="lang.pay"/></a>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                                <tag:pager prefix="receipts_" page="${requestScope.receipts}" submitButtonId="submitButton"/>
                             </div>
                         </div>
 
