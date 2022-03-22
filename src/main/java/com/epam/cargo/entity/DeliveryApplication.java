@@ -33,6 +33,10 @@ public class DeliveryApplication implements Entity<Long> {
     public DeliveryApplication() {
     }
 
+    public DeliveryApplication(Long id) {
+        this.id = id;
+    }
+
     public DeliveryApplication(Long id, User customer, Address senderAddress, Address receiverAddress, DeliveredBaggage deliveredBaggage, LocalDate sendingDate, LocalDate receivingDate, State state, Double price) {
         this.id = id;
         this.customer = customer;
