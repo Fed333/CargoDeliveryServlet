@@ -1,10 +1,13 @@
 package com.epam.cargo.filter;
 
+import com.epam.cargo.infrastructure.context.ApplicationContext;
+import com.epam.cargo.service.LocaleResolverService;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Optional;
+
+import static com.epam.cargo.listener.ContextListener.APPLICATION_CONTEXT_ATTRIBUTE;
 
 /**
  * Filter for switching language locale.<br>
@@ -13,16 +16,14 @@ import java.util.Optional;
  * */
 public class SessionLocaleResolverFilter implements Filter {
 
-    private static final String DEFAULT_LOCALE_LANGUAGE = "en";
-    private static final String LANG_ATTRIBUTE = "lang";
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpSession session = req.getSession();
+        ApplicationContext context = (ApplicationContext) req.getServletContext().getAttribute(APPLICATION_CONTEXT_ATTRIBUTE);
 
-        String lang = Optional.ofNullable(req.getParameter(LANG_ATTRIBUTE)).orElse((String)session.getAttribute(LANG_ATTRIBUTE));
-        req.getSession().setAttribute(LANG_ATTRIBUTE, Optional.ofNullable(lang).orElse(DEFAULT_LOCALE_LANGUAGE));
+        LocaleResolverService localeResolverService = context.getObject(LocaleResolverService.class);
+        localeResolverService.interceptLocale(req);
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
