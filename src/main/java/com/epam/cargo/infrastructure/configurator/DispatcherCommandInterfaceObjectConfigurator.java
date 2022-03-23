@@ -12,6 +12,7 @@ import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
 import com.epam.cargo.infrastructure.web.Model;
 import com.epam.cargo.infrastructure.web.binding.binder.ParameterBinder;
 import com.epam.cargo.infrastructure.web.binding.manager.ParameterBinderManager;
+import com.epam.cargo.infrastructure.web.redirect.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -105,7 +106,15 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
      * */
     private Command createCommand(Object controller, Method method, ApplicationContext context) {
         return (req, res) -> {
-            req.setAttribute(Model.class.getName(), context.getObject(Model.class));
+            Model model = context.getObject(Model.class);
+            req.setAttribute(Model.class.getName(), model);
+
+            RedirectAttributes redirectAttributes = Optional.ofNullable((RedirectAttributes)req.getSession().getAttribute(RedirectAttributes.class.getName()))
+                    .orElse(context.getObject(RedirectAttributes.class));
+            req.setAttribute(RedirectAttributes.class.getName(), redirectAttributes);
+
+            model.mergeAttributes(redirectAttributes.getFlashAttributes());
+
             Parameter[] parameters = method.getParameters();
             Object[] arguments = new Object[parameters.length];
 
@@ -124,14 +133,15 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
                 throw new RuntimeException("Controller's method invocation failed " + method, e.getCause());
             }
 
-            Model model = (Model)req.getAttribute(Model.class.getName());
             req.removeAttribute(Model.class.getName());
             model.asMap().forEach(req::setAttribute);
 
             if (isRedirect(methodResponse)){
+                req.getSession().setAttribute(RedirectAttributes.class.getName(), req.getAttribute(RedirectAttributes.class.getName()));
                 String httpPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("httpPrefix", "");
                 res.sendRedirect(httpPrefix + eraseRedirect(methodResponse));
             } else{
+                req.getSession().removeAttribute(RedirectAttributes.class.getName());
                 String viewPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("viewPrefix", "");
                 req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
             }
