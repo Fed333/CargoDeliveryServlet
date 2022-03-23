@@ -49,7 +49,7 @@
                             <label class="col-form label"><a href="/reset_password"><fmt:message key="auth.login.forgot-password"/></a></label>
                         </div>
                         <div class="form-group row mx-5">
-                            <label class="col-form label"><fmt:message key="auth.login.have-not-registered"/> <a href="/registration"><fmt:message key="auth.login.register-now"/></a></label>
+                            <label class="col-form label"><fmt:message key="auth.login.have-not-registered"/> <a href="${pageContext.request.contextPath}/registration"><fmt:message key="auth.login.register-now"/></a></label>
                         </div>
                         <div class="form-group row justify-content-center">
                             <button class="btn btn-primary mt-4" type="submit" id="button_sign_in"><fmt:message key="auth.login"/></button>
