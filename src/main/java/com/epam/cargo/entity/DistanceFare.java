@@ -1,5 +1,7 @@
 package com.epam.cargo.entity;
 
+import java.util.Objects;
+
 /**
  * POJO class of distance fare.
  * Used in calculating price of delivery cost.
@@ -66,5 +68,18 @@ public class DistanceFare implements Entity<Long>{
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DistanceFare that = (DistanceFare) o;
+        return Objects.equals(id, that.id) && Objects.equals(distanceFrom, that.distanceFrom) && Objects.equals(distanceTo, that.distanceTo) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, distanceFrom, distanceTo, price);
     }
 }
