@@ -16,9 +16,20 @@
 
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/directions"><fmt:message key="menu.directions"/></a>
-                </li>
+                <div class="dropdown navbar-nav" id="infoDropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <fmt:message key="menu.info"/>
+                    </a>
+                    <ul class="dropdown-menu me-auto" aria-labelledby="infoDropdown">
+                        <li>
+                            <a class="dropdown-item" id="directionsInfo" href="${pageContext.request.contextPath}/directions"><fmt:message key="menu.directions"/></a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" id="faresInfo" href="${pageContext.request.contextPath}/fares"><fmt:message key="menu.fares"/></a>
+                        </li>
+                    </ul>
+                </div>
+
                 <li class="nav-item">
                     <a class="nav-link" href="/make_app"><fmt:message key="menu.create-application"/></a>
                 </li>
