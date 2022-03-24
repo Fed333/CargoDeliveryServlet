@@ -1,5 +1,7 @@
 package com.epam.cargo.entity;
 
+import java.util.Objects;
+
 /**
  * POJO class of dimensions fare.
  * Used in calculating price of delivery cost.
@@ -65,5 +67,18 @@ public class DimensionsFare implements Entity<Long>{
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DimensionsFare that = (DimensionsFare) o;
+        return Objects.equals(id, that.id) && Objects.equals(dimensionsFrom, that.dimensionsFrom) && Objects.equals(dimensionsTo, that.dimensionsTo) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dimensionsFrom, dimensionsTo, price);
     }
 }
