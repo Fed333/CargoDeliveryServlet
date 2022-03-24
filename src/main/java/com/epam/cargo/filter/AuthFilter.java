@@ -20,7 +20,8 @@ public class AuthFilter implements Filter {
             contextPath + "/login",
             contextPath + "/directions",
             contextPath + "/registration",
-            contextPath + "/forbidden");
+            contextPath + "/forbidden",
+            contextPath + "/fares");
 
     private Set<String> authManager = Set.of(
       contextPath + "/applications/review"
