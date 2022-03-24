@@ -1,5 +1,7 @@
 package com.epam.cargo.entity;
 
+import java.util.Objects;
+
 /**
  * POJO class of weight fare.
  * Used in calculating price of delivery cost.
@@ -64,5 +66,18 @@ public class WeightFare implements Entity<Long>{
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WeightFare that = (WeightFare) o;
+        return Objects.equals(id, that.id) && Objects.equals(weightFrom, that.weightFrom) && Objects.equals(weightTo, that.weightTo) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, weightFrom, weightTo, price);
     }
 }
