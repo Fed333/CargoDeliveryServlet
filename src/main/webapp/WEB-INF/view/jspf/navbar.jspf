@@ -34,7 +34,7 @@
                 </div>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/make_app"><fmt:message key="menu.create-application"/></a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/make_app"><fmt:message key="menu.create-application"/></a>
                 </li>
                 <c:if test="${user != null && user.isManager()}">
                     <li class="nav-item">
