@@ -98,6 +98,15 @@ public class DirectionDeliveryService {
         };
     }
 
+    /**
+     * finds the smallest distance between given cities, according to direction delivery routes in database
+     * @return number with represents smaller distance between cities in km
+     * if no way exists return Double.POSITIVE_INFINITIVE
+     * */
+    public Double calculateMinDistance(City cityFrom, City cityTo){
+        return CityUtils.getMinDistance(cityFrom, cityTo, findAll());
+    }
+
     private static class DirectionDeliveryComparatorRecognizer implements ComparatorRecognizer<DirectionDelivery> {
 
         private final Map<String, Comparator<DirectionDelivery>> comparators;
@@ -125,6 +134,18 @@ public class DirectionDeliveryService {
         if (city1.equals(city2)){
             throw new IllegalArgumentException();
         }
+    }
+
+    /**
+     * finds the smallest distance between given cities, according to direction delivery routes in database
+     * @return City.Distance object with smallest distance and route as well
+     * */
+    public City.Distance getDistanceBetweenCities(City cityFrom, City cityTo, Locale locale){
+        return CityUtils.getDistance(
+                cityFrom,
+                cityTo,
+                findAll()
+        );
     }
 
 }

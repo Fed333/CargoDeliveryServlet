@@ -27,6 +27,9 @@
                         <li>
                             <a class="dropdown-item" id="faresInfo" href="${pageContext.request.contextPath}/fares"><fmt:message key="menu.fares"/></a>
                         </li>
+                        <li>
+                            <a class="dropdown-item" id="calculatorInfo" href="${pageContext.request.contextPath}/delivery_cost_calculator"><fmt:message key="lang.delivery-cost"/></a>
+                        </li>
                     </ul>
                 </div>
 

@@ -21,7 +21,9 @@ public class AuthFilter implements Filter {
             contextPath + "/directions",
             contextPath + "/registration",
             contextPath + "/forbidden",
-            contextPath + "/fares");
+            contextPath + "/fares",
+            contextPath + "/delivery_cost_calculator"
+            );
 
     private Set<String> authManager = Set.of(
       contextPath + "/applications/review"
