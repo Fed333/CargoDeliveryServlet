@@ -5,19 +5,17 @@ import com.epam.cargo.dto.DeliveryCostCalculatorResponse;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DeliveredBaggage;
-import com.epam.cargo.exception.NoExistingCityException;
-import com.epam.cargo.exception.NoExistingDirectionException;
-import com.epam.cargo.exception.WrongDataAttributeException;
-import com.epam.cargo.exception.WrongDataException;
+import com.epam.cargo.exception.*;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.PropertyValue;
 import com.epam.cargo.infrastructure.annotation.Singleton;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.epam.cargo.exception.ModelErrorAttribute.CITY_DIRECTION;
+import static com.epam.cargo.exception.ModelErrorAttribute.*;
 import static com.epam.cargo.exception.WrongInput.INVALID_DIRECTION_SAME_CITIES;
 
 /**
@@ -51,7 +49,8 @@ public class DeliveryCostCalculatorService {
     private String messages;
 
     public DeliveryCostCalculatorResponse calculateCost(DeliveryCostCalculatorRequest calculatorRequest, Locale locale) throws WrongDataException {
-        Objects.requireNonNull(calculatorRequest, "calculatorRequest cannot be null");
+        DeliveryCostCalculatorRequestValidator validator = new DeliveryCostCalculatorRequestValidator(ResourceBundle.getBundle(messages, locale));
+        validator.requireValidCalculatorRequest(calculatorRequest);
 
         ResourceBundle bundle = ResourceBundle.getBundle(messages, locale);
 
@@ -64,7 +63,11 @@ public class DeliveryCostCalculatorService {
 
         City.Distance distance = directionDeliveryService.getDistanceBetweenCities(cityFrom, cityTo, locale);
 
-        double totalCost = calculate(distance.getDistance(), calculatorRequest.getWeight(), calculatorRequest.getDimensions().getVolume());
+        double totalCost = calculate(
+                distance.getDistance(),
+                calculatorRequest.getWeight(),
+                calculatorRequest.getDimensions().getVolume()
+        );
         return new DeliveryCostCalculatorResponse(totalCost, distance);
     }
 
@@ -133,4 +136,35 @@ public class DeliveryCostCalculatorService {
         double dimensionsCost = dimensionsFareService.getPrice(volume.intValue());
         return distanceCost + weightCost + dimensionsCost;
     }
+
+    private static class DeliveryCostCalculatorRequestValidator {
+
+        private final ResourceBundle bundle;
+
+        public DeliveryCostCalculatorRequestValidator(ResourceBundle bundle) {
+            this.bundle = bundle;
+        }
+
+        private void requireValidCalculatorRequest(DeliveryCostCalculatorRequest calculatorRequest) throws WrongDataAttributeException {
+            Objects.requireNonNull(calculatorRequest, "calculatorRequest cannot be null");
+
+            Optional.ofNullable(calculatorRequest.getWeight()).orElseThrow(()->new WrongDataAttributeException(WEIGHT.getAttr(), bundle, WrongInput.REQUIRED));
+            Optional.ofNullable(calculatorRequest.getDimensions().getLength()).orElseThrow(()->new WrongDataAttributeException(LENGTH.getAttr(), bundle, WrongInput.REQUIRED));
+            Optional.ofNullable(calculatorRequest.getDimensions().getWidth()).orElseThrow(()->new WrongDataAttributeException(WIDTH.getAttr(), bundle, WrongInput.REQUIRED));
+            Optional.ofNullable(calculatorRequest.getDimensions().getHeight()).orElseThrow(()->new WrongDataAttributeException(HEIGHT.getAttr(), bundle, WrongInput.REQUIRED));
+
+            requirePositiveOnly(calculatorRequest.getWeight(), WEIGHT.getAttr());
+            requirePositiveOnly(calculatorRequest.getDimensions().getLength(), LENGTH.getAttr());
+            requirePositiveOnly(calculatorRequest.getDimensions().getWidth(), WIDTH.getAttr());
+            requirePositiveOnly(calculatorRequest.getDimensions().getHeight(), HEIGHT.getAttr());
+        }
+
+        private void requirePositiveOnly(Number number, String modelAttribute) throws WrongDataAttributeException {
+            if (number.doubleValue() <= 0){
+                throw new WrongDataAttributeException(modelAttribute, bundle, WrongInput.NO_POSITIVE_NUMBER);
+            }
+        }
+
+    }
+
 }

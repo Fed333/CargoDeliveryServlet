@@ -9,19 +9,19 @@
 
 <c:choose>
     <c:when test="${requestScope.distance != null}">
-        <c:set scope="application" var="selectedCitySenderId" value="${requestScope.distance.cityFrom.id}"/>
-        <c:set scope="application" var="selectedCityReceiverId" value="${requestScope.distance.cityTo.id}"/>
+        <c:set scope="request" var="selectedCitySenderId" value="${requestScope.distance.cityFrom.id}"/>
+        <c:set scope="request" var="selectedCityReceiverId" value="${requestScope.distance.cityTo.id}"/>
     </c:when>
     <c:when test="${requestScope.calculatorRequest != null}">
-        <c:set scope="application" var="selectedCitySenderId" value="${requestScope.calculatorRequest.cityFrom.id}"/>
-        <c:set scope="application" var="selectedCityReceiverId" value="${requestScope.calculatorRequest.cityTo.id}"/>
+        <c:set scope="request" var="selectedCitySenderId" value="${requestScope.calculatorRequest.cityFromId}"/>
+        <c:set scope="request" var="selectedCityReceiverId" value="${requestScope.calculatorRequest.cityToId}"/>
     </c:when>
 </c:choose>
 
-<c:set scope="application" var="weight" value="${requestScope.calculatorRequest.weight}"/>
-<c:set scope="application" var="length" value="${requestScope.calculatorRequest.dimensions.length}"/>
-<c:set scope="application" var="width" value="${requestScope.calculatorRequest.dimensions.width}"/>
-<c:set scope="application" var="height" value="${requestScope.calculatorRequest.dimensions.height}"/>
+<c:set scope="request" var="weight" value="${requestScope.calculatorRequest.weight}"/>
+<c:set scope="request" var="length" value="${requestScope.calculatorRequest.dimensions.length}"/>
+<c:set scope="request" var="width" value="${requestScope.calculatorRequest.dimensions.width}"/>
+<c:set scope="request" var="height" value="${requestScope.calculatorRequest.dimensions.height}"/>
 
 
 <!DOCTYPE>
@@ -29,14 +29,17 @@
 <head>
     <title>Cost calculator</title>
     <%@include file="jspf/head.jspf"%>
-    <script src="/static/js/formSubmit.js"></script>
-    <script src="/static/js/localization.js"></script>
-    <script src="/static/js/validationError.js"></script>
-    <script src="/static/js/deliveryCostCalculatorValidation.js"></script>
-</head>
+  </head>
 <body>
 <div class="content">
     <%@include file="jspf/navbar.jspf"%>
+
+    <script src="${pageContext.request.contextPath}/static/js/formSubmit.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/validationError.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/deliveryCostCalculatorValidation.js"></script>
+
+
     <div class="container mt-4">
 
         <div class="row mb-2">

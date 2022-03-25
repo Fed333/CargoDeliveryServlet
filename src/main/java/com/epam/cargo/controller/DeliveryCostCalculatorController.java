@@ -25,6 +25,8 @@ import java.util.Locale;
 @Controller
 public class DeliveryCostCalculatorController {
 
+    private static final String CALCULATOR_REQUEST = "calculatorRequest";
+
     @Inject
     private DeliveryCostCalculatorService deliveryCostCalculatorService;
 
@@ -45,6 +47,9 @@ public class DeliveryCostCalculatorController {
     ){
         Locale locale = localeResolverService.resolveLocale(session);
         model.addAttribute("cities", cityService.findAll(locale, Sort.by(Order.by("name"))));
+        if (!model.containsAttribute(CALCULATOR_REQUEST)){
+            model.addAttribute(CALCULATOR_REQUEST, calculatorRequest);
+        }
         return "deliveryCostCalculator.jsp";
     }
 
@@ -63,7 +68,7 @@ public class DeliveryCostCalculatorController {
         } catch (WrongDataException e) {
             redirectAttributes.addFlashAttribute(e.getModelAttribute(), e.getMessage());
         }
-        redirectAttributes.addFlashAttribute("calculatorRequest", calculatorRequest);
+        redirectAttributes.addFlashAttribute(CALCULATOR_REQUEST, calculatorRequest);
         return "redirect:/delivery_cost_calculator";
     }
 }
