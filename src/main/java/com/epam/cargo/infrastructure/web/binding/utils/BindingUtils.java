@@ -106,8 +106,9 @@ public class BindingUtils {
     public static Sort bindSort(HttpServletRequest req, String propertyParameter, String directionParameter) {
         String[] properties = req.getParameterValues(propertyParameter);
         String[] directionsArray = Optional.ofNullable(req.getParameterValues(directionParameter)).orElse(new String[]{});
-        Order.Direction[] directions = new Order.Direction[directionsArray.length];
-        directions = Arrays.stream(directionsArray).map(Order.Direction::valueOf).collect(Collectors.toList()).toArray(directions);
+
+        Order.Direction[] directions = Arrays.stream(directionsArray).map(Order.Direction::valueOf).toArray(Order.Direction[]::new);
+
         Order[] orders = bindOrders(properties, directions);
         return Sort.by(orders);
     }
