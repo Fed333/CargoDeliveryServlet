@@ -34,7 +34,6 @@ public class DirectionsController {
         Page<DirectionDelivery> directions = directionsService.findAll(filter, pageable);
 
         model.addAttribute("directions", directions);
-        model.addAttribute("url", "/CargoDeliveryServlet/directions");
 
         Optional.ofNullable(filter.getSenderCityName()).ifPresent(v->session.setAttribute("senderCity", v));
         Optional.ofNullable(filter.getReceiverCityName()).ifPresent(v->session.setAttribute("receiverCity", v));

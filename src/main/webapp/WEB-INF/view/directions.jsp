@@ -18,7 +18,7 @@
     <div class="container mt-4">
         <h2 class="d-flex justify-content-center"><fmt:message key="lang.directions"/></h2>
         <div class="d-flex justify-content-center">
-            <form class="col-6" action="${requestScope.url}" method="get">
+            <form class="col-6" action="${pageContext.request.contextPath}/directions" method="get">
                  <div class="form-group row mt-2">
                     <div class="col-2">
                         <label class="col-form-label"><fmt:message key="lang.sorting"/></label>
