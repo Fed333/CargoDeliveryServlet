@@ -11,7 +11,11 @@ public enum ModelErrorAttribute {
     RECEIVING("receivingDateErrorMessage"),
     CITY_DIRECTION("invalidCityDirectionErrorMessage"),
     PAYING("payingErrorMessage"),
-    ABSENT_CITY("noExistingCityMessage");
+    ABSENT_CITY("noExistingCityMessage"),
+    LENGTH("lengthErrorMessage"),
+    WIDTH("widthErrorMessage"),
+    HEIGHT("heightErrorMessage"),
+    WEIGHT("weightErrorMessage");
 
     private final String attr;
 
