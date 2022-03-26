@@ -1,6 +1,5 @@
 package com.epam.cargo.dto.validator;
 
-import com.epam.cargo.dto.DeliveredBaggageRequest;
 import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.dto.UserRequest;
 import com.epam.cargo.exception.ModelErrorAttribute;
@@ -9,7 +8,6 @@ import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.exception.WrongInput;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -22,6 +20,48 @@ public class DeliveryApplicationRequestValidator extends RequestValidator<Delive
 
     public DeliveryApplicationRequestValidator(ResourceBundle bundle) {
         super(bundle);
+    }
+
+    @Override
+    public boolean validate(DeliveryApplicationRequest request) {
+
+        validateDates(request);
+
+        DeliveredBaggageRequestValidator baggageRequestValidator = new DeliveredBaggageRequestValidator(getBundle());
+        baggageRequestValidator.validate(request.getDeliveredBaggageRequest());
+        merge(baggageRequestValidator);
+
+        SenderAddressRequestValidator senderAddressRequestValidator = new SenderAddressRequestValidator(getBundle());
+        senderAddressRequestValidator.validate(request.getSenderAddress());
+        merge(senderAddressRequestValidator);
+
+        ReceiverAddressRequestValidator receiverAddressRequestValidator = new ReceiverAddressRequestValidator(getBundle());
+        receiverAddressRequestValidator.validate(request.getReceiverAddress());
+        merge(receiverAddressRequestValidator);
+
+        return isValid();
+    }
+
+
+    private boolean validateDates(DeliveryApplicationRequest request){
+        return validationChain(
+                () -> validateNotNull(request.getSendingDate(), ModelErrorAttribute.SENDING.getAttr(), WrongInput.REQUIRED),
+                () ->  validateNotNull(request.getReceivingDate(), ModelErrorAttribute.RECEIVING.getAttr(), WrongInput.REQUIRED),
+                () -> validateSequenceOfDates(request)
+        );
+    }
+
+    private boolean validateSequenceOfDates(DeliveryApplicationRequest object){
+        boolean validation = true;
+        if (object.getSendingDate().isBefore(LocalDate.now())){
+            addError(ModelErrorAttribute.SENDING.getAttr(), WrongInput.SENDING_IS_BEFORE_NOW);
+            validation = false;
+        }
+        if (object.getSendingDate().isAfter(object.getReceivingDate())){
+            addError(ModelErrorAttribute.RECEIVING.getAttr(), WrongInput.REQUIRED_BEING_AFTER_SENDING);
+            validation = false;
+        }
+        return validation;
     }
 
     @Override
