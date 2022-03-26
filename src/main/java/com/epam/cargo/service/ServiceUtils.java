@@ -8,6 +8,7 @@ import com.epam.cargo.exception.*;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
 import com.epam.cargo.infrastructure.web.data.sort.Sort;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -26,6 +27,9 @@ public class ServiceUtils {
      * @author Roman Kovalchuk
      * */
     private static void requireValidDates(DeliveryApplication object, ResourceBundle bundle) throws WrongDataAttributeException {
+        if (object.getSendingDate().isBefore(LocalDate.now())){
+            throw new WrongDataAttributeException(ModelErrorAttribute.SENDING.getAttr(), bundle, WrongInput.SENDING_IS_BEFORE_NOW);
+        }
         if (object.getSendingDate().isAfter(object.getReceivingDate())){
             throw new WrongDataAttributeException(ModelErrorAttribute.RECEIVING.getAttr(), bundle, WrongInput.REQUIRED_BEING_AFTER_SENDING);
         }
