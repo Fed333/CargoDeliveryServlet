@@ -3,6 +3,7 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.UserRepo;
 import com.epam.cargo.dto.AddressRequest;
 import com.epam.cargo.dto.UserRequest;
+import com.epam.cargo.dto.validator.UserRequestValidator;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.Role;
@@ -147,28 +148,25 @@ public class UserService {
         }
 
         private void initializePersonalData(UserRequest userRequest, User user) throws WrongDataException{
-            user.setName(validator.requireValidName(userRequest));
-            user.setSurname(validator.requireValidSurname(userRequest));
-            user.setEmail(user.getEmail());
-            user.setPhone(validator.requireValidPhone(userRequest));
+            user.setName(userRequest.getName());
+            user.setSurname(userRequest.getSurname());
+            user.setEmail(userRequest.getEmail());
+            user.setPhone(userRequest.getPhone());
 
             assignAddressToUser(userRequest, user);
         }
 
         private void initializeCredentials(UserRequest userRequest, User user) throws WrongDataException {
             String login = userRequest.getLogin();
-            validator.requireValidLogin(login);
-            validator.requireUniqueLogin(login);
             user.setLogin(login);
 
             String password = userRequest.getPassword();
-            validator.requireValidPassword(password);
-            validator.requirePasswordDuplicationMatch(userRequest, password);
             user.setPassword(passwordEncoder.encode(password));
         }
 
         public User initialize(UserRequest userRequest) throws WrongDataException {
             User user = new User();
+            validator.requireValid(userRequest);
             initializeCredentials(userRequest, user);
             initializePersonalData(userRequest, user);
             return user;
@@ -182,71 +180,24 @@ public class UserService {
      * */
     private class UserValidator {
 
-        /**
-         * Current locale.
-         * */
-        private final Locale locale;
-
         private final ResourceBundle bundle;
 
+        private final UserRequestValidator validator;
+
         public UserValidator(Locale locale) {
-            this.locale = locale;
             bundle = ResourceBundle.getBundle(messages, locale);
+            validator = new UserRequestValidator(bundle);
         }
 
-        private void requirePasswordDuplicationMatch(UserRequest userRequest, String password) throws WrongDataException {
-            if (!password.equals(userRequest.getDuplicatePassword())){
-                throw new WrongDataAttributeException(DUPLICATE_PASSWORD.getAttr(), bundle, CONFIRMATION_PASSWORD_FAILED);
-            }
-        }
-
-        private void requireValidPassword(String password) throws NoValidPasswordException {
-            if (!isValidPassword(password)){
-                throw new NoValidPasswordException(bundle, password);
-            }
-        }
-
-        private boolean isValidPassword(String password) {
-            return isValidRegexp(password, PASSWORD_VALID_REGEX);
-        }
-
-        private boolean isValidLogin(String login){
-            return isValidRegexp(login, LOGIN_VALID_REGEX);
-        }
-
-        private boolean isValidRegexp(String value, String regexp){
-            return Optional.ofNullable(value).orElse("").matches(regexp);
-        }
-
-        private void requireValidLogin(String login) throws WrongDataException{
-            if (!isValidLogin(login)){
-                throw new NoValidLoginException(bundle, login);
-            }
+        public void requireValid(UserRequest request) throws WrongDataException {
+            validator.requireValid(request);
+            requireUniqueLogin(request.getLogin());
         }
 
         private void requireUniqueLogin(String login) throws OccupiedLoginException {
             if (!Objects.isNull(userRepo.findByLogin(login))){
                 throw new OccupiedLoginException(bundle, login);
             }
-        }
-
-        private String requireValidAttribute(String value, String regexp, ModelErrorAttribute attribute, String errorMessage) throws WrongDataAttributeException {
-            if (!isValidRegexp(value, regexp)){
-                throw new WrongDataAttributeException(attribute.getAttr(), bundle, errorMessage);
-            }
-            return value;
-        }
-
-        private String requireValidName(UserRequest userRequest) throws WrongDataAttributeException {
-            return requireValidAttribute(userRequest.getName(), NAME_VALID_REGEX, ModelErrorAttribute.NAME, WrongInput.INCORRECT_NAME);
-        }
-
-        private String requireValidSurname(UserRequest userRequest) throws WrongDataAttributeException {
-            return requireValidAttribute(userRequest.getSurname(), NAME_VALID_REGEX, ModelErrorAttribute.SURNAME, WrongInput.INCORRECT_SURNAME);
-        }
-
-        private String requireValidPhone(UserRequest userRequest) throws WrongDataAttributeException {
-            return requireValidAttribute(userRequest.getPhone(), PHONE_VALID_REGEX, ModelErrorAttribute.PHONE, WrongInput.INCORRECT_PHONE);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.epam.cargo.controller;
 
 import com.epam.cargo.dto.UserRequest;
+import com.epam.cargo.dto.validator.UserRequestValidator;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.infrastructure.annotation.Controller;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Takes requests associated with registration user page.
@@ -28,6 +30,8 @@ import java.util.Optional;
  * */
 @Controller
 public class RegistrationController {
+
+    private static final String USER_REQUEST = "userRequest";
 
     @Inject
     private UserService userService;
@@ -51,7 +55,7 @@ public class RegistrationController {
         Locale locale = localeResolverService.resolveLocale(session);
         List<City> cities = cityService.findAll(locale, Sort.by(new Order("name", Order.Direction.ASC)));
         model.addAttribute("cities", cities);
-        model.addAttribute("userRequest", Optional.ofNullable(model.getAttribute("userRequest")).orElse(userRequest));
+        model.addAttribute(USER_REQUEST, Optional.ofNullable(model.getAttribute(USER_REQUEST)).orElse(userRequest));
 
         return "registration.jsp";
     }
@@ -63,15 +67,24 @@ public class RegistrationController {
             Model model,
             RedirectAttributes redirectAttributes
     ) {
-        try {
-            userService.registerUser(userRequest, localeResolverService.resolveLocale(session));
-        } catch (WrongDataException e) {
-            redirectAttributes
-                    .addFlashAttribute("userRequest", userRequest)
-                    .addFlashAttribute(e.getModelAttribute(), e.getMessage());
+        Locale locale = localeResolverService.resolveLocale(session);
+        UserRequestValidator validator = new UserRequestValidator(ResourceBundle.getBundle(messages, locale));
+        if (validator.validate(userRequest)){
+            try {
+                userService.registerUser(userRequest, localeResolverService.resolveLocale(session));
+            } catch (WrongDataException e) {
+                redirectAttributes
+                        .addFlashAttribute(USER_REQUEST, userRequest)
+                        .addFlashAttribute(e.getModelAttribute(), e.getMessage());
+                return "redirect:/registration";
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(USER_REQUEST, userRequest);
+            validator.getErrors().forEach(redirectAttributes::addFlashAttribute);
             return "redirect:/registration";
         }
-        model.addAttribute("userRequest", userRequest);
+
+        model.addAttribute(USER_REQUEST, userRequest);
         return "redirect:/login";
     }
 

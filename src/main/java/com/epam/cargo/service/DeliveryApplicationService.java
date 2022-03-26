@@ -59,7 +59,6 @@ public class DeliveryApplicationService {
         Objects.requireNonNull(request, "DeliveryApplicationRequest object cannot be null");
 
         ResourceBundle bundle = ResourceBundle.getBundle(messages, locale);
-        new DeliveryApplicationRequestValidator(bundle).requireValid(request);
 
         DeliveryApplication application = ServiceUtils.createDeliveryApplication(customer, request, cityService, bundle);
         application.setPrice(calculatePrice(application));
