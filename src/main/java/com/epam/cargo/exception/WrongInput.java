@@ -29,4 +29,5 @@ public interface WrongInput {
     String UNFILLED_NAME = "wrong.input.unfilled.name";
     String UNFILLED_SURNAME = "wrong.input.unfilled.surname";
     String UNFILLED_PHONE = "wrong.input.unfilled.phone";
+    String SENDING_IS_BEFORE_NOW = "wrong.input.sending.before.now";
 }

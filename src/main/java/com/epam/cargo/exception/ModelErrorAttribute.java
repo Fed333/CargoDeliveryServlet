@@ -23,7 +23,8 @@ public enum ModelErrorAttribute {
     SENDER_HOUSE_NUMBER("senderHouseNumberErrorMessage"),
     RECEIVER_HOUSE_NUMBER("receiverHouseNumberErrorMessage"),
     SENDER_CITY_ID("senderCityIdErrorMessage"),
-    RECEIVER_CITY_ID("receiverCityIdErrorMessage");
+    RECEIVER_CITY_ID("receiverCityIdErrorMessage"),
+    BAGGAGE_TYPE("baggageTypeErrorMessage");
 
     private final String attr;
 
