@@ -36,8 +36,8 @@
 <div class="content">
     <%@include file="jspf/navbar.jspf"%>
     <div class="container mt-4">
-        <script src="/static/js/localization.js"></script>
-        <script src="/static/js/validationError.js"></script>
+        <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>
+        <script src="${pageContext.request.contextPath}/static/js/validationError.js"></script>
 
         <div class="row">
             <div class="col d-flex justify-content-center">
