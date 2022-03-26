@@ -8,7 +8,7 @@ import java.util.Map;
  * @see Model
  * @see HashMap
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @SuppressWarnings("unused")
 public class WebModel implements Model {
@@ -26,7 +26,7 @@ public class WebModel implements Model {
     }
 
     @Override
-    public Model mergeAttributes(Map<String, Object> toMerge) {
+    public Model mergeAttributes(Map<String, ?> toMerge) {
         map.putAll(toMerge);
         return this;
     }
