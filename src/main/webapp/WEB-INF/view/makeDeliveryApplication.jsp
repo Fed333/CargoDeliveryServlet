@@ -11,7 +11,7 @@
 <c:set scope="request" var="volume" value="${requestScope.deliveredBaggage.volume}"/>
 <c:set scope="request" var="weight" value="${requestScope.deliveredBaggage.weight}"/>
 <c:set scope="request" var="selectedType" value="${requestScope.type}"/>
-<c:set scope="request" var="description" value="${requestScope.description}"/>
+<c:set scope="request" var="description" value="${requestScope.deliveredBaggage.description}"/>
 
 <c:set scope="request" var="senderAddress" value="${requestScope.deliveryApplicationRequest.senderAddress}"/>
 <c:set scope="request" var="senderCityId" value="${requestScope.senderAddress.cityId}"/>
@@ -169,7 +169,7 @@
                                         <label class="col-form-label"><fmt:message key="lang.street"/></label>
                                     </div>
                                     <div class="col validation-container" <c:if test="${requestScope.receiverStreetErrorMessage != null}" >data-error=${requestScope.receiverStreetErrorMessage}</c:if>>
-                                        <input class="form-control" name="receiverAddress.streetName" id="senderStreetInput" value="${receiverStreetName}">
+                                        <input class="form-control" name="receiverAddress.streetName" id="receiverStreetInput" value="${receiverStreetName}">
                                     </div>
                                 </div>
                                 <div class="row mt-2">
