@@ -8,6 +8,7 @@ public enum ModelErrorAttribute {
     NAME("nameErrorMessage"),
     PHONE("phoneErrorMessage"),
     SURNAME("surnameErrorMessage"),
+    SENDING("sendingDateErrorMessage"),
     RECEIVING("receivingDateErrorMessage"),
     CITY_DIRECTION("invalidCityDirectionErrorMessage"),
     PAYING("payingErrorMessage"),
@@ -15,7 +16,14 @@ public enum ModelErrorAttribute {
     LENGTH("lengthErrorMessage"),
     WIDTH("widthErrorMessage"),
     HEIGHT("heightErrorMessage"),
-    WEIGHT("weightErrorMessage");
+    WEIGHT("weightErrorMessage"),
+    VOLUME("volumeErrorMessage"),
+    SENDER_STREET("senderStreetErrorMessage"),
+    RECEIVER_STREET("receiverStreetErrorMessage"),
+    SENDER_HOUSE_NUMBER("senderHouseNumberErrorMessage"),
+    RECEIVER_HOUSE_NUMBER("receiverHouseNumberErrorMessage"),
+    SENDER_CITY_ID("senderCityIdErrorMessage"),
+    RECEIVER_CITY_ID("receiverCityIdErrorMessage");
 
     private final String attr;
 
