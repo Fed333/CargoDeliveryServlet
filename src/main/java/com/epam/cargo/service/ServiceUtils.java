@@ -5,6 +5,9 @@ import com.epam.cargo.dto.DeliveredBaggageRequest;
 import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.*;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
 import com.epam.cargo.infrastructure.web.data.sort.Sort;
 
@@ -15,7 +18,7 @@ import java.util.*;
  * Utils service class.<br>
  * Has common useful for services static methods.
  * @author Roman Kovalchuk
- * @version 1.1
+ * @version 1.2
  * */
 public class ServiceUtils {
 
@@ -163,6 +166,29 @@ public class ServiceUtils {
         if (Objects.isNull(userService.findUserByLogin(user.getLogin()))){
             throw new IllegalArgumentException("User " + user + " must be present in database");
         }
+    }
+
+    /**
+     * Makes {@link Page} object from list according to the given {@link Pageable}.
+     * @param list list of objects which we make page from
+     * @param pageable set of rules to make page
+     * @param recognizer services for getting {@link Comparator} objects
+     * @return {@link Page} object created with list
+     * @since 1.2
+     * */
+    static <T> Page<T> toPage(List<T> list, Pageable pageable, ComparatorRecognizer<T> recognizer) {
+        if(pageable.getPageNumber()*pageable.getPageSize() > list.size()){
+            pageable = pageable.withPage(0);
+        }
+        Sort sort = pageable.getSort();
+        sortList(list, sort, recognizer);
+
+        int start = pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), list.size());
+        if (start > end){
+            return new PageImpl<>(Collections.emptyList(), pageable, list.size());
+        }
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 
     /**
