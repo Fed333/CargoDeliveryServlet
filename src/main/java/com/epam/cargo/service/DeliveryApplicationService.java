@@ -2,6 +2,7 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.DeliveryApplicationRepo;
 import com.epam.cargo.dto.DeliveryApplicationRequest;
+import com.epam.cargo.dto.DeliveryApplicationsReviewFilterRequest;
 import com.epam.cargo.dto.validator.DeliveryApplicationRequestValidator;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.DeliveredBaggage;
@@ -15,9 +16,12 @@ import com.epam.cargo.infrastructure.annotation.PropertyValue;
 import com.epam.cargo.infrastructure.annotation.Singleton;
 import com.epam.cargo.infrastructure.web.data.page.Page;
 import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Singleton(type = Singleton.Type.LAZY)
 public class DeliveryApplicationService {
@@ -138,6 +142,72 @@ public class DeliveryApplicationService {
 
     private Address requireNotNullAddress(Address application) {
         return Optional.ofNullable(application).orElseThrow(()->new IllegalArgumentException("Address in application cannot be null!"));
+    }
+
+
+    public List<DeliveryApplication> findAll(DeliveryApplicationsReviewFilterRequest filter){
+        List<DeliveryApplication> applications = findAll();
+        applications = applications.stream()
+                .filter(
+                        statePredicate(filter)
+                                .and(baggageTypePredicate(filter))
+                                .and(senderCityPredicate(filter))
+                                .and(receiverCityPredicate(filter))
+                                .and(sendingDatePredicate(filter))
+                                .and(receivingDatePredicate(filter))
+                )
+                .collect(Collectors.toList());
+
+        return applications;
+    }
+
+    private Predicate<? super DeliveryApplication> receivingDatePredicate(DeliveryApplicationsReviewFilterRequest filter) {
+        return a -> Objects.isNull(filter.getReceivingDate()) || a.getReceivingDate().equals(filter.getReceivingDate());
+    }
+
+    private Predicate<? super DeliveryApplication> sendingDatePredicate(DeliveryApplicationsReviewFilterRequest filter) {
+        return a -> Objects.isNull(filter.getSendingDate()) || a.getSendingDate().equals(filter.getSendingDate());
+    }
+
+    private Predicate<? super DeliveryApplication> senderCityPredicate(DeliveryApplicationsReviewFilterRequest filter) {
+        return a -> Objects.isNull(filter.getCityFromId()) || a.getSenderAddress().getCity().getId().equals(filter.getCityFromId());
+    }
+
+    private Predicate<? super DeliveryApplication> receiverCityPredicate(DeliveryApplicationsReviewFilterRequest filter) {
+        return a -> Objects.isNull(filter.getCityToId()) || a.getReceiverAddress().getCity().getId().equals(filter.getCityToId());
+    }
+
+    private Predicate<DeliveryApplication> baggageTypePredicate(DeliveryApplicationsReviewFilterRequest filter) {
+        return a -> Objects.isNull(filter.getBaggageType()) || a.getDeliveredBaggage().getType().equals(filter.getBaggageType());
+    }
+
+
+    private Predicate<DeliveryApplication> statePredicate(DeliveryApplicationsReviewFilterRequest filter) {
+        return a -> Objects.isNull(filter.getApplicationState()) || a.getState().equals(filter.getApplicationState());
+    }
+
+    public Page<DeliveryApplication> getPage(DeliveryApplicationsReviewFilterRequest applicationsRequest, Pageable pageable) {
+        List<DeliveryApplication> list = findAll(applicationsRequest);
+        return ServiceUtils.toPage(list, pageable, new DeliveryApplicationComparatorRecognizer());
+    }
+
+    private static class DeliveryApplicationComparatorRecognizer implements ServiceUtils.ComparatorRecognizer<DeliveryApplication> {
+
+        private final Map<String, Comparator<DeliveryApplication>> comparators;
+
+        DeliveryApplicationComparatorRecognizer(){
+            comparators = new HashMap<>();
+            comparators.put("id", Comparator.comparing(DeliveryApplication::getId, Long::compareTo));
+        }
+
+        @Override
+        public Comparator<DeliveryApplication> getComparator(Order order) {
+            Comparator<DeliveryApplication> cmp = comparators.get(order.getProperty());
+            if (!Objects.isNull(cmp) && order.isDescending()){
+                cmp = cmp.reversed();
+            }
+            return cmp;
+        }
     }
 
 }
