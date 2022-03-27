@@ -53,25 +53,8 @@ public class DirectionDeliveryService {
     public Page<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, Pageable pageable){
         List<DirectionDelivery> directions = findAll(filter);
 
-        Page<DirectionDelivery> page = toPage(directions, pageable);
+        Page<DirectionDelivery> page = ServiceUtils.toPage(directions, pageable, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
         return page;
-    }
-
-    private Page<DirectionDelivery> toPage(List<DirectionDelivery> directions, Pageable pageable) {
-
-        if(pageable.getPageNumber()*pageable.getPageSize() > directions.size()){
-            pageable = pageable.withPage(0);
-        }
-        Sort sort = pageable.getSort();
-
-        sortList(directions, sort, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
-
-        int start = pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), directions.size());
-        if (start > end){
-            return new PageImpl<>(Collections.emptyList(), pageable, directions.size());
-        }
-        return new PageImpl<>(directions.subList(start, end), pageable, directions.size());
     }
 
     public void deleteDirection(DirectionDelivery direction) {
