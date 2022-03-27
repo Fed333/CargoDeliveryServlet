@@ -12,6 +12,7 @@ import com.epam.cargo.infrastructure.web.Model;
 import com.epam.cargo.infrastructure.web.data.page.Page;
 import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
 import com.epam.cargo.service.CityService;
 import com.epam.cargo.service.DeliveryApplicationService;
 import com.epam.cargo.service.LocaleResolverService;
@@ -45,8 +46,9 @@ public class DeliveryApplicationsReviewController {
         model.addAttribute("applicationsPage", applications);
         model.addAttribute("states", DeliveryApplication.State.values());
         model.addAttribute("types", BaggageType.values());
-        model.addAttribute("cities", cityService.findAll());
+        model.addAttribute("cities", cityService.findAll(locale, Sort.by(Order.by("name"))));
         model.addAttribute("lang", locale.getLanguage());
+        model.addAttribute("deliveryApplicationsReviewFilterRequest", applicationsRequest);
 
         return "applicationsReview.jsp";
     }
