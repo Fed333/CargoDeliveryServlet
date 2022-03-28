@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * Abstract class for validation content of dto objects.<br>
  * @author Roman Kovalchuk
- * @version 1.1
+ * @version 1.2
  * */
 public abstract class RequestValidator <T>{
 
@@ -125,7 +125,7 @@ public abstract class RequestValidator <T>{
      * @param o {@link Object} to validate
      * @param modelAttribute name of attribute in model
      * @param keyErrorMessage name of error message key in ResourceBundle
-     * @throws WrongDataException if parameter o is null
+     * @throws WrongDataAttributeException if parameter o is null
      * */
     protected void requireNotNull(Object o, String modelAttribute, String keyErrorMessage) throws WrongDataAttributeException {
         if (Objects.isNull(o)){
@@ -142,6 +142,19 @@ public abstract class RequestValidator <T>{
      * */
     protected void requireNotBlank(String s, String modelAttribute, String keyErrorMessage) throws WrongDataAttributeException {
         if (Objects.isNull(s) || s.isBlank()){
+            throw new WrongDataAttributeException(modelAttribute, bundle, keyErrorMessage);
+        }
+    }
+
+    /**
+     * Checks whether number value is more than zero.<br>
+     * @param n {@link Number} to validate
+     * @param modelAttribute name of attribute in model
+     * @param keyErrorMessage name of error message key in ResourceBundle
+     * @since 1.2
+     * */
+    protected void requirePositive(Number n, String modelAttribute, String keyErrorMessage) throws WrongDataAttributeException {
+        if (n.doubleValue() <= 0){
             throw new WrongDataAttributeException(modelAttribute, bundle, keyErrorMessage);
         }
     }
