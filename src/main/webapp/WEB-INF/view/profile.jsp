@@ -125,7 +125,7 @@
                                             <a class="link disabled" href="#">#${receipt.id}</a>
                                         </div>
                                         <div class="col-2 d-flex align-self-center">
-                                            <a class="link " href="${pageContext.request.contextPath}/${receipt.application.id}">#${receipt.application.id}</a>
+                                            <a class="link " href="${pageContext.request.contextPath}/application?id=${receipt.application.id}">#${receipt.application.id}</a>
                                         </div>
                                         <div class="col-3 d-flex align-self-center">
                                                 ${receipt.manager.name} ${receipt.manager.surname}
