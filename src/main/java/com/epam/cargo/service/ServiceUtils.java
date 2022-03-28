@@ -3,6 +3,7 @@ package com.epam.cargo.service;
 import com.epam.cargo.dto.AddressRequest;
 import com.epam.cargo.dto.DeliveredBaggageRequest;
 import com.epam.cargo.dto.DeliveryApplicationRequest;
+import com.epam.cargo.dto.DeliveryReceiptRequest;
 import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.*;
 import com.epam.cargo.infrastructure.web.data.page.Page;
@@ -189,6 +190,17 @@ public class ServiceUtils {
             return new PageImpl<>(Collections.emptyList(), pageable, list.size());
         }
         return new PageImpl<>(list.subList(start, end), pageable, list.size());
+    }
+
+    public static DeliveryReceipt createDeliveryReceipt(DeliveryApplication application, User manager, DeliveryReceiptRequest receiptRequest) {
+        DeliveryReceipt receipt = new DeliveryReceipt();
+        receipt.setApplication(application);
+        receipt.setCustomer(application.getCustomer());
+        receipt.setManager(manager);
+        receipt.setTotalPrice(Optional.ofNullable(receiptRequest.getPrice()).orElse(application.getPrice()));
+        receipt.setFormationDate(LocalDate.now());
+        receipt.setPaid(false);
+        return receipt;
     }
 
     /**

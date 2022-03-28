@@ -81,7 +81,8 @@ public class AuthFilter implements Filter {
     private Set<String> getPermittedManager() {
         return Set.of(
                 contextPath + "/applications/review",
-                contextPath + "/profile/review"
+                contextPath + "/profile/review",
+                contextPath + "/application/accept"
         );
     }
 
@@ -93,6 +94,7 @@ public class AuthFilter implements Filter {
                 contextPath + "/directions",
                 contextPath + "/registration",
                 contextPath + "/forbidden",
+                contextPath + "/error",
                 contextPath + "/fares",
                 contextPath + "/delivery_cost_calculator"
         );
