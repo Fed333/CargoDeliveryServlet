@@ -78,7 +78,7 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
                     String prefix = "";
                     try {
                         Properties properties = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH);
-                        prefix = properties.getProperty(HTTP_PREFIX.getKey());
+                        prefix = properties.getProperty(HTTP_PREFIX.getKey(), "");
                     } catch (IOException e) {
                         e.printStackTrace();
                         //TODO log WARNING message
@@ -141,11 +141,11 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
 
             if (isRedirect(methodResponse)){
                 req.getSession().setAttribute(RedirectAttributes.class.getName(), req.getAttribute(RedirectAttributes.class.getName()));
-                String httpPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault(HTTP_PREFIX.getKey(), "");
+                String httpPrefix = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getProperty(HTTP_PREFIX.getKey(), "");
                 res.sendRedirect(httpPrefix + eraseRedirect(methodResponse));
             } else{
                 req.getSession().removeAttribute(RedirectAttributes.class.getName());
-                String viewPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault(VIEW_PREFIX.getKey(), "");
+                String viewPrefix = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getProperty(VIEW_PREFIX.getKey(), "");
                 req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
             }
 
