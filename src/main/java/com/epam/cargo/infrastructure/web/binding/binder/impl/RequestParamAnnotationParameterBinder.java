@@ -18,7 +18,7 @@ import static com.epam.cargo.infrastructure.web.binding.utils.BindingUtils.conve
  * @author Roman Kovalchuk
  * @see ParameterBinder
  * @see RequestParam
- * @version 1.0
+ * @version 1.1
  * */
 public class RequestParamAnnotationParameterBinder implements ParameterBinder {
 
@@ -27,7 +27,7 @@ public class RequestParamAnnotationParameterBinder implements ParameterBinder {
         RequestParam paramAnnotation = parameter.getAnnotation(RequestParam.class);
         Class<?> parameterClass = parameter.getType();
         Object bind = bindType(parameterClass, req, paramAnnotation.name(), context);
-        if (Objects.isNull(bind)){
+        if (Objects.isNull(bind) && paramAnnotation.required()){
             if (parameterClass.isAssignableFrom(paramAnnotation.defaultValue().getClass())){
                 return paramAnnotation.defaultValue();
             } else {

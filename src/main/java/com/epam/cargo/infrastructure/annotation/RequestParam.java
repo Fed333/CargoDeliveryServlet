@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @see RequestMapping
  * @see DispatcherCommandInterfaceObjectConfigurator
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER})
@@ -34,6 +34,11 @@ public @interface RequestParam {
      * @since 1.0
      * @see HttpServletRequest
      * */
-    String defaultValue();
+    String defaultValue() default "";
 
+    /**
+     * Notifies, whether request parameter is required.<br>
+     * @since 1.1
+     * */
+    boolean required() default true;
 }
