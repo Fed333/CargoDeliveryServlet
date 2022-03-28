@@ -14,7 +14,7 @@
 <body>
 <div class="content">
     <%@include file="jspf/navbar.jspf"%>
-    <script src="/static/js/localization.js"></script>
+    <script src="${requestScope.request.contextPath}/static/js/localization.js"></script>
     <div class="row">
         <div class="col d-flex justify-content-center">
             <div class="row">
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <script>addSwitchLanguageWithUrlClickListeners('${url}', [])</script>
+    <script>addSwitchLanguageWithUrlClickListeners('${pageContext.request.contextPath}/forbidden', [])</script>
 </div>
 </body>
 </html>
