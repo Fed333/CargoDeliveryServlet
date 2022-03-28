@@ -24,7 +24,8 @@ public enum ModelErrorAttribute {
     RECEIVER_HOUSE_NUMBER("receiverHouseNumberErrorMessage"),
     SENDER_CITY_ID("senderCityIdErrorMessage"),
     RECEIVER_CITY_ID("receiverCityIdErrorMessage"),
-    BAGGAGE_TYPE("baggageTypeErrorMessage");
+    BAGGAGE_TYPE("baggageTypeErrorMessage"),
+    RECEIPT("receiptErrorMessage");
 
     private final String attr;
 
