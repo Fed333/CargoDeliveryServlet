@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Context within the infrastructure works.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public class ApplicationContext {
 
@@ -66,6 +66,7 @@ public class ApplicationContext {
 
         if (implClass.isAnnotationPresent(Singleton.class)){
             cache.put(clazz, t);
+            factory.popClass(implClass);
         }
 
         return t;
