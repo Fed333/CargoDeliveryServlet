@@ -1,11 +1,8 @@
 package com.epam.cargo.dto.validator;
 
-import com.epam.cargo.dao.repo.UserRepo;
 import com.epam.cargo.dto.UserRequest;
 import com.epam.cargo.exception.*;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.epam.cargo.exception.ModelErrorAttribute.*;
