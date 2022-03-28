@@ -4,15 +4,14 @@ import com.epam.cargo.dao.repo.UserRepo;
 import com.epam.cargo.dto.AddressRequest;
 import com.epam.cargo.dto.UserRequest;
 import com.epam.cargo.dto.validator.UserRequestValidator;
-import com.epam.cargo.entity.Address;
-import com.epam.cargo.entity.City;
-import com.epam.cargo.entity.Role;
-import com.epam.cargo.entity.User;
+import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.*;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.PropertyValue;
 import com.epam.cargo.infrastructure.annotation.Singleton;
 import com.epam.cargo.infrastructure.security.encoding.password.PasswordEncoder;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
@@ -51,6 +50,12 @@ public class UserService {
 
     @Inject
     private AddressService addressService;
+
+    @Inject
+    private DeliveryApplicationService applicationService;
+
+    @Inject
+    private DeliveryReceiptService receiptService;
 
     @Inject
     private PasswordEncoder passwordEncoder;
@@ -134,6 +139,14 @@ public class UserService {
 
     private void requireValidUser(User user) {
         Optional.ofNullable(user.getLogin()).orElseThrow(()->new IllegalArgumentException("User login cannot be null!"));
+    }
+
+    public Page<DeliveryApplication> getApplications(User user, Pageable pageable) {
+        return applicationService.findAllByUserId(user.getId(), pageable);
+    }
+
+    public Page<DeliveryReceipt> getCustomerReceipts(User customer, Pageable pageable) {
+        return receiptService.findAllByCustomerId(customer.getId(), pageable);
     }
 
     /**
