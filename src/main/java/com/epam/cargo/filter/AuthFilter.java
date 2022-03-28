@@ -67,7 +67,7 @@ public class AuthFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         ApplicationContext context = (ApplicationContext) filterConfig.getServletContext().getAttribute(APPLICATION_CONTEXT_ATTRIBUTE);
         try {
-            contextPath = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES.getPath()).getProperty(HTTP_PREFIX.getKey());
+            contextPath = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES.getPath()).getProperty(HTTP_PREFIX.getKey(), "");
         } catch (IOException e) {
             e.printStackTrace();
             logger.warn("Properties file " + APPLICATION_PROPERTIES.getPath() + " wasn't found! ContextPath will be \"\".", e);
