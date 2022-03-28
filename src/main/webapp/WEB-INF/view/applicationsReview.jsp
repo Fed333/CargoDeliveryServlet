@@ -119,7 +119,7 @@
                             <c:forEach items="${requestScope.applicationsPage.content}" var="application">
                                 <div class="row alert alert-primary mb-2">
                                     <div class="col-1">
-                                        <a class="link" href="#">#${application.id}</a>
+                                        <a class="link" href="${pageContext.request.contextPath}/application?id=${application.id}">#${application.id}</a>
                                     </div>
                                     <div class="col-5">
                                         ${application.senderAddress.city.name} - ${application.receiverAddress.city.name}

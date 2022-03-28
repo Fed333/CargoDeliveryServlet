@@ -82,7 +82,7 @@
                                 <c:forEach items="${requestScope.applications.content}" var="application">
                                     <div class="row alert alert-primary mb-2">
                                         <div class="col-1">
-                                            <a class="link disabled" href="#">#${application.id}</a>
+                                            <a class="link " href="${pageContext.request.contextPath}/application?id=${application.id}">#${application.id}</a>
                                         </div>
                                         <div class="col">
                                                 ${application.senderAddress.city.name} - ${application.receiverAddress.city.name}
@@ -125,7 +125,7 @@
                                             <a class="link disabled" href="#">#${receipt.id}</a>
                                         </div>
                                         <div class="col-2 d-flex align-self-center">
-                                            <a class="link disabled" href="#">#${receipt.application.id}</a>
+                                            <a class="link " href="${pageContext.request.contextPath}/${receipt.application.id}">#${receipt.application.id}</a>
                                         </div>
                                         <div class="col-3 d-flex align-self-center">
                                                 ${receipt.manager.name} ${receipt.manager.surname}
