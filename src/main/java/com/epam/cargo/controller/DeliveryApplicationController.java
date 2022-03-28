@@ -4,12 +4,10 @@ import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.dto.validator.DeliveredBaggageRequestValidator;
 import com.epam.cargo.dto.validator.DeliveryApplicationRequestValidator;
 import com.epam.cargo.entity.BaggageType;
+import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.exception.WrongDataException;
-import com.epam.cargo.infrastructure.annotation.Controller;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.RequestMapping;
+import com.epam.cargo.infrastructure.annotation.*;
 import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
 import com.epam.cargo.infrastructure.web.Model;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
@@ -95,5 +93,21 @@ public class DeliveryApplicationController {
 
         return "redirect:/profile";
     }
+
+    @RequestMapping(url = "/application", method = HttpMethod.GET)
+    public String applicationPage(
+            @RequestParam(name = "id", defaultValue = "-1") Long applicationId,
+            Model model
+    ){
+        if (applicationId == -1){
+            return "redirect:/forbidden";
+        }
+
+        DeliveryApplication application = applicationService.findById(applicationId);
+        model.addAttribute("application", application);
+
+        return "application.jsp";
+    }
+
 
 }
