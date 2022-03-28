@@ -26,8 +26,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.epam.cargo.infrastructure.source.properties.ApplicationPropertiesConstants.HTTP_PREFIX;
-import static com.epam.cargo.infrastructure.source.properties.ApplicationPropertiesConstants.VIEW_PREFIX;
+import static com.epam.cargo.infrastructure.source.properties.constant.ApplicationPropertiesConstants.HTTP_PREFIX;
+import static com.epam.cargo.infrastructure.source.properties.constant.ApplicationPropertiesConstants.VIEW_PREFIX;
 
 /**
  *  Configurator of request mapping within the infrastructure.

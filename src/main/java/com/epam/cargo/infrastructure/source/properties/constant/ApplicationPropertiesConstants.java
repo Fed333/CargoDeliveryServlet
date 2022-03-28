@@ -1,4 +1,4 @@
-package com.epam.cargo.infrastructure.source.properties;
+package com.epam.cargo.infrastructure.source.properties.constant;
 
 /**
  * Contains all keys of application.properties file.<br>
