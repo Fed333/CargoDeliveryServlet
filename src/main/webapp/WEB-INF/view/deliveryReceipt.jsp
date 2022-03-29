@@ -10,7 +10,7 @@
 <!DOCTYPE>
 <html>
 <head>
-    <title>Index</title>
+    <title>Make Delivery Receipt</title>
     <%@include file="jspf/head.jspf"%>
 </head>
 <body>

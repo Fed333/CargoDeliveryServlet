@@ -172,7 +172,7 @@ public class DeliveryReceiptRepoImpl implements DeliveryReceiptRepo {
         @Override
         public void transferObjectToUpdate(DeliveryReceipt o, PreparedStatement statement) throws SQLException {
             setDeliveryReceiptData(o, statement);
-            statement.setLong(6, o.getId());
+            statement.setLong(7, o.getId());
         }
 
         private void setDeliveryReceiptData(DeliveryReceipt o, PreparedStatement statement) throws SQLException {
