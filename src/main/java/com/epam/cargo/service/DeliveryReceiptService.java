@@ -5,16 +5,17 @@ import com.epam.cargo.dto.DeliveryReceiptRequest;
 import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.entity.DeliveryReceipt;
 import com.epam.cargo.entity.User;
+import com.epam.cargo.exception.NotEnoughMoneyException;
 import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.infrastructure.annotation.Inject;
+import com.epam.cargo.infrastructure.annotation.PropertyValue;
 import com.epam.cargo.infrastructure.annotation.Singleton;
 import com.epam.cargo.infrastructure.web.data.page.Page;
 import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 import org.apache.log4j.Logger;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Service class for managing {@link DeliveryReceipt} objects.<br>
@@ -32,6 +33,12 @@ public class DeliveryReceiptService {
 
     @Inject
     private DeliveryApplicationService applicationService;
+
+    @Inject
+    private UserService userService;
+
+    @PropertyValue
+    private String messages;
 
     public Optional<DeliveryReceipt> findById(Long id) {
         return receiptRepo.findById(id);
@@ -88,6 +95,48 @@ public class DeliveryReceiptService {
         requireValidReceipt(receipt);
         return addReceipt(receipt);
     }
+
+    /**
+     * Makes a payment of delivery receipt by corresponding user
+     * @param receipt delivery receipt to pay
+     * @param initiator a person who initiated the payment
+     * */
+    public void payReceipt(DeliveryReceipt receipt, User initiator) throws NotEnoughMoneyException {
+        requireValidReceipt(receipt);
+        User customer = receipt.getCustomer();
+        if(!ServiceUtils.credentialsEquals(customer, initiator)){
+            throw new IllegalStateException("You don't have access for this page");
+        }
+        if (receipt.getPaid()){
+            throw new IllegalStateException("Receipt's been already paid");
+        }
+        BigDecimal balance = initiator.getCash().subtract(BigDecimal.valueOf(receipt.getTotalPrice()));
+
+        if (balance.compareTo(BigDecimal.ZERO) < 0){
+            Locale locale = Locale.UK;
+            ResourceBundle bundle = ResourceBundle.getBundle(messages, locale);
+            throw new NotEnoughMoneyException(initiator.getCash(), receipt, bundle);
+        }
+
+        initiator.setCash(balance);
+        receipt.setCustomer(initiator);
+        receipt.setPaid(Boolean.TRUE);
+
+        if (Objects.isNull(initiator.getReceipts())){
+            initiator.setReceipts(findAllByCustomerId(initiator.getId()));
+        }
+
+        List<DeliveryReceipt> receipts = initiator.getReceipts();
+            receipts.forEach(r ->{
+                if(Objects.equals(r.getId(), receipt.getId())){
+                    r.setPaid(Boolean.TRUE);
+                }
+            });
+
+        userService.saveUser(initiator);
+        receiptRepo.save(receipt);
+    }
+
 
     private boolean isSubmittedState(DeliveryApplication application) {
         return application.getState().equals(DeliveryApplication.State.SUBMITTED);

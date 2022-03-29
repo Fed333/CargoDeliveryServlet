@@ -3,8 +3,10 @@ package com.epam.cargo.controller;
 import com.epam.cargo.dto.DeliveryReceiptRequest;
 import com.epam.cargo.dto.validator.DeliveryReceiptRequestValidator;
 import com.epam.cargo.entity.DeliveryApplication;
+import com.epam.cargo.entity.DeliveryReceipt;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.exception.ModelErrorAttribute;
+import com.epam.cargo.exception.NotEnoughMoneyException;
 import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.exception.WrongInput;
 import com.epam.cargo.infrastructure.annotation.*;
@@ -16,6 +18,7 @@ import com.epam.cargo.service.*;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -26,6 +29,8 @@ import java.util.ResourceBundle;
 @Controller
 public class DeliveryReceiptController {
 
+    private final String APPLICATION_ID = "applicationId";
+    private final String APPLICATION = "application";
     @Inject
     private DeliveryReceiptService receiptService;
 
@@ -83,8 +88,8 @@ public class DeliveryReceiptController {
         User manager = authorizationService.getAuthorized(session);
 
         if(!application.getState().equals(DeliveryApplication.State.SUBMITTED)){
-            redirectAttributes.addFlashAttribute("application", application);
-            redirectAttributes.addFlashAttribute("applicationId", application.getId());
+            redirectAttributes.addFlashAttribute(APPLICATION, application);
+            redirectAttributes.addFlashAttribute(APPLICATION_ID, application.getId());
             return "redirect:/application/confirmation/failed";
         }
 
@@ -109,6 +114,96 @@ public class DeliveryReceiptController {
 
         return "redirect:/applications/review";
 
+    }
+
+    @RequestMapping(url = "/application/confirmation/failed", method = HttpMethod.GET)
+    public String failedApplicationConfirmation(
+            Long applicationId,
+            Model model
+    ){
+        model.addAttribute("url", "/application/confirmation/failed");
+        if (!Objects.isNull(applicationId)) {
+            model.addAttribute(APPLICATION_ID, applicationId);
+            model.addAttribute(APPLICATION, applicationService.findById(applicationId));
+        }
+        return "deliveryApplicationConfirmationFailed.jsp";
+    }
+
+    @RequestMapping(url = "/receipt", method = HttpMethod.GET)
+    public String receiptPage(
+            @RequestParam(name = "id", required = false) Long receiptId,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            HttpSession session
+    ){
+        User initiator = authorizationService.getAuthorized(session);
+        Optional<DeliveryReceipt> optional = receiptService.findById(receiptId);
+        if (optional.isEmpty()){
+            redirectAttributes.addFlashAttribute(ModelErrorAttribute.ERROR_MESSAGE.getAttr(), "No found receipt with id " + receiptId);
+            return "redirect:/error";
+        }
+        DeliveryReceipt receipt = optional.get();
+
+        if (!initiator.isManager() && !userService.credentialsEquals(receipt.getCustomer(), initiator)){
+            return "redirect:/forbidden";
+        }
+
+        model.addAttribute("receipt", receipt);
+        return "receipt.jsp";
+    }
+
+    @RequestMapping(url = "/receipt/pay", method = HttpMethod.GET)
+    public String payReceiptPage(
+            @RequestParam(name = "id", required = false) Long receiptId,
+            RedirectAttributes redirectAttributes,
+            Model model,
+            HttpSession session
+
+    ){
+
+        User initiator = authorizationService.getAuthorized(session);
+
+        Optional<DeliveryReceipt> optional = receiptService.findById(receiptId);
+        if (optional.isEmpty()){
+            redirectAttributes.addFlashAttribute(ModelErrorAttribute.ERROR_MESSAGE.getAttr(), "No found receipt with id " + receiptId);
+            return "redirect:/error";
+        }
+        DeliveryReceipt receipt = optional.get();
+
+        if (!userService.credentialsEquals(receipt.getCustomer(), initiator)){
+            return "redirect:/forbidden";
+        }
+
+        model.addAttribute("receipt", receipt);
+        return "payReceipt.jsp";
+    }
+
+    @RequestMapping(url = "/receipt/pay", method = HttpMethod.POST)
+    public String payReceipt(
+            @RequestParam(name = "id", defaultValue = "-1") Long receiptId,
+            RedirectAttributes redirectAttributes,
+            Model model,
+            HttpSession session
+    ){
+
+        User user = authorizationService.getAuthorized(session);
+
+        Optional<DeliveryReceipt> optional = receiptService.findById(receiptId);
+        if (optional.isEmpty()){
+            redirectAttributes.addFlashAttribute(ModelErrorAttribute.ERROR_MESSAGE.getAttr(), "No found receipt with id " + receiptId);
+            return "redirect:/error";
+        }
+        DeliveryReceipt receipt = optional.get();
+
+        try {
+            receiptService.payReceipt(receipt, user);
+        } catch (NotEnoughMoneyException e) {
+            redirectAttributes.addFlashAttribute(e.getAttribute(), e.getMessage());
+            redirectAttributes.addFlashAttribute("rejectedFunds", e.getRejectedFunds());
+            redirectAttributes.addFlashAttribute("price", e.getReceipt().getTotalPrice());
+            return "redirect:/paying/failed";
+        }
+        return "redirect:/profile";
     }
 
 }
