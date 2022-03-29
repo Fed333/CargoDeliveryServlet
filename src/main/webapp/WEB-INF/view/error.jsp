@@ -34,7 +34,9 @@
             </div>
         </div>
     </div>
-    <script>addSwitchLanguageWithUrlClickListeners('${pageContext.request.contextPath}/error', [])</script>
+    <input name="errorMessage" id="errorMessageHiddenInput" value="${requestScope.errorMessage}" hidden>
+    <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>
+    <script>addSwitchLanguageWithUrlClickListeners('${pageContext.request.contextPath}/error', ['errorMessageHiddenInput'])</script>
 </div>
 </body>
 </html>
