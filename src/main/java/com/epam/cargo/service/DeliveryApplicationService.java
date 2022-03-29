@@ -4,10 +4,7 @@ import com.epam.cargo.dao.repo.DeliveryApplicationRepo;
 import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.dto.DeliveryApplicationsReviewFilterRequest;
 import com.epam.cargo.dto.validator.DeliveryApplicationRequestValidator;
-import com.epam.cargo.entity.Address;
-import com.epam.cargo.entity.DeliveredBaggage;
-import com.epam.cargo.entity.DeliveryApplication;
-import com.epam.cargo.entity.User;
+import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.NoExistingCityException;
 import com.epam.cargo.exception.NoExistingDirectionException;
 import com.epam.cargo.exception.WrongDataException;
@@ -19,6 +16,7 @@ import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
 import org.apache.log4j.Logger;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -189,6 +187,28 @@ public class DeliveryApplicationService {
     public Page<DeliveryApplication> getPage(DeliveryApplicationsReviewFilterRequest applicationsRequest, Pageable pageable) {
         List<DeliveryApplication> list = findAll(applicationsRequest);
         return ServiceUtils.toPage(list, pageable, new DeliveryApplicationComparatorRecognizer());
+    }
+
+    /**
+     * change application state to completed
+     * @param application customer's delivery application
+     * @throws IllegalStateException if receipt is not paid or not found
+     * */
+    public void completeApplication(DeliveryApplication application) {
+        Objects.requireNonNull(application, "Application cannot be null");
+        Optional<DeliveryReceipt> receiptOptional = receiptService.findByApplicationId(application.getId());
+        DeliveryReceipt receipt = receiptOptional.orElseThrow(()->new IllegalStateException("Cannot complete application. No paid receipt found!"));
+
+        if (!receipt.getPaid()){
+            throw new IllegalStateException("Cannot complete application. No paid receipt found!");
+        }
+
+        if (application.getReceivingDate().isAfter(LocalDate.now())){
+            throw new IllegalStateException("Cannot complete application. Receiving date hasn't come yet.");
+        }
+
+        application.setState(DeliveryApplication.State.COMPLETED);
+        deliveryApplicationRepo.save(application);
     }
 
     private static class DeliveryApplicationComparatorRecognizer implements ServiceUtils.ComparatorRecognizer<DeliveryApplication> {

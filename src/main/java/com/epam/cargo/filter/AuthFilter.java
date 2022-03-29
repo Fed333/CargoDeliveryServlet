@@ -82,7 +82,8 @@ public class AuthFilter implements Filter {
         return Set.of(
                 contextPath + "/applications/review",
                 contextPath + "/profile/review",
-                contextPath + "/application/accept"
+                contextPath + "/application/accept",
+                contextPath + "/application/complete"
         );
     }
 

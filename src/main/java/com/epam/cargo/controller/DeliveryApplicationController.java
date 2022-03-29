@@ -109,5 +109,14 @@ public class DeliveryApplicationController {
         return "application.jsp";
     }
 
+    @RequestMapping(url = "/application/complete", method = HttpMethod.POST)
+    public String completeApplication(
+            @RequestParam(name = "id", required = false) Long applicationId,
+            Model model
+    ){
+        DeliveryApplication application = applicationService.findById(applicationId);
+        applicationService.completeApplication(application);
+        return String.format("redirect:/application?id=%d", application.getId());
+    }
 
 }
