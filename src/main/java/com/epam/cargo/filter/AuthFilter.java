@@ -83,7 +83,8 @@ public class AuthFilter implements Filter {
                 contextPath + "/applications/review",
                 contextPath + "/profile/review",
                 contextPath + "/application/accept",
-                contextPath + "/application/complete"
+                contextPath + "/application/complete",
+                contextPath + "/application/reject"
         );
     }
 
