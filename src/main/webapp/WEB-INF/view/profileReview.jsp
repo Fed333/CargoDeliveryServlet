@@ -123,10 +123,10 @@
                                 <c:forEach items="${requestScope.receipts.content}" var="receipt">
                                     <div class="row alert alert-primary mb-2">
                                         <div class="col-1 d-flex align-self-center">
-                                            <a class="link disabled" href="#">#${receipt.id}</a>
+                                            <a class="link" href="${pageContext.request.contextPath}/receipt?id=${receipt.id}">#${receipt.id}</a>
                                         </div>
                                         <div class="col-2 d-flex align-self-center">
-                                            <a class="link " href="${pageContext.request.contextPath}/application?id=${receipt.application.id}">#${receipt.application.id}</a>
+                                            <a class="link" href="${pageContext.request.contextPath}/application?id=${receipt.application.id}">#${receipt.application.id}</a>
                                         </div>
                                         <div class="col-3 d-flex align-self-center">
                                                 ${receipt.manager.name} ${receipt.manager.surname}

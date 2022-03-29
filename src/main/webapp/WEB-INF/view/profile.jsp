@@ -122,7 +122,7 @@
                                 <c:forEach items="${requestScope.receipts.content}" var="receipt">
                                     <div class="row alert alert-primary mb-2">
                                         <div class="col-1 d-flex align-self-center">
-                                            <a class="link disabled" href="#">#${receipt.id}</a>
+                                            <a class="link" href="${pageContext.request.contextPath}/receipt?id=${receipt.id}">#${receipt.id}</a>
                                         </div>
                                         <div class="col-2 d-flex align-self-center">
                                             <a class="link " href="${pageContext.request.contextPath}/application?id=${receipt.application.id}">#${receipt.application.id}</a>
@@ -142,7 +142,7 @@
                                                     <button class="btn btn-primary disabled"><fmt:message key="lang.paid"/></button>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a class="btn btn-success" href="/receipt/${receipt.id}/pay"><fmt:message key="lang.pay"/></a>
+                                                    <a class="btn btn-success" href="${pageContext.request.contextPath}/receipt/pay?id=${receipt.id}"><fmt:message key="lang.pay"/></a>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
