@@ -68,7 +68,7 @@ public abstract class RequestValidator <T>{
      * */
     protected boolean validateNotBlank(String s, String modelAttribute, String keyErrorMessage){
         if (Objects.isNull(s) || s.isBlank()){
-            errors.put(modelAttribute, bundle.getString(keyErrorMessage));
+            addError(modelAttribute, keyErrorMessage);
             return false;
         }
         return true;
@@ -76,7 +76,7 @@ public abstract class RequestValidator <T>{
 
     protected boolean validatePositive(Number n, String modelAttribute, String keyErrorMessage){
         if (n.doubleValue() <= 0){
-            errors.put(modelAttribute, keyErrorMessage);
+            addError(modelAttribute, keyErrorMessage);
             return false;
         }
         return true;
