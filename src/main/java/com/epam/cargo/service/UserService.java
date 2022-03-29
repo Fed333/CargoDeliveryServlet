@@ -149,6 +149,14 @@ public class UserService {
         return receiptService.findAllByCustomerId(customer.getId(), pageable);
     }
 
+    public boolean credentialsEquals(User customer, User initiator) {
+        return ServiceUtils.credentialsEquals(customer, initiator);
+    }
+
+    public User saveUser(User user) {
+        return userRepo.save(user);
+    }
+
     /**
      * Inner class for initialization {@link User} object
      * */
