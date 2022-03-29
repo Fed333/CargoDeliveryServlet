@@ -211,6 +211,60 @@ public class DeliveryApplicationService {
         deliveryApplicationRepo.save(application);
     }
 
+    public void rejectApplication(DeliveryApplication application) {
+        Objects.requireNonNull(application, "Application cannot be null");
+        Optional<DeliveryReceipt> receiptOptional = receiptService.findByApplicationId(application.getId());
+        receiptOptional.ifPresent(r ->{
+            if (r.getPaid()){
+                throw new IllegalStateException("Cannot reject already paid application");
+            }
+            else{
+                receiptService.delete(r);
+            }
+        });
+        application.setState(DeliveryApplication.State.REJECTED);
+        deliveryApplicationRepo.save(application);
+        logger.info(String.format("Reject application: %s", applicationLogInfo(application)));
+    }
+
+    public DeliveryApplication edit(DeliveryApplication application, DeliveryApplicationRequest updated) throws NoExistingCityException, NoExistingDirectionException {
+        Objects.requireNonNull(application, "Application cannot be null");
+        Objects.requireNonNull(updated, "UpdatedRequest cannot be null");
+
+        if (!application.getState().equals(DeliveryApplication.State.SUBMITTED)){
+            throw new IllegalStateException("Forbidden edit approved applications");
+        }
+
+        if (Objects.nonNull(updated.getDeliveredBaggageRequest())){
+            application.setDeliveredBaggage(deliveredBaggageService.update(application.getDeliveredBaggage(), updated.getDeliveredBaggageRequest()));
+        }
+
+        if (Objects.nonNull(updated.getSenderAddress())){
+            Address updatedSenderAddress = ServiceUtils.createAddress(updated.getSenderAddress(), cityService);
+            addressService.addAddress(updatedSenderAddress);
+            application.setSenderAddress(updatedSenderAddress);
+        }
+
+        if (Objects.nonNull(updated.getReceiverAddress())){
+            Address updatedReceiverAddress = ServiceUtils.createAddress(updated.getReceiverAddress(), cityService);
+            addressService.addAddress(updatedReceiverAddress);
+            application.setReceiverAddress(updatedReceiverAddress);
+        }
+
+        if (Objects.nonNull(updated.getSendingDate())){
+            application.setSendingDate(updated.getSendingDate());
+        }
+
+        if (Objects.nonNull(updated.getReceivingDate())){
+            application.setReceivingDate(updated.getReceivingDate());
+        }
+
+        application.setPrice(calculatePrice(application));
+
+        deliveryApplicationRepo.save(application);
+        return application;
+    }
+
     private static class DeliveryApplicationComparatorRecognizer implements ServiceUtils.ComparatorRecognizer<DeliveryApplication> {
 
         private final Map<String, Comparator<DeliveryApplication>> comparators;
