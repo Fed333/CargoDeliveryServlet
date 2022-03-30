@@ -1,5 +1,7 @@
 package com.epam.cargo.entity;
 
+import java.util.Objects;
+
 /**
  * Represents delivered baggage.
  * Used as a part of delivery application.
@@ -20,6 +22,10 @@ public class DeliveredBaggage implements Entity<Long>{
     private String description;
 
     public DeliveredBaggage() {
+    }
+
+    public DeliveredBaggage(Long id) {
+        this.id = id;
     }
 
     public DeliveredBaggage(Long id, Double weight, Double volume, BaggageType type, String description) {
@@ -70,5 +76,18 @@ public class DeliveredBaggage implements Entity<Long>{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveredBaggage that = (DeliveredBaggage) o;
+        return Objects.equals(id, that.id) && Objects.equals(weight, that.weight) && Objects.equals(volume, that.volume) && type == that.type && Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, weight, volume, type, description);
     }
 }

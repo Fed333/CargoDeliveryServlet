@@ -5,9 +5,11 @@ import com.epam.cargo.entity.City;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.PropertyValue;
 import com.epam.cargo.infrastructure.annotation.Singleton;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
+import java.text.Collator;
+import java.util.*;
 
 @Singleton
 public class CityService {
@@ -37,6 +39,47 @@ public class CityService {
         cityRepo.save(city);
 
         return true;
+    }
+
+    /**
+     * find city in database according to the given id
+     * @param id city identifier in database
+     * @return found City object or null if absent
+     * */
+    public City findCityById(Long id){
+        return cityRepo.findById(id).orElse(null);
+    }
+
+    /**
+     * find city in database according given zipcode
+     * @param zipcode post code of City object
+     * @return found City object or null if city with given zipcode is absent
+     * */
+    public City findCityByZipCode(String zipcode) {
+        return cityRepo.findByZipcode(zipcode).orElse(null);
+    }
+
+    public List<City> findAll(Locale locale, Sort sort) {
+        List<City> cities = findAll();
+        ServiceUtils.sortList(cities, sort, new CityComparatorRecognizer(Collator.getInstance(locale)));
+        return cities;
+    }
+
+    private static class CityComparatorRecognizer implements ServiceUtils.ComparatorRecognizer<City> {
+        private final Map<String, Comparator<City>> comparators;
+
+        CityComparatorRecognizer(Collator collator){
+            comparators = new HashMap<>();
+            comparators.put("name", new City.NameComparator(collator));
+        }
+
+        public Comparator<City> getComparator(Order order){
+            Comparator<City> cmp = comparators.get(order.getProperty());
+            if (!Objects.isNull(cmp) && order.isDescending()){
+                cmp = cmp.reversed();
+            }
+            return cmp;
+        }
     }
 
 }

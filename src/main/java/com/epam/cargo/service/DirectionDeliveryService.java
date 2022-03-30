@@ -2,12 +2,15 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
-import com.epam.cargo.dto.PageRequest;
-import com.epam.cargo.dto.SortRequest;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
 import com.epam.cargo.infrastructure.annotation.Inject;
 import com.epam.cargo.infrastructure.annotation.Singleton;
+import com.epam.cargo.infrastructure.web.data.page.Page;
+import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
+import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.Collator;
@@ -19,9 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.epam.cargo.service.ServiceUtils.*;
-
-import static com.epam.cargo.dto.SortRequest.Order;
+import static com.epam.cargo.service.ServiceUtils.ComparatorRecognizer;
+import static com.epam.cargo.service.ServiceUtils.sortList;
 
 @Singleton(type = Singleton.Type.LAZY)
 public class DirectionDeliveryService {
@@ -40,36 +42,19 @@ public class DirectionDeliveryService {
         return directions;
     }
 
-    public List<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, SortRequest sort){
+    public List<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, Sort sort){
         List<DirectionDelivery> directions = findAll(filter);
-        if (Objects.nonNull(sort) && Objects.nonNull(sort.getProperty())) {
+        if (Objects.nonNull(sort)) {
             ServiceUtils.sortList(directions, sort, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
         }
         return directions;
     }
 
-    public List<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, PageRequest pageRequest){
+    public Page<DirectionDelivery> findAll(DirectionDeliveryFilterRequest filter, Pageable pageable){
         List<DirectionDelivery> directions = findAll(filter);
-        List<DirectionDelivery> page;
-        page = getPage(directions, pageRequest);
+
+        Page<DirectionDelivery> page = ServiceUtils.toPage(directions, pageable, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
         return page;
-    }
-
-    private List<DirectionDelivery> getPage(List<DirectionDelivery> directions, PageRequest pageRequest) {
-
-        if(pageRequest.getPage() * pageRequest.getSize() > directions.size()){
-            pageRequest.setPage(0);
-        }
-        SortRequest sort = pageRequest.getSort();
-        if (Objects.nonNull(sort) && Objects.nonNull(sort.getProperty())) {
-            sortList(directions, sort, new DirectionDeliveryComparatorRecognizer(Collator.getInstance(Locale.UK)));
-        }
-        int start = pageRequest.getPage() * pageRequest.getSize();
-        int end = Math.min(start + pageRequest.getSize(), directions.size());
-        if (start > end){
-            return Collections.emptyList();
-        }
-        return directions.subList(start, end);
     }
 
     public void deleteDirection(DirectionDelivery direction) {
@@ -96,6 +81,15 @@ public class DirectionDeliveryService {
         };
     }
 
+    /**
+     * finds the smallest distance between given cities, according to direction delivery routes in database
+     * @return number with represents smaller distance between cities in km
+     * if no way exists return Double.POSITIVE_INFINITIVE
+     * */
+    public Double calculateMinDistance(City cityFrom, City cityTo){
+        return CityUtils.getMinDistance(cityFrom, cityTo, findAll());
+    }
+
     private static class DirectionDeliveryComparatorRecognizer implements ComparatorRecognizer<DirectionDelivery> {
 
         private final Map<String, Comparator<DirectionDelivery>> comparators;
@@ -108,9 +102,9 @@ public class DirectionDeliveryService {
         }
 
         @Override
-        public Comparator<DirectionDelivery> getComparator(String property, Order order){
-            Comparator<DirectionDelivery> cmp = comparators.get(property);
-            if (order.equals(Order.DESC)){
+        public Comparator<DirectionDelivery> getComparator(Order order) {
+            Comparator<DirectionDelivery> cmp = comparators.get(order.getProperty());
+            if (!Objects.isNull(cmp) && order.isDescending()){
                 cmp = cmp.reversed();
             }
             return cmp;
@@ -123,6 +117,18 @@ public class DirectionDeliveryService {
         if (city1.equals(city2)){
             throw new IllegalArgumentException();
         }
+    }
+
+    /**
+     * finds the smallest distance between given cities, according to direction delivery routes in database
+     * @return City.Distance object with smallest distance and route as well
+     * */
+    public City.Distance getDistanceBetweenCities(City cityFrom, City cityTo, Locale locale){
+        return CityUtils.getDistance(
+                cityFrom,
+                cityTo,
+                findAll()
+        );
     }
 
 }

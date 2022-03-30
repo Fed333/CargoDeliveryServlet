@@ -1,17 +1,24 @@
 package com.epam.cargo.infrastructure.web.binding.utils;
 
+import com.epam.cargo.infrastructure.annotation.Qualifier;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.format.formatter.Formatter;
 import com.epam.cargo.infrastructure.format.manager.FormatterManager;
+import com.epam.cargo.infrastructure.web.data.sort.Order;
+import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Utils class for managing with common web binding operations.<br>
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.2
  * */
 public class BindingUtils {
 
@@ -86,6 +93,73 @@ public class BindingUtils {
             return Enum.valueOf((Class)bindClass, constantName);
         }
         return null;
+    }
+
+    /**
+     * Binds Sort object from HttpServletRequest.<br>
+     * @param req source of the data
+     * @param propertyParameter parameter of sorting property in req
+     * @param directionParameter parameter of sorting direction in req
+     * @return Sort object with sorting data
+     * @since 1.1
+     * */
+    public static Sort bindSort(HttpServletRequest req, String propertyParameter, String directionParameter) {
+        String[] properties = req.getParameterValues(propertyParameter);
+        String[] directionsArray = Optional.ofNullable(req.getParameterValues(directionParameter)).orElse(new String[]{});
+
+        Order.Direction[] directions = Arrays.stream(directionsArray).map(Order.Direction::valueOf).toArray(Order.Direction[]::new);
+
+        Order[] orders = bindOrders(properties, directions);
+        return Sort.by(orders);
+    }
+
+    /**
+     * Gets sorting orders from source arrays.<br>
+     * @param properties array with sorting properties
+     * @param directions arrays with sorting directions
+     * @return Order[] with sorting orders, if passed null or empty properties returns empty array
+     * @since 1.1
+     * */
+    public static Order[] bindOrders(String[] properties, Order.Direction[] directions){
+        if (Objects.isNull(properties) || properties.length == 0){
+            return new Order[]{};
+        }
+        Order[] orders = new Order[properties.length];
+
+        for (int i = 0; i < properties.length; i++) {
+            String property = properties[i];
+            Order.Direction direction = (i < directions.length) ? directions[i] : Order.Direction.ASC;
+            orders[i] = new Order(property, direction);
+        }
+        return orders;
+    }
+
+    /**
+     * Qualifies web parameter if it's annotated with @Qualifier annotation.<br>
+     * @param parameter web parameter to qualify
+     * @return prefix from qualifier value if present in format "value_", otherwise returns ""
+     * @since 1.2
+     * */
+    @NotNull
+    public static String qualify(Parameter parameter){
+        if (parameter.isAnnotationPresent(Qualifier.class)){
+            Qualifier qualifier = parameter.getAnnotation(Qualifier.class);
+            return qualifier.value() + "_";
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Qualifies parameterName if web parameter is annotated with {@link Qualifier} annotation.<br>
+     * @param parameter web parameter which might be qualified
+     * @param parameterName parameter name to qualify
+     * @return result of concatenation a {@link #qualify(Parameter)} method and parameterName
+     * @since 1.2
+     * */
+    @NotNull
+    public static String qualify(Parameter parameter, String parameterName){
+        return qualify(parameter) + parameterName;
     }
 
 }

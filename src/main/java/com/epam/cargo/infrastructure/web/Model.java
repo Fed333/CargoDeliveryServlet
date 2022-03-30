@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * @see Command
  * @see HttpServletRequest
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public interface Model {
 
@@ -21,7 +21,7 @@ public interface Model {
 
     Object getAttribute(String attribute);
 
-    Model mergeAttributes(Map<String, Object> toMerge);
+    Model mergeAttributes(Map<String, ?> toMerge);
 
     boolean containsAttribute(String attribute);
 

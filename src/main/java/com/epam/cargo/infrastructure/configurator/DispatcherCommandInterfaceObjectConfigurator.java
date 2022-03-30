@@ -12,6 +12,7 @@ import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
 import com.epam.cargo.infrastructure.web.Model;
 import com.epam.cargo.infrastructure.web.binding.binder.ParameterBinder;
 import com.epam.cargo.infrastructure.web.binding.manager.ParameterBinderManager;
+import com.epam.cargo.infrastructure.web.redirect.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.epam.cargo.infrastructure.source.properties.constant.ApplicationPropertiesConstants.HTTP_PREFIX;
+import static com.epam.cargo.infrastructure.source.properties.constant.ApplicationPropertiesConstants.VIEW_PREFIX;
+
 /**
  *  Configurator of request mapping within the infrastructure.
  *  Maintain http methods dispatching, using Command pattern.<br>
@@ -33,7 +37,7 @@ import java.util.stream.Collectors;
  * @see RequestMapping
  * @see CommandMapping
  * @author Roman Kovalchuk
- * @version 1.3
+ * @version 1.4
  * */
 @SuppressWarnings({"unused", "deprecation"})
 public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfigurator {
@@ -74,7 +78,7 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
                     String prefix = "";
                     try {
                         Properties properties = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH);
-                        prefix = properties.getProperty("httpPrefix");
+                        prefix = properties.getProperty(HTTP_PREFIX.getKey(), "");
                     } catch (IOException e) {
                         e.printStackTrace();
                         //TODO log WARNING message
@@ -105,7 +109,15 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
      * */
     private Command createCommand(Object controller, Method method, ApplicationContext context) {
         return (req, res) -> {
-            req.setAttribute(Model.class.getName(), context.getObject(Model.class));
+            Model model = context.getObject(Model.class);
+            req.setAttribute(Model.class.getName(), model);
+
+            RedirectAttributes redirectAttributes = Optional.ofNullable((RedirectAttributes)req.getSession().getAttribute(RedirectAttributes.class.getName()))
+                    .orElse(context.getObject(RedirectAttributes.class));
+            req.setAttribute(RedirectAttributes.class.getName(), redirectAttributes);
+
+            model.mergeAttributes(redirectAttributes.getFlashAttributes());
+
             Parameter[] parameters = method.getParameters();
             Object[] arguments = new Object[parameters.length];
 
@@ -124,11 +136,19 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
                 throw new RuntimeException("Controller's method invocation failed " + method, e.getCause());
             }
 
-            Model model = (Model)req.getAttribute(Model.class.getName());
             req.removeAttribute(Model.class.getName());
             model.asMap().forEach(req::setAttribute);
-            String viewPrefix = (String)context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getOrDefault("viewPrefix", "");
-            req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
+
+            if (isRedirect(methodResponse)){
+                req.getSession().setAttribute(RedirectAttributes.class.getName(), req.getAttribute(RedirectAttributes.class.getName()));
+                String httpPrefix = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getProperty(HTTP_PREFIX.getKey(), "");
+                res.sendRedirect(httpPrefix + eraseRedirect(methodResponse));
+            } else{
+                req.getSession().removeAttribute(RedirectAttributes.class.getName());
+                String viewPrefix = context.getObject(PropertiesSource.class).getProperties(APPLICATION_PROPERTIES_PATH).getProperty(VIEW_PREFIX.getKey(), "");
+                req.getRequestDispatcher(viewPrefix + methodResponse).forward(req, res);
+            }
+
         };
     }
 
@@ -167,5 +187,26 @@ public class DispatcherCommandInterfaceObjectConfigurator implements ObjectConfi
             throw new RuntimeException("Type of field " + field + " isn't a map.");
         }
         return field;
+    }
+
+    /**
+     * Checks whether given url is a redirect: url.
+     * @since 1.4
+     * */
+    private boolean isRedirect(String url){
+        return url.matches("^redirect:/.*");
+    }
+
+    /**
+     * Erases redirect: part from redirectUrl.<br>
+     * @param redirectUrl url with redirect: at beginning
+     * @return url without redirect: part
+     * @since 1.4
+     * */
+    private String eraseRedirect(String redirectUrl){
+        if (!isRedirect(redirectUrl)){
+            throw new IllegalArgumentException("Not redirect url!");
+        }
+        return redirectUrl.replaceAll("^redirect:", "");
     }
 }

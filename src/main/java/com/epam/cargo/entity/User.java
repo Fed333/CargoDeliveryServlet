@@ -2,6 +2,7 @@ package com.epam.cargo.entity;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -37,6 +38,10 @@ public class User implements Entity<Long> {
     private List<DeliveryReceipt> receipts;
 
     public User() { }
+
+    public User(Long id){
+        this.id = id;
+    }
 
     public User(String name, String login, String password) {
         this.name = name;
@@ -159,4 +164,45 @@ public class User implements Entity<Long> {
         this.receipts = receipts;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id)
+                && Objects.equals(name, user.name)
+                && Objects.equals(surname, user.surname)
+                && Objects.equals(login, user.login)
+                && Objects.equals(password, user.password)
+                && Objects.equals(phone, user.phone)
+                && Objects.equals(email, user.email)
+                && Objects.equals(cash, user.cash)
+                && Objects.equals(address, user.address)
+                && Objects.equals(roles, user.roles)
+                && Objects.equals(applications, user.applications)
+                && Objects.equals(receipts, user.receipts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, login, password, phone, email, cash, address, roles, applications, receipts);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", cash=" + cash +
+                ", address=" + address +
+                ", roles=" + roles +
+                ", applications=" + applications +
+                ", receipts=" + receipts +
+                '}';
+    }
 }

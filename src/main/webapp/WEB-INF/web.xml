@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
@@ -33,5 +34,25 @@
     <filter-name>LocaleResolverFilter</filter-name>
     <servlet-name>MainServlet</servlet-name>
   </filter-mapping>
-  
+
+  <filter>
+    <filter-name>LoggerFilter</filter-name>
+    <filter-class>com.epam.cargo.filter.LoggerFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>LoggerFilter</filter-name>
+    <servlet-name>MainServlet</servlet-name>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.epam.cargo.filter.AuthFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <servlet-name>MainServlet</servlet-name>
+  </filter-mapping>
+
 </web-app>

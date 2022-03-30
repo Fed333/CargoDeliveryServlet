@@ -18,13 +18,13 @@
     <div class="container mt-4">
         <h2 class="d-flex justify-content-center"><fmt:message key="lang.directions"/></h2>
         <div class="d-flex justify-content-center">
-            <form class="col-6" action="${requestScope.url}" method="get">
+            <form class="col-6" action="${pageContext.request.contextPath}/directions" method="get">
                  <div class="form-group row mt-2">
                     <div class="col-2">
                         <label class="col-form-label"><fmt:message key="lang.sorting"/></label>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" name="sort.property" id="sortCriterionSelect">
+                        <select class="form-select" name="directions_sort" id="sortCriterionSelect">
                             <option value="senderCity.name" id="senderCityOption" <c:if test="${sessionScope.sort == \"senderCity.name\"}">selected</c:if>>
                                 <fmt:message key="info.sort-direction-sender-city"/>
                             </option>
@@ -37,7 +37,7 @@
                         </select>
                     </div>
                     <div class="col-5">
-                        <select class="form-select" id="sortOrderSelect" name="sort.order">
+                        <select class="form-select" id="sortOrderSelect" name="directions_order">
                             <option value="ASC" id="ascOption" <c:if test="${sessionScope.sortOrder == \"ASC\"}">selected</c:if>>
                                 <fmt:message key="sort.order-asc"/>
                             </option>
@@ -75,7 +75,7 @@
                         </tr>
                         </thead>
                         <tbody class="table-light">
-                        <c:forEach items="${requestScope.directions}" var="direction">
+                        <c:forEach items="${requestScope.directions.content}" var="direction">
                             <tr>
                                 <td>${direction.senderCity.name} - ${direction.receiverCity.name}</td>
                                 <td>${direction.distance}</td>
@@ -85,12 +85,12 @@
                     </table>
                 </div>
                 <div class="row">
-                    <tag:pager url="${requestScope.url}" submitButtonId="submitButton"/>
+                    <tag:pager prefix="directions_" page="${requestScope.directions}" submitButtonId="submitButton"/>
                 </div>
                 <input name="lang" value="${sessionScope.lang}" id="langInput" hidden>
             </form>
-            <script src="static/js/formSubmit.js"></script>
-            <script src="static/js/localization.js"></script>
+            <script src="${pageContext.request.contextPath}/static/js/formSubmit.js"></script>
+            <script src="${pageContext.request.contextPath}/static/js/localization.js"></script>
             <script>
                 function clickSubmitButtonHandler(){
                     clickSubmitButton('submitButton')

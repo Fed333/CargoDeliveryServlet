@@ -1,4 +1,4 @@
-package com.epam.cargo.dao.repo.impl;
+package com.epam.cargo.dao.persist;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
 import com.epam.cargo.entity.Entity;
@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Abstract class with common logic of CRUD Dao methods.
  * @author Roman Kovalchuk
- * @version 1.0
+ * @version 1.1
  * */
 public abstract class DaoPersist<T extends Entity<ID>, ID> {
     
@@ -56,7 +57,7 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
      * @throws IllegalStateException when more than 1 element was found
      * @since 1.0
      * */
-    public Optional<T> findBy(String selectQuery, CityRepoImpl.PreparedStatementConsumer prepared) {
+    public Optional<T> findBy(String selectQuery, PreparedStatementConsumer prepared) {
         Connection connection = null;
         try {
             connection = pool.getConnection();
@@ -83,10 +84,21 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
      * @since 1.0
      * */
     public List<T> findAll(String selectAllQuery) {
+        return findAllBy(selectAllQuery, ps -> {});
+    }
+
+    /**
+     * Finds all T objects in selected by given sql query.
+     * @param selectQuery sql query to select all records from database
+     * @return List of all T objects from database
+     * @since 1.1
+     * */
+    public List<T> findAllBy(String selectQuery, PreparedStatementConsumer prepared) {
         Connection connection = null;
         try {
             connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(selectAllQuery);
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+            prepared.prepare(statement);
             return fetchAll(statement);
         }
         catch (SQLException e){
@@ -98,6 +110,35 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
             }
         }
         return null;
+    }
+
+    /**
+     * Gives number of records by countQuery.<br>
+     * @param countQuery query to find count of records
+     * @param prepared actions to prepare PreparedStatement
+     * @return count of records
+     * */
+    public int countBy(String countQuery, PreparedStatementConsumer prepared){
+        Connection connection = null;
+        try {
+            connection = pool.getConnection();
+            PreparedStatement ps = connection.prepareStatement(countQuery);
+            prepared.prepare(ps);
+            ResultSet resultSet = ps.executeQuery();
+            int total = 0;
+            if (resultSet.next()){
+                total = resultSet.getInt(1);
+            }
+            return total;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to get count of records from database.", e);
+        } finally {
+            if (Objects.nonNull(connection)) {
+                pool.releaseConnection(connection);
+            }
+        }
     }
 
     /**
@@ -204,4 +245,20 @@ public abstract class DaoPersist<T extends Entity<ID>, ID> {
         }
         return objects;
     }
+
+    /**
+     * Interface for special preparing action under PreparedStatement.
+     * @author Roman Kovalchuk
+     * @version 1.0
+     * */
+    public interface PreparedStatementConsumer {
+
+        void prepare(PreparedStatement preparedStatement) throws SQLException;
+
+        @SuppressWarnings("unused")
+        default PreparedStatementConsumer prepareNext(PreparedStatementConsumer after) {
+            return o -> {prepare(o); after.prepare(o);};
+        }
+    }
+
 }

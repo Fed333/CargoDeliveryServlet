@@ -25,6 +25,19 @@ public class DeliveryReceipt implements Entity<Long>, Receipt {
 
     private Boolean paid;
 
+    public DeliveryReceipt() {
+    }
+
+    public DeliveryReceipt(Long id, DeliveryApplication application, User customer, User manager, Double totalPrice, LocalDate formationDate, Boolean paid) {
+        this.id = id;
+        this.application = application;
+        this.customer = customer;
+        this.manager = manager;
+        this.totalPrice = totalPrice;
+        this.formationDate = formationDate;
+        this.paid = paid;
+    }
+
     public Long getId() {
         return id;
     }
