@@ -1,0 +1,1 @@
+SELECT * FROM addresses a LEFT JOIN cities c ON (a.city_id = c.id);
