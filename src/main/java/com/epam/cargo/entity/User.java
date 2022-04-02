@@ -176,7 +176,7 @@ public class User implements Entity<Long> {
                 && Objects.equals(password, user.password)
                 && Objects.equals(phone, user.phone)
                 && Objects.equals(email, user.email)
-                && Objects.equals(cash, user.cash)
+                && cash.compareTo(user.cash) == 0
                 && Objects.equals(address, user.address)
                 && Objects.equals(roles, user.roles)
                 && Objects.equals(applications, user.applications)
