@@ -1,4 +1,4 @@
-package com.epam.cargo.dao.test.infrastructure.source;
+package com.epam.cargo.mock.source;
 
 import com.epam.cargo.infrastructure.annotation.Singleton;
 import com.epam.cargo.infrastructure.source.input.InputStreamSource;
