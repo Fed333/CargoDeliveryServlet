@@ -2,8 +2,8 @@ package com.epam.cargo.dao.test.infrastructure.application;
 
 import com.epam.cargo.dao.connection.TestConnectionPool;
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
-import com.epam.cargo.dao.test.infrastructure.source.TestInputStreamSource;
-import com.epam.cargo.dao.test.infrastructure.source.TestPropertiesSource;
+import com.epam.cargo.mock.source.TestInputStreamSource;
+import com.epam.cargo.mock.source.TestPropertiesSource;
 import com.epam.cargo.infrastructure.Application;
 import com.epam.cargo.infrastructure.context.ApplicationContext;
 import com.epam.cargo.infrastructure.source.input.InputStreamSource;
