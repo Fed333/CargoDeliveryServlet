@@ -4,6 +4,7 @@ import org.mockito.MockedStatic;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -19,6 +20,13 @@ public class ResourceBundleMock {
         bundleMockedStatic = mockStatic(ResourceBundle.class);
         bundleMockedStatic
                 .when(()->ResourceBundle.getBundle(any()))
+                .thenAnswer(invocationOnMock -> {
+                    String baseName = invocationOnMock.getArgument(0, String.class);
+                    FileInputStream fis = new FileInputStream("src/main/webapp/WEB-INF/classes" + baseName + ".properties");
+                    return new PropertyResourceBundle(fis);
+                });
+        bundleMockedStatic
+                .when(()->ResourceBundle.getBundle(any(), any(Locale.class)))
                 .thenAnswer(invocationOnMock -> {
                     String baseName = invocationOnMock.getArgument(0, String.class);
                     FileInputStream fis = new FileInputStream("src/main/webapp/WEB-INF/classes" + baseName + ".properties");
