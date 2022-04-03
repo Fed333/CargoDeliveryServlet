@@ -16,6 +16,16 @@ public class AddressRequest {
 
     private String houseNumber;
 
+    @SuppressWarnings("unused")
+    public AddressRequest() {
+    }
+
+    public AddressRequest(Long cityId, String streetName, String houseNumber) {
+        this.cityId = cityId;
+        this.streetName = streetName;
+        this.houseNumber = houseNumber;
+    }
+
     public Long getCityId() {
         return cityId;
     }
