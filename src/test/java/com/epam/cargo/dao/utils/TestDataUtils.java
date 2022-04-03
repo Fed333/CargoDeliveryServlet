@@ -1,20 +1,13 @@
 package com.epam.cargo.dao.utils;
 
+import com.epam.cargo.dto.AddressRequest;
+import com.epam.cargo.dto.DeliveredBaggageRequest;
+import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.entity.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class TestDataUtils {
 
@@ -72,6 +65,49 @@ public class TestDataUtils {
                 LocalDate.now().plusDays(3),
                 DeliveryApplication.State.SUBMITTED,
                 20d
+        );
+    }
+
+    public static DeliveryApplicationRequest getTestApplicationRequest() {
+        return new DeliveryApplicationRequest(
+                getSenderAddressRequest(),
+                getReceiverAddressRequest(),
+                getDeliveredBaggageRequest(),
+                LocalDate.now(),
+                LocalDate.now().plusDays(3)
+        );
+    }
+
+    public static DeliveredBaggageRequest getDeliveredBaggageRequest() {
+        return new DeliveredBaggageRequest(10d, 10000d, BaggageType.STANDART, "testBaggage");
+    }
+
+    public static AddressRequest getReceiverAddressRequest() {
+        return new AddressRequest(2L, "testStreet2", "testHouse2");
+    }
+
+    public static AddressRequest getSenderAddressRequest() {
+        return new AddressRequest(1L, "testStreet1", "testHouse1");
+    }
+
+    public static DeliveryReceipt getDeliveryReceiptPaid() {
+        return getDeliveryReceipt(true);
+    }
+
+    public static DeliveryReceipt getDeliveryReceiptUnpaid(){
+        return getDeliveryReceipt(false);
+    }
+
+
+    public static DeliveryReceipt getDeliveryReceipt(boolean paid) {
+        return new DeliveryReceipt(
+                1L,
+                getTestApplication(),
+                getTestUser(),
+                getTestUser(),
+                50d,
+                LocalDate.now(),
+                paid
         );
     }
 
