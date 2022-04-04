@@ -21,6 +21,12 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing DeliveryApplication objects.<br>
+ * @author Roman Kovalchuk
+ * @see DeliveryApplication
+ * @version 1.0
+ * */
 @Singleton(type = Singleton.Type.LAZY)
 public class DeliveryApplicationService {
 

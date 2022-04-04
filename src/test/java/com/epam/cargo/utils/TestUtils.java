@@ -1,12 +1,12 @@
 package com.epam.cargo.utils;
 
-import com.epam.cargo.entity.DirectionDelivery;
-
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 public class TestUtils {
+
+    public static final  String APPLICATION_PACKAGE = "com.epam.cargo";
 
     public static <T> boolean isSorted(List<T> list, Comparator<T> comparator){
         Iterator<T> it = list.iterator();

@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Service class for managing DeliveredBaggage objects.<br>
+ * @author Roman Kovalchuk
+ * @see DeliveredBaggage
+ * @version 1.0
+ * */
 @Singleton(type = Singleton.Type.LAZY)
 public class DeliveredBaggageService {
 

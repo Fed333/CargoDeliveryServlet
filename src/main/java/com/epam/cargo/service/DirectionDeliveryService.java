@@ -25,6 +25,12 @@ import java.util.stream.Collectors;
 import static com.epam.cargo.service.ServiceUtils.ComparatorRecognizer;
 import static com.epam.cargo.service.ServiceUtils.sortList;
 
+/**
+ * Service class for managing DirectionDelivery objects.<br>
+ * @author Roman Kovalchuk
+ * @see DirectionDelivery
+ * @version 1.0
+ * */
 @Singleton(type = Singleton.Type.LAZY)
 public class DirectionDeliveryService {
 

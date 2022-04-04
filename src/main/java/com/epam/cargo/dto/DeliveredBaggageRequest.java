@@ -19,6 +19,7 @@ public class DeliveredBaggageRequest {
 
     private String description;
 
+    @SuppressWarnings("unused")
     public DeliveredBaggageRequest() {
     }
 

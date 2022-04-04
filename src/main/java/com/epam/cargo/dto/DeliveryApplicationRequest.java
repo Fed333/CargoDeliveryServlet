@@ -22,6 +22,18 @@ public class DeliveryApplicationRequest {
 
     private LocalDate receivingDate;
 
+    @SuppressWarnings("unused")
+    public DeliveryApplicationRequest() {
+    }
+
+    public DeliveryApplicationRequest(AddressRequest senderAddress, AddressRequest receiverAddress, DeliveredBaggageRequest deliveredBaggageRequest, LocalDate sendingDate, LocalDate receivingDate) {
+        this.senderAddress = senderAddress;
+        this.receiverAddress = receiverAddress;
+        this.deliveredBaggageRequest = deliveredBaggageRequest;
+        this.sendingDate = sendingDate;
+        this.receivingDate = receivingDate;
+    }
+
     public AddressRequest getSenderAddress() {
         return senderAddress;
     }

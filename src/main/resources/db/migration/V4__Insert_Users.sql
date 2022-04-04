@@ -41,7 +41,6 @@ INSERT INTO public.user_role VALUES (30, 'USER');
 INSERT INTO public.user_role VALUES (33, 'USER');
 INSERT INTO public.user_role VALUES (35, 'USER');
 INSERT INTO public.user_role VALUES (36, 'USER');
-INSERT INTO public.user_role VALUES (24, 'MANAGER');
 INSERT INTO public.user_role VALUES (49, 'USER');
 INSERT INTO public.user_role VALUES (56, 'USER');
 INSERT INTO public.user_role VALUES (57, 'USER');

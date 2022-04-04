@@ -7,6 +7,9 @@ import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
 import com.epam.cargo.infrastructure.web.data.sort.Order;
 import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import com.epam.cargo.mock.MockApplication;
+import com.epam.cargo.mock.annotation.MockBean;
+import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.utils.TestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -23,10 +26,27 @@ import java.util.stream.Stream;
 import static com.epam.cargo.dao.utils.RepoTestsUtils.createDirectionDeliveryFilterRequest;
 import static com.epam.cargo.infrastructure.web.data.sort.Order.Direction.ASC;
 import static com.epam.cargo.infrastructure.web.data.sort.Order.Direction.DESC;
+import static com.epam.cargo.utils.TestUtils.APPLICATION_PACKAGE;
 
 public class DirectionDeliveryServiceTest {
 
+    @SuppressWarnings("all")
+    @MockBean
+    private DirectionDeliveryRepo mockRepo;
+
     private DirectionDeliveryService directionDeliveryService;
+
+    @BeforeEach
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
+        MockFactory factory = MockApplication.run(DirectionDeliveryServiceTest.class, APPLICATION_PACKAGE);
+        directionDeliveryService = factory.getObject(DirectionDeliveryService.class);
+        mockRepo = factory.getObject(DirectionDeliveryRepo.class);
+
+        List<DirectionDelivery> unorderedDirections = getTestDirections();
+        Collections.shuffle(unorderedDirections);
+        Mockito.when(mockRepo.findAll()).thenReturn(unorderedDirections);
+
+    }
 
     private static final ArrayList<City> testCities = new ArrayList<>(Arrays.asList(
             new City(1L, "a", "91"),
@@ -35,6 +55,8 @@ public class DirectionDeliveryServiceTest {
             new City(4L, "d", "64"),
             new City(5L, "e", "55")
     ));
+
+
 
     @NotNull
     public static Stream<Arguments> testSortedCase() {
@@ -108,18 +130,6 @@ public class DirectionDeliveryServiceTest {
     @NotNull
     private static Object getSortByDistance(Order.Direction direction) {
         return Sort.by(new Order("distance", direction));
-    }
-
-    @BeforeEach
-    public void setUp() throws NoSuchFieldException, IllegalAccessException {
-        DirectionDeliveryRepo mockRepo = Mockito.mock(DirectionDeliveryRepoImpl.class);
-        List<DirectionDelivery> unorderedDirections = getTestDirections();
-        Collections.shuffle(unorderedDirections);
-        Mockito.when(mockRepo.findAll()).thenReturn(unorderedDirections);
-        directionDeliveryService = new DirectionDeliveryService();
-        Field field = directionDeliveryService.getClass().getDeclaredField("directionDeliveryRepo");
-        field.setAccessible(true);
-        field.set(directionDeliveryService, mockRepo);
     }
 
     @NotNull

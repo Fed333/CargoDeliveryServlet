@@ -11,6 +11,12 @@ import com.epam.cargo.infrastructure.web.data.sort.Sort;
 import java.text.Collator;
 import java.util.*;
 
+/**
+ * Service class for managing City objects.<br>
+ * @author Roman Kovalchuk
+ * @see City
+ * @version 1.0
+ * */
 @Singleton
 public class CityService {
 
