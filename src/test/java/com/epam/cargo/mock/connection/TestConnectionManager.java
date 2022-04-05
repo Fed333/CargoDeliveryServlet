@@ -1,4 +1,4 @@
-package com.epam.cargo.dao.connection;
+package com.epam.cargo.mock.connection;
 
 
 import java.io.FileInputStream;

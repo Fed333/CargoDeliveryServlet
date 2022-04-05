@@ -6,8 +6,8 @@ import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;

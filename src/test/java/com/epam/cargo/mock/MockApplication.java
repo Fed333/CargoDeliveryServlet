@@ -1,29 +1,26 @@
 package com.epam.cargo.mock;
 
-import com.epam.cargo.dao.connection.TestConnectionPool;
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
-import com.epam.cargo.infrastructure.config.Config;
-import com.epam.cargo.infrastructure.config.impl.JavaConfig;
-import com.epam.cargo.infrastructure.source.input.InputStreamSource;
-import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
-import com.epam.cargo.mock.factory.MockFactory;
-import com.epam.cargo.mock.source.TestInputStreamSource;
-import com.epam.cargo.mock.source.TestPropertiesSource;
+import com.epam.cargo.mock.connection.TestConnectionPool;
+import org.fed333.servletboot.context.ApplicationContext;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 
-import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Class designed special for raising test mocked ApplicationContext.
+ * @author Roman Kovalchuk
+ * @see MockApplicationContext
+ * @version 1.0
+ * */
 public class MockApplication {
 
-    public static MockFactory run(Class<?> testClass, String packageToScan){
-        Config config = new JavaConfig(packageToScan, new HashMap<>(
-                Map.of(
-                        ConnectionPool.class, TestConnectionPool.class,
-                        InputStreamSource.class, TestInputStreamSource.class,
-                        PropertiesSource.class, TestPropertiesSource.class
-                ))
-        );
-        return new MockFactory(testClass, config);
+    public static MockApplicationContext run(Class<?> testClass, String packageToScan){
+        return TestApplication.run(testClass, packageToScan, Map.of(
+                ConnectionPool.class, TestConnectionPool.class
+        ));
     }
 
 }

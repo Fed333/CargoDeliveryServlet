@@ -1,9 +1,9 @@
 package com.epam.cargo.controller;
 
-import com.epam.cargo.infrastructure.annotation.Controller;
-import com.epam.cargo.infrastructure.annotation.RequestMapping;
-import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.web.Model;
+import org.fed333.servletboot.annotation.Controller;
+import org.fed333.servletboot.annotation.RequestMapping;
+import org.fed333.servletboot.dispatcher.HttpMethod;
+import org.fed333.servletboot.web.Model;
 
 @Controller
 public class IndexController {

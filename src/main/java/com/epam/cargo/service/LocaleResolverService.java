@@ -1,6 +1,6 @@
 package com.epam.cargo.service;
 
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Singleton;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

@@ -6,9 +6,9 @@ import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DeliveredBaggage;
 import com.epam.cargo.exception.*;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
 
 import java.util.Locale;
 import java.util.Objects;

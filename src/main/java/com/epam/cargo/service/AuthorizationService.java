@@ -3,10 +3,10 @@ package com.epam.cargo.service;
 import com.epam.cargo.dto.AuthorizedDataRequest;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.exception.*;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
-import com.epam.cargo.infrastructure.security.encoding.password.PasswordEncoder;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
+import org.fed333.servletboot.security.encoding.password.PasswordEncoder;
 
 import javax.servlet.http.HttpSession;
 import java.util.Objects;

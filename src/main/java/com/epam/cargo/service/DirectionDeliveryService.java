@@ -4,13 +4,12 @@ import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.pageable.Pageable;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.Collator;
@@ -23,7 +22,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.epam.cargo.service.ServiceUtils.ComparatorRecognizer;
-import static com.epam.cargo.service.ServiceUtils.sortList;
 
 /**
  * Service class for managing DirectionDelivery objects.<br>

@@ -5,8 +5,8 @@ import com.epam.cargo.dao.persist.DaoPersist;
 import com.epam.cargo.dao.repo.DeliveredBaggageRepo;
 import com.epam.cargo.entity.BaggageType;
 import com.epam.cargo.entity.DeliveredBaggage;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;

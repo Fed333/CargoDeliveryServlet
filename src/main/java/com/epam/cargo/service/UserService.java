@@ -6,19 +6,16 @@ import com.epam.cargo.dto.UserRequest;
 import com.epam.cargo.dto.validator.UserRequestValidator;
 import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.*;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
-import com.epam.cargo.infrastructure.security.encoding.password.PasswordEncoder;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
+import org.fed333.servletboot.security.encoding.password.PasswordEncoder;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.pageable.Pageable;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.*;
-
-import static com.epam.cargo.exception.ModelErrorAttribute.DUPLICATE_PASSWORD;
-import static com.epam.cargo.exception.WrongInput.CONFIRMATION_PASSWORD_FAILED;
 
 /**
  * Service class for managing User objects.<br>

@@ -1,8 +1,8 @@
 package com.epam.cargo.dao.persist;
 
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.fed333.servletboot.web.data.pageable.Pageable;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

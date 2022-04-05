@@ -7,11 +7,11 @@ import com.epam.cargo.entity.DeliveryReceipt;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.exception.NotEnoughMoneyException;
 import com.epam.cargo.exception.WrongDataException;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.pageable.Pageable;
 import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;

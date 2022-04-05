@@ -1,22 +1,20 @@
 package com.epam.cargo.controller;
 
 import com.epam.cargo.dto.DeliveryApplicationRequest;
-import com.epam.cargo.dto.validator.DeliveredBaggageRequestValidator;
 import com.epam.cargo.dto.validator.DeliveryApplicationRequestValidator;
 import com.epam.cargo.entity.BaggageType;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.entity.User;
-import com.epam.cargo.exception.ModelErrorAttribute;
 import com.epam.cargo.exception.NoExistingCityException;
 import com.epam.cargo.exception.NoExistingDirectionException;
 import com.epam.cargo.exception.WrongDataException;
-import com.epam.cargo.infrastructure.annotation.*;
-import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.web.Model;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
-import com.epam.cargo.infrastructure.web.redirect.RedirectAttributes;
+import org.fed333.servletboot.annotation.*;
+import org.fed333.servletboot.dispatcher.HttpMethod;
+import org.fed333.servletboot.web.Model;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
+import org.fed333.servletboot.web.redirect.RedirectAttributes;
 import com.epam.cargo.service.*;
 
 import javax.servlet.http.HttpSession;
@@ -36,6 +34,7 @@ import static com.epam.cargo.exception.ModelErrorAttribute.ERROR_MESSAGE;
 public class DeliveryApplicationController {
 
     private final String APPLICATION_REQUEST = "deliveryApplicationRequest";
+
     @Inject
     private DeliveryApplicationService applicationService;
 

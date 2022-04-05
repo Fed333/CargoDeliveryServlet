@@ -9,10 +9,10 @@ import com.epam.cargo.exception.ModelErrorAttribute;
 import com.epam.cargo.exception.NotEnoughMoneyException;
 import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.exception.WrongInput;
-import com.epam.cargo.infrastructure.annotation.*;
-import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.web.Model;
-import com.epam.cargo.infrastructure.web.redirect.RedirectAttributes;
+import org.fed333.servletboot.annotation.*;
+import org.fed333.servletboot.dispatcher.HttpMethod;
+import org.fed333.servletboot.web.Model;
+import org.fed333.servletboot.web.redirect.RedirectAttributes;
 import com.epam.cargo.service.*;
 
 import javax.servlet.http.HttpSession;

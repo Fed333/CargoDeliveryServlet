@@ -5,7 +5,7 @@ import com.epam.cargo.dao.test.infrastructure.application.TestApplication;
 import com.epam.cargo.dao.utils.RepoTestsUtils;
 import com.epam.cargo.dao.utils.parse.impl.WeightFareParser;
 import com.epam.cargo.entity.WeightFare;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -1,6 +1,6 @@
 package com.epam.cargo.filter;
 
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import com.epam.cargo.service.LocaleResolverService;
 
 import javax.servlet.*;

@@ -1,6 +1,6 @@
 package com.epam.cargo.dao.repo.impl;
 
-import com.epam.cargo.dao.connection.TestConnectionManager;
+import com.epam.cargo.mock.connection.TestConnectionManager;
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
 import com.epam.cargo.dao.test.infrastructure.application.TestApplication;
 import com.epam.cargo.dao.utils.RepoTestsUtils;
@@ -8,7 +8,7 @@ import com.epam.cargo.dao.utils.TestDataUtils;
 import com.epam.cargo.dao.utils.parse.impl.AddressParser;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.City;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

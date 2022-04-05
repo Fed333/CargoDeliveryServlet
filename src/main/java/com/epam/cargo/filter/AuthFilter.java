@@ -1,8 +1,8 @@
 package com.epam.cargo.filter;
 
 import com.epam.cargo.entity.User;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
-import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
+import org.fed333.servletboot.context.ApplicationContext;
+import org.fed333.servletboot.source.properties.PropertiesSource;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.epam.cargo.infrastructure.source.properties.constant.ApplicationPropertiesConstants.HTTP_PREFIX;
-import static com.epam.cargo.infrastructure.source.properties.constant.PropertiesPathConstants.APPLICATION_PROPERTIES;
+import static org.fed333.servletboot.source.properties.constant.ApplicationPropertiesConstants.HTTP_PREFIX;
+import static org.fed333.servletboot.source.properties.constant.PropertiesPathConstants.APPLICATION_PROPERTIES;
 import static com.epam.cargo.listener.ContextListener.APPLICATION_CONTEXT_ATTRIBUTE;
 import static com.epam.cargo.service.AuthorizationService.AUTHORIZED_USER;
 

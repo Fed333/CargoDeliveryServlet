@@ -1,8 +1,8 @@
 package com.epam.cargo.dao.repo;
 
 import com.epam.cargo.entity.DeliveryApplication;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.pageable.Pageable;
 
 
 import java.util.List;

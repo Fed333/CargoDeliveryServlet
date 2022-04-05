@@ -1,8 +1,8 @@
-package com.epam.cargo.dao.connection;
+package com.epam.cargo.mock.connection;
 
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
 
 import javax.annotation.PostConstruct;
 import java.sql.Connection;

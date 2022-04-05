@@ -3,9 +3,10 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.ResourceBundleMock;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -35,9 +36,9 @@ class CityServiceTest {
 
     @BeforeEach
     public void setUp(){
-        MockFactory factory = MockApplication.run(CityServiceTest.class, APPLICATION_PACKAGE);
-        cityService = factory.getObject(CityService.class);
-        cityRepo = factory.getObject(CityRepo.class);
+        MockApplicationContext context = MockApplication.run(CityServiceTest.class, APPLICATION_PACKAGE);
+        cityService = context.getObject(CityService.class);
+        cityRepo = context.getObject(CityRepo.class);
     }
 
     @AfterAll

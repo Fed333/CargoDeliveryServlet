@@ -1,7 +1,7 @@
 package com.epam.cargo.dao.connection.pool;
 
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;

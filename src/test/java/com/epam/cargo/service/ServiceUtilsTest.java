@@ -1,9 +1,8 @@
 package com.epam.cargo.service;
 
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Order.*;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
 import com.epam.cargo.utils.TestUtils;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,18 +56,18 @@ class ServiceUtilsTest {
     @NotNull
     private static Sort fullPropertyDESCSort() {
         return Sort.by(
-                new Order("property1", Direction.DESC),
-                new Order("property2", Direction.DESC),
-                new Order("property3", Direction.DESC)
+                new Order("property1", Order.Direction.DESC),
+                new Order("property2", Order.Direction.DESC),
+                new Order("property3", Order.Direction.DESC)
         );
     }
 
     @NotNull
     private static Sort fullPropertyASCSort() {
         return Sort.by(
-                new Order("property1", Direction.ASC),
-                new Order("property2", Direction.ASC),
-                new Order("property3", Direction.ASC)
+                new Order("property1", Order.Direction.ASC),
+                new Order("property2", Order.Direction.ASC),
+                new Order("property3", Order.Direction.ASC)
         );
     }
 

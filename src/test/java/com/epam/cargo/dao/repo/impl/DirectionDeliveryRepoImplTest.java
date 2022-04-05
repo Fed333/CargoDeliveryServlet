@@ -6,7 +6,7 @@ import com.epam.cargo.dao.utils.RepoTestsUtils;
 import com.epam.cargo.dao.utils.parse.impl.DirectionDeliveryParser;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

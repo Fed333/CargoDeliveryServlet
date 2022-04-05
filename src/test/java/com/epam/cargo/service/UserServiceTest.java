@@ -6,12 +6,13 @@ import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.User;
 import com.epam.cargo.exception.NoExistingCityException;
 import com.epam.cargo.exception.WrongDataException;
-import com.epam.cargo.infrastructure.security.encoding.password.PasswordEncoder;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.ResourceBundleMock;
 import com.epam.cargo.service.environment.UserMockEnvironment;
+import org.fed333.servletboot.security.encoding.password.PasswordEncoder;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,12 +20,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 import static com.epam.cargo.utils.TestUtils.APPLICATION_PACKAGE;
@@ -86,12 +84,12 @@ class UserServiceTest {
 
     @BeforeEach
     public void setUp(){
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        userService = factory.getObject(UserService.class);
-        cityService = factory.getObject(CityService.class);
-        passwordEncoder = factory.getObject(PasswordEncoder.class);
-        addressService = factory.getObject(AddressService.class);
-        userRepo = factory.getObject(UserRepo.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        userService = context.getObject(UserService.class);
+        cityService = context.getObject(CityService.class);
+        passwordEncoder = context.getObject(PasswordEncoder.class);
+        addressService = context.getObject(AddressService.class);
+        userRepo = context.getObject(UserRepo.class);
         try {
             Mockito.doReturn(false).when(addressService).addAddress(any());
         } catch (NoExistingCityException e) {

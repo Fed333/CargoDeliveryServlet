@@ -3,17 +3,16 @@ package com.epam.cargo.controller;
 import com.epam.cargo.dto.DeliveryCostCalculatorRequest;
 import com.epam.cargo.dto.DeliveryCostCalculatorResponse;
 import com.epam.cargo.exception.WrongDataException;
-import com.epam.cargo.infrastructure.annotation.*;
-import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.web.Model;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
-import com.epam.cargo.infrastructure.web.redirect.RedirectAttributes;
+import org.fed333.servletboot.annotation.*;
+import org.fed333.servletboot.dispatcher.HttpMethod;
+import org.fed333.servletboot.web.Model;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
+import org.fed333.servletboot.web.redirect.RedirectAttributes;
 import com.epam.cargo.service.CityService;
 import com.epam.cargo.service.DeliveryCostCalculatorService;
 import com.epam.cargo.service.LocaleResolverService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 

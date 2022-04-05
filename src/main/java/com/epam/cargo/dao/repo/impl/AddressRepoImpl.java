@@ -6,8 +6,8 @@ import com.epam.cargo.dao.repo.AddressRepo;
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.City;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.epam.cargo.dao.repo.impl.AddressRepoImpl.AddressColumns.*;
-import static com.epam.cargo.infrastructure.annotation.Singleton.Type.LAZY;
+import static org.fed333.servletboot.annotation.Singleton.Type.LAZY;
 
 /**
  * Implementation of AddressRepo interface. <br>

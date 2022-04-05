@@ -8,7 +8,7 @@ import com.epam.cargo.dao.utils.ScriptExecutorUtils;
 import com.epam.cargo.dao.utils.TestDataUtils;
 import com.epam.cargo.dao.utils.parse.impl.CityParser;
 import com.epam.cargo.entity.City;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -3,16 +3,18 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.DimensionsFareRepo;
 import com.epam.cargo.entity.DimensionsFare;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.FareDataMock;
 import com.epam.cargo.service.environment.FareMockEnvironment;
 import com.epam.cargo.utils.CsvFileDimensionsFareReader;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -32,9 +34,9 @@ class DimensionsFareServiceTest {
 
     @BeforeEach
     public void init(){
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        fareService = factory.getObject(DimensionsFareService.class);
-        dimensionsFareRepo = factory.getObject(DimensionsFareRepo.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        fareService = context.getObject(DimensionsFareService.class);
+        dimensionsFareRepo = context.getObject(DimensionsFareRepo.class);
         fares = CsvFileDimensionsFareReader.readDimensionsFaresCsv(DIMENSIONS_FARES_TABLE_CASES);
     }
 

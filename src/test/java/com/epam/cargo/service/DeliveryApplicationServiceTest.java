@@ -2,22 +2,20 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.*;
 import com.epam.cargo.dao.utils.TestDataUtils;
-import com.epam.cargo.dto.AddressRequest;
 import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.NoExistingCityException;
 import com.epam.cargo.exception.NoExistingDirectionException;
 import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
-import com.epam.cargo.service.environment.EnvironmentConstant;
 import com.epam.cargo.service.environment.FareDataMock;
-import com.epam.cargo.service.environment.FareMockEnvironment;
 import com.epam.cargo.service.environment.ResourceBundleMock;
 import com.epam.cargo.utils.CsvFileDimensionsFareReader;
 import com.epam.cargo.utils.CsvFileWeightFareReader;
 import com.epam.cargo.utils.CsvFilesDistanceFareReader;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,7 +27,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -39,7 +36,6 @@ import java.util.stream.Stream;
 import static com.epam.cargo.dao.utils.TestDataUtils.*;
 import static com.epam.cargo.service.environment.EnvironmentConstant.*;
 import static com.epam.cargo.utils.TestUtils.APPLICATION_PACKAGE;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -168,19 +164,19 @@ class DeliveryApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        applicationService = factory.getObject(DeliveryApplicationService.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        applicationService = context.getObject(DeliveryApplicationService.class);
 
-        deliveryApplicationRepo = factory.getObject(DeliveryApplicationRepo.class);
-        deliveredBaggageRepo = factory.getObject(DeliveredBaggageRepo.class);
-        userRepo = factory.getObject(UserRepo.class);
-        cityRepo = factory.getObject(CityRepo.class);
-        addressRepo = factory.getObject(AddressRepo.class);
-        costCalculatorService = factory.getObject(DeliveryCostCalculatorService.class);
-        distanceFareRepo = factory.getObject(DistanceFareRepo.class);
-        weightFareRepo = factory.getObject(WeightFareRepo.class);
-        dimensionsFareRepo = factory.getObject(DimensionsFareRepo.class);
-        receiptRepo = factory.getObject(DeliveryReceiptRepo.class);
+        deliveryApplicationRepo = context.getObject(DeliveryApplicationRepo.class);
+        deliveredBaggageRepo = context.getObject(DeliveredBaggageRepo.class);
+        userRepo = context.getObject(UserRepo.class);
+        cityRepo = context.getObject(CityRepo.class);
+        addressRepo = context.getObject(AddressRepo.class);
+        costCalculatorService = context.getObject(DeliveryCostCalculatorService.class);
+        distanceFareRepo = context.getObject(DistanceFareRepo.class);
+        weightFareRepo = context.getObject(WeightFareRepo.class);
+        dimensionsFareRepo = context.getObject(DimensionsFareRepo.class);
+        receiptRepo = context.getObject(DeliveryReceiptRepo.class);
     }
 
     public static Stream<Arguments> sendApplicationTestCases() {

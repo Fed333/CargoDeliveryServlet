@@ -1,7 +1,7 @@
 package com.epam.cargo.dto;
 
 import com.epam.cargo.entity.BaggageType;
-import com.epam.cargo.infrastructure.annotation.DTO;
+import org.fed333.servletboot.annotation.DTO;
 
 /**
  * Data Transfer Object to assemble baggage on making delivery application page.<br>

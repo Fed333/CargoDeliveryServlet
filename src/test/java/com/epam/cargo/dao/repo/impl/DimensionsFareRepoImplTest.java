@@ -5,7 +5,7 @@ import com.epam.cargo.dao.test.infrastructure.application.TestApplication;
 import com.epam.cargo.dao.utils.RepoTestsUtils;
 import com.epam.cargo.dao.utils.parse.impl.DimensionsFareParser;
 import com.epam.cargo.entity.DimensionsFare;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

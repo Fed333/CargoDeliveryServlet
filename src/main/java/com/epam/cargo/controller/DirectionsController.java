@@ -2,12 +2,12 @@ package com.epam.cargo.controller;
 
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
 import com.epam.cargo.entity.DirectionDelivery;
-import com.epam.cargo.infrastructure.annotation.*;
-import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.web.Model;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
+import org.fed333.servletboot.annotation.*;
+import org.fed333.servletboot.dispatcher.HttpMethod;
+import org.fed333.servletboot.web.Model;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.pageable.Pageable;
+import org.fed333.servletboot.web.data.sort.Order;
 import com.epam.cargo.service.DirectionDeliveryService;
 
 import javax.servlet.http.HttpServletRequest;

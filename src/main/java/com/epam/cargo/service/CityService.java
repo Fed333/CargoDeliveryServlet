@@ -2,11 +2,11 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.CityRepo;
 import com.epam.cargo.entity.City;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.PropertyValue;
-import com.epam.cargo.infrastructure.annotation.Singleton;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.PropertyValue;
+import org.fed333.servletboot.annotation.Singleton;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
 
 import java.text.Collator;
 import java.util.*;

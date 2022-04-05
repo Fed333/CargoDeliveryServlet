@@ -3,7 +3,7 @@
 <%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%@ attribute name="page" type="com.epam.cargo.infrastructure.web.data.page.Page" required="true"%>
+<%@ attribute name="page" type="org.fed333.servletboot.web.data.page.Page" required="true"%>
 <%@ attribute name="prefix" type="java.lang.String" required="true"%>
 <%@ attribute name="submitButtonId" type="java.lang.String" required="true"%>
 

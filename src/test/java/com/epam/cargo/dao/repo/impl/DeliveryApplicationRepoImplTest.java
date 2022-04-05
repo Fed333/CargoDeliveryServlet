@@ -6,7 +6,7 @@ import com.epam.cargo.dao.utils.RepoTestsUtils;
 import com.epam.cargo.dao.utils.TestDataUtils;
 import com.epam.cargo.dao.utils.parse.impl.DeliveryApplicationParser;
 import com.epam.cargo.entity.DeliveryApplication;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.context.ApplicationContext;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

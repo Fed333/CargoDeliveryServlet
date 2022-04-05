@@ -3,11 +3,12 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.WeightFareRepo;
 import com.epam.cargo.entity.WeightFare;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.FareDataMock;
 import com.epam.cargo.service.environment.FareMockEnvironment;
 import com.epam.cargo.utils.CsvFileWeightFareReader;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,9 +33,9 @@ class WeightFareServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        weightFareRepo = factory.getObject(WeightFareRepo.class);
-        fareService = factory.getObject(WeightFareService.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        weightFareRepo = context.getObject(WeightFareRepo.class);
+        fareService = context.getObject(WeightFareService.class);
 
         fares = CsvFileWeightFareReader.readWeightFaresCsv(WEIGHT_FARES_TABLE_CASES);
     }

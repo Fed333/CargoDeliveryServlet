@@ -2,8 +2,8 @@ package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.DistanceFareRepo;
 import com.epam.cargo.entity.DistanceFare;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
 
 import java.util.List;
 import java.util.Objects;

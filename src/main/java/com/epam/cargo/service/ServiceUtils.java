@@ -6,11 +6,11 @@ import com.epam.cargo.dto.DeliveryApplicationRequest;
 import com.epam.cargo.dto.DeliveryReceiptRequest;
 import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.*;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.page.impl.PageImpl;
+import org.fed333.servletboot.web.data.pageable.Pageable;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
 
 import java.time.LocalDate;
 import java.util.*;

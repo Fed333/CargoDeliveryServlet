@@ -7,12 +7,13 @@ import com.epam.cargo.dto.DimensionsRequest;
 import com.epam.cargo.entity.*;
 import com.epam.cargo.exception.WrongDataException;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.FareDataMock;
 import com.epam.cargo.service.environment.FareMockEnvironment;
 import com.epam.cargo.service.environment.ResourceBundleMock;
 import com.epam.cargo.utils.*;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -81,13 +82,13 @@ class DeliveryCostCalculatorServiceTest {
 
     @BeforeEach
     public void setUp(){
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        deliveryCostCalculatorService = factory.getObject(DeliveryCostCalculatorService.class);
-        cityRepo = factory.getObject(CityRepo.class);
-        directionDeliveryRepo = factory.getObject(DirectionDeliveryRepo.class);
-        distanceFareRepo = factory.getObject(DistanceFareRepo.class);
-        weightFareRepo = factory.getObject(WeightFareRepo.class);
-        dimensionsFareRepo = factory.getObject(DimensionsFareRepo.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        deliveryCostCalculatorService = context.getObject(DeliveryCostCalculatorService.class);
+        cityRepo = context.getObject(CityRepo.class);
+        directionDeliveryRepo = context.getObject(DirectionDeliveryRepo.class);
+        distanceFareRepo = context.getObject(DistanceFareRepo.class);
+        weightFareRepo = context.getObject(WeightFareRepo.class);
+        dimensionsFareRepo = context.getObject(DimensionsFareRepo.class);
     }
 
     @AfterAll

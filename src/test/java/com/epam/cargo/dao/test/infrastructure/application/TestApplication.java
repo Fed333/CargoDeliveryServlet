@@ -1,13 +1,13 @@
 package com.epam.cargo.dao.test.infrastructure.application;
 
-import com.epam.cargo.dao.connection.TestConnectionPool;
+import com.epam.cargo.mock.connection.TestConnectionPool;
 import com.epam.cargo.dao.connection.pool.ConnectionPool;
-import com.epam.cargo.mock.source.TestInputStreamSource;
-import com.epam.cargo.mock.source.TestPropertiesSource;
-import com.epam.cargo.infrastructure.Application;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
-import com.epam.cargo.infrastructure.source.input.InputStreamSource;
-import com.epam.cargo.infrastructure.source.properties.PropertiesSource;
+import org.fed333.servletboot.testing.source.TestInputStreamSource;
+import org.fed333.servletboot.testing.source.TestPropertiesSource;
+import org.fed333.servletboot.Application;
+import org.fed333.servletboot.context.ApplicationContext;
+import org.fed333.servletboot.source.input.InputStreamSource;
+import org.fed333.servletboot.source.properties.PropertiesSource;
 
 import java.util.HashMap;
 import java.util.Map;

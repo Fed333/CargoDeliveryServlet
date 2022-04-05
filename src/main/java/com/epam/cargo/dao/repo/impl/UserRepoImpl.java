@@ -7,7 +7,7 @@ import com.epam.cargo.dao.repo.RoleRepo;
 import com.epam.cargo.dao.repo.UserRepo;
 import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.User;
-import com.epam.cargo.infrastructure.annotation.Inject;
+import org.fed333.servletboot.annotation.Inject;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;

@@ -3,12 +3,13 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.DistanceFareRepo;
 import com.epam.cargo.entity.DistanceFare;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.FareDataMock;
 import com.epam.cargo.service.environment.FareMockEnvironment;
 import com.epam.cargo.service.environment.ResourceBundleMock;
 import com.epam.cargo.utils.CsvFilesDistanceFareReader;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,9 +44,9 @@ class DistanceFareServiceTest {
 
     @BeforeEach
     public void init() {
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        fareService = factory.getObject(DistanceFareService.class);
-        fareRepo = factory.getObject(DistanceFareRepo.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        fareService = context.getObject(DistanceFareService.class);
+        fareRepo = context.getObject(DistanceFareRepo.class);
         fares = CsvFilesDistanceFareReader.readDistanceFaresCsv(DISTANCE_FARES_TABLE_CASES);
         fares.forEach(System.out::println);
     }

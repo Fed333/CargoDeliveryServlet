@@ -7,14 +7,14 @@ import com.epam.cargo.entity.Address;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.exception.NoExistingCityException;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.ResourceBundleMock;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import static com.epam.cargo.utils.TestUtils.APPLICATION_PACKAGE;
 import static org.mockito.Mockito.*;
@@ -38,10 +38,10 @@ class AddressServiceTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        MockFactory factory = MockApplication.run(AddressServiceTest.class, APPLICATION_PACKAGE);
-        addressService = factory.getObject(AddressService.class);
-        addressRepo = factory.getObject(AddressRepo.class);
-        cityRepo = factory.getObject(CityRepo.class);
+        MockApplicationContext context = MockApplication.run(AddressServiceTest.class, APPLICATION_PACKAGE);
+        addressService = context.getObject(AddressService.class);
+        addressRepo = context.getObject(AddressRepo.class);
+        cityRepo = context.getObject(CityRepo.class);
 
     }
 

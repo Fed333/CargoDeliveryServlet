@@ -1,6 +1,6 @@
 package com.epam.cargo.dto;
 
-import com.epam.cargo.infrastructure.annotation.DTO;
+import org.fed333.servletboot.annotation.DTO;
 
 import java.util.Objects;
 import java.util.function.Supplier;

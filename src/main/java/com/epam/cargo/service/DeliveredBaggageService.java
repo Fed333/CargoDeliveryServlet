@@ -3,8 +3,8 @@ package com.epam.cargo.service;
 import com.epam.cargo.dao.repo.DeliveredBaggageRepo;
 import com.epam.cargo.dto.DeliveredBaggageRequest;
 import com.epam.cargo.entity.DeliveredBaggage;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
 
 import java.util.List;
 import java.util.Objects;

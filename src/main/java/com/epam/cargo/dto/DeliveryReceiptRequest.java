@@ -1,6 +1,6 @@
 package com.epam.cargo.dto;
 
-import com.epam.cargo.infrastructure.annotation.DTO;
+import org.fed333.servletboot.annotation.DTO;
 
 /**
  * Data Transfer Object to assemble data for DeliveryReceipt on making delivery receipt page.<br>

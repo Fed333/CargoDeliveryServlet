@@ -10,11 +10,11 @@ import com.epam.cargo.dao.repo.UserRepo;
 import com.epam.cargo.entity.DeliveryApplication;
 import com.epam.cargo.entity.DeliveryReceipt;
 import com.epam.cargo.entity.User;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
-import com.epam.cargo.infrastructure.web.data.page.Page;
-import com.epam.cargo.infrastructure.web.data.page.impl.PageImpl;
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
+import org.fed333.servletboot.web.data.page.Page;
+import org.fed333.servletboot.web.data.page.impl.PageImpl;
+import org.fed333.servletboot.web.data.pageable.Pageable;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;

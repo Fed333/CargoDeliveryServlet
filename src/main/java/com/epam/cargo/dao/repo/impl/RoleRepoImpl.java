@@ -4,8 +4,8 @@ import com.epam.cargo.dao.connection.pool.ConnectionPool;
 import com.epam.cargo.dao.repo.RoleRepo;
 import com.epam.cargo.entity.Role;
 import com.epam.cargo.entity.User;
-import com.epam.cargo.infrastructure.annotation.Inject;
-import com.epam.cargo.infrastructure.annotation.Singleton;
+import org.fed333.servletboot.annotation.Inject;
+import org.fed333.servletboot.annotation.Singleton;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

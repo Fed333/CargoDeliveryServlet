@@ -2,7 +2,7 @@ package com.epam.cargo.dto;
 
 import com.epam.cargo.entity.BaggageType;
 import com.epam.cargo.entity.DeliveryApplication;
-import com.epam.cargo.infrastructure.annotation.DTO;
+import org.fed333.servletboot.annotation.DTO;
 
 import java.time.LocalDate;
 

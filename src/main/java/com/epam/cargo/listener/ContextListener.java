@@ -1,7 +1,7 @@
 package com.epam.cargo.listener;
 
-import com.epam.cargo.infrastructure.Application;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
+import org.fed333.servletboot.Application;
+import org.fed333.servletboot.context.ApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

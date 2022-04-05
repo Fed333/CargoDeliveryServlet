@@ -5,9 +5,9 @@ import com.epam.cargo.dto.DeliveredBaggageRequest;
 import com.epam.cargo.entity.BaggageType;
 import com.epam.cargo.entity.DeliveredBaggage;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.service.environment.ResourceBundleMock;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,9 +38,9 @@ class DeliveredBaggageServiceTest {
 
     @BeforeEach
     public void setUp(){
-        MockFactory factory = MockApplication.run(getClass(), APPLICATION_PACKAGE);
-        baggageService = factory.getObject(DeliveredBaggageService.class);
-        baggageRepo = factory.getObject(DeliveredBaggageRepo.class);
+        MockApplicationContext context = MockApplication.run(getClass(), APPLICATION_PACKAGE);
+        baggageService = context.getObject(DeliveredBaggageService.class);
+        baggageRepo = context.getObject(DeliveredBaggageRepo.class);
     }
 
     @AfterAll

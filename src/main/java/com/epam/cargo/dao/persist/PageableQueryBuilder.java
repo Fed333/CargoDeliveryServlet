@@ -1,7 +1,7 @@
 package com.epam.cargo.dao.persist;
 
-import com.epam.cargo.infrastructure.web.data.pageable.Pageable;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
+import org.fed333.servletboot.web.data.pageable.Pageable;
+import org.fed333.servletboot.web.data.sort.Sort;
 
 /**
  * Simple builder of pageable sql queries.<br>

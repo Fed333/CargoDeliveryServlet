@@ -1,16 +1,16 @@
 package com.epam.cargo.service;
 
 import com.epam.cargo.dao.repo.DirectionDeliveryRepo;
-import com.epam.cargo.dao.repo.impl.DirectionDeliveryRepoImpl;
 import com.epam.cargo.dto.DirectionDeliveryFilterRequest;
 import com.epam.cargo.entity.City;
 import com.epam.cargo.entity.DirectionDelivery;
-import com.epam.cargo.infrastructure.web.data.sort.Order;
-import com.epam.cargo.infrastructure.web.data.sort.Sort;
 import com.epam.cargo.mock.MockApplication;
-import com.epam.cargo.mock.annotation.MockBean;
-import com.epam.cargo.mock.factory.MockFactory;
 import com.epam.cargo.utils.TestUtils;
+import org.fed333.servletboot.testing.TestApplication;
+import org.fed333.servletboot.testing.annotation.MockBean;
+import org.fed333.servletboot.testing.context.MockApplicationContext;
+import org.fed333.servletboot.web.data.sort.Order;
+import org.fed333.servletboot.web.data.sort.Sort;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,14 +19,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Stream;
 
 import static com.epam.cargo.dao.utils.RepoTestsUtils.createDirectionDeliveryFilterRequest;
-import static com.epam.cargo.infrastructure.web.data.sort.Order.Direction.ASC;
-import static com.epam.cargo.infrastructure.web.data.sort.Order.Direction.DESC;
 import static com.epam.cargo.utils.TestUtils.APPLICATION_PACKAGE;
+import static org.fed333.servletboot.web.data.sort.Order.Direction.ASC;
+import static org.fed333.servletboot.web.data.sort.Order.Direction.DESC;
 
 public class DirectionDeliveryServiceTest {
 
@@ -38,9 +37,9 @@ public class DirectionDeliveryServiceTest {
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
-        MockFactory factory = MockApplication.run(DirectionDeliveryServiceTest.class, APPLICATION_PACKAGE);
-        directionDeliveryService = factory.getObject(DirectionDeliveryService.class);
-        mockRepo = factory.getObject(DirectionDeliveryRepo.class);
+        MockApplicationContext context = MockApplication.run(DirectionDeliveryServiceTest.class, APPLICATION_PACKAGE);
+        directionDeliveryService = context.getObject(DirectionDeliveryService.class);
+        mockRepo = context.getObject(DirectionDeliveryRepo.class);
 
         List<DirectionDelivery> unorderedDirections = getTestDirections();
         Collections.shuffle(unorderedDirections);

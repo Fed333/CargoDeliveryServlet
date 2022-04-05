@@ -1,10 +1,9 @@
 package com.epam.cargo;
 
 
-import com.epam.cargo.infrastructure.Application;
-import com.epam.cargo.infrastructure.context.ApplicationContext;
-import com.epam.cargo.infrastructure.dispatcher.HttpMethod;
-import com.epam.cargo.infrastructure.dispatcher.impl.CommandDispatcher;
+import org.fed333.servletboot.context.ApplicationContext;
+import org.fed333.servletboot.dispatcher.HttpMethod;
+import org.fed333.servletboot.dispatcher.impl.CommandDispatcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
