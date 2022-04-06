@@ -30,18 +30,15 @@ import static org.fed333.servletboot.annotation.Singleton.Type.LAZY;
 @Singleton(type = LAZY)
 public class AddressRepoImpl implements AddressRepo {
 
-    private static final String SELECT_BY_ID = "SELECT * FROM addresses WHERE id = ?";
-    private static final String SELECT_BY_HOUSE_NUMBER_AND_CITY_AND_STREET = "SELECT * FROM addresses WHERE house_number = ? AND city_id = ? AND street = ?";
-    private static final String SELECT_ALL = "SELECT * FROM addresses";
+    private static final String SELECT_BY_ID = "SELECT a.id AS address_id, a.*, c.id AS city_id, c.* FROM addresses a LEFT JOIN cities c ON (a.city_id = c.id) WHERE a.id = ?";
+    private static final String SELECT_BY_HOUSE_NUMBER_AND_CITY_AND_STREET = "SELECT a.id AS address_id, a.*, c.id AS city_id, c.* FROM addresses a LEFT JOIN cities c ON (a.city_id = c.id) WHERE a.house_number = ? AND a.city_id = ? AND a.street = ?";
+    private static final String SELECT_ALL = "SELECT a.id AS address_id, a.*, c.id AS city_id, c.* FROM addresses a LEFT JOIN cities c ON (a.city_id = c.id)";
     private static final String INSERT_INTO = "INSERT INTO addresses (city_id, street, house_number) VALUES (?, ?, ?)";
     private static final String UPDATE_BY_ID = "UPDATE addresses SET city_id = ?, street = ?, house_number = ? WHERE id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM addresses WHERE id = ?";
 
     @Inject
     private ConnectionPool pool;
-
-    @Inject
-    private CityRepo cityRepo;
 
     private AddressDaoPersist persist;
 
@@ -85,7 +82,12 @@ public class AddressRepoImpl implements AddressRepo {
 
     enum AddressColumns {
 
-        ID("id"), CITY_ID("city_id"), STREET("street"), HOUSE_NUMBER("house_number");
+        ID("address_id"),
+        CITY_ID("city_id"),
+        STREET("street"),
+        HOUSE_NUMBER("house_number"),
+        CITY_NAME("name"),
+        CITY_ZIPCODE("zipcode");
 
         private final String column;
 
@@ -110,8 +112,7 @@ public class AddressRepoImpl implements AddressRepo {
         ).orElse(null);
     }
 
-
-    private class AddressDaoPersist extends DaoPersist<Address, Long> {
+    private static class AddressDaoPersist extends DaoPersist<Address, Long> {
 
         public AddressDaoPersist(ConnectionPool pool) {
             super(pool);
@@ -120,8 +121,11 @@ public class AddressRepoImpl implements AddressRepo {
         @Override
         public Address parseObjectFrom(ResultSet result) throws SQLException {
             Long id = result.getLong(ID.getColumn());
-            Long cityId = result.getLong(CITY_ID.getColumn());
-            City city = cityRepo.findById(cityId).orElseThrow(()->new NoSuchElementException("No found city with id " + cityId));
+            City city = new City(
+                    result.getLong(CITY_ID.getColumn()),
+                    result.getString(CITY_NAME.getColumn()),
+                    result.getString(CITY_ZIPCODE.getColumn())
+            );
             String street = result.getString(STREET.getColumn());
             String houseNumber = result.getString(HOUSE_NUMBER.getColumn());
             return new Address(id, city, street, houseNumber);
