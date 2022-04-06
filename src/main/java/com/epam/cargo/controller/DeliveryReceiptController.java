@@ -31,6 +31,7 @@ public class DeliveryReceiptController {
 
     private final String APPLICATION_ID = "applicationId";
     private final String APPLICATION = "application";
+
     @Inject
     private DeliveryReceiptService receiptService;
 
@@ -199,9 +200,8 @@ public class DeliveryReceiptController {
             receiptService.payReceipt(receipt, user);
         } catch (NotEnoughMoneyException e) {
             redirectAttributes.addFlashAttribute(e.getAttribute(), e.getMessage());
-            redirectAttributes.addFlashAttribute("rejectedFunds", e.getRejectedFunds());
-            redirectAttributes.addFlashAttribute("price", e.getReceipt().getTotalPrice());
-            return "redirect:/paying/failed";
+            redirectAttributes.addFlashAttribute(ModelErrorAttribute.ERROR_MESSAGE.getAttr(), "Not enough money! " + e.getRejectedFunds() + " is less than required " + receipt.getTotalPrice());
+            return "redirect:/error";
         }
         return "redirect:/profile";
     }
