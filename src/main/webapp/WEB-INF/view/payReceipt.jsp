@@ -17,7 +17,8 @@
 <div class="content">
     <%@include file="jspf/navbar.jspf"%>
     <div class="container mt-4">
-        <form action="${url}" method="post">
+        <form action="${pageContext.request.contextPath}/receipt/pay" method="post">
+            <input name="id" value="${requestScope.receipt.id}" hidden>
             <div class="row">
                 <div class="col d-flex justify-content-center">
                     <div class="card" style="min-width: 480px;">
